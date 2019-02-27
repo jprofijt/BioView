@@ -16,8 +16,8 @@ gradle/
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
-*.iws
+.idea/
+.idea*.iws
 *.iml
 *.ipr
 /out/
@@ -28,3 +28,4 @@ gradle/
 /dist/
 /nbdist/
 /.nb-gradle/
+testdata/
