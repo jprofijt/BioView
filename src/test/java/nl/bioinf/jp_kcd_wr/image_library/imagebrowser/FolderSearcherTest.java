@@ -8,5 +8,11 @@ class FolderSearcherTest {
 
     @Test
     void findFolders() {
+        FolderSearcher folderSearcher = new FolderSearcher();
+        String[] folders = folderSearcher.findFolders("testdata").toArray(new String[0]);
+
+        for (String folder: folders) {
+            System.out.printf("directory: " + folder + "\n");
+        }
     }
 }
