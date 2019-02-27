@@ -6,7 +6,7 @@
 </head>
 <body>
 <th:block th:each="folder: ${folders}">
-    <a href="/nextfolder" th:text="folder"></a>
+    <a href="/nextfolder" th:text="${folder}"></a><br/>
 </th:block>
 </body>
 </html>
