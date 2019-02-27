@@ -21,10 +21,13 @@ gradle/
 *.iml
 *.ipr
 /out/
-
+plu
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
+/src/main/resources/application.properties
+src/main/java/nl/bioinf/jp_kcd_wr/image_library/model/
+src/test/resources/
