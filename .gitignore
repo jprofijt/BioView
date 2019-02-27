@@ -5,7 +5,6 @@ HELP.md
 gradlew
 gradlew.bat
 gradle/
-application.properties
 
 ### STS ###
 .apt_generated
@@ -17,8 +16,8 @@ application.properties
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea/
-.idea*.iws
+.idea
+*.iws
 *.iml
 *.ipr
 /out/
@@ -29,4 +28,3 @@ application.properties
 /dist/
 /nbdist/
 /.nb-gradle/
-testdata/
