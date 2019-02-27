@@ -4,3 +4,5 @@ VALUES
        ("Lisa","Lisa67@smoething.nl","bLAbla","USER"),
        ("piet", "piet@hanze.nl", "dinges", "ADMIN");
 
+
+
