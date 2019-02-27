@@ -7,15 +7,18 @@ apply plugin: 'io.spring.dependency-management'
 
 group = 'nl.bioinf.jp_kcd_wr'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = JavaVersion.VERSION_1_10
+sourceCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.13'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    compile "org.springframework.boot:spring-boot-configuration-processor"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 }
