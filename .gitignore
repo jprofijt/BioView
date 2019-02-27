@@ -28,3 +28,6 @@ gradle/
 /dist/
 /nbdist/
 /.nb-gradle/
+
+upload-dir/
+application.properties
