@@ -3,13 +3,28 @@
 <head>
     <title>Getting Started: Serving Web Content</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
 </head>
 <body>
+<div class="container mx-auto">
 <th:block th:each="folder: ${folders}">
+
     <form th:action="@{/nextfolder}" method="get">
-        <input name="folder" type="text" th:default="testdata" th:value="${folder}" hidden>
-        <input type="submit" th:value="${folder}" th:default="testdata">
+            <input name="folder" type="text" th:default="testdata" th:value="${folder}" hidden>
+            <input type="submit" th:value="${folder}" th:default="testdata">
     </form><br/>
+
 </th:block>
+</div>
+    <form th:action="@{/createfolder}" method="post">
+        <input name="directoryName" type="text" th:required="true">
+        <input name="currentPath" type="text" th:value="${currentPath}" th:default="testdata" hidden>
+        <input type="submit" value="Create Folder here">
+    </form>
+<div>
+
+</div>
 </body>
 </html>
