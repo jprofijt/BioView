@@ -6,7 +6,10 @@
 </head>
 <body>
 <th:block th:each="folder: ${folders}">
-    <a href="/nextfolder" th:text="${folder}"></a><br/>
+    <form th:action="@{/nextfolder}" method="get">
+        <input name="folder" type="text" th:default="testdata" th:value="${folder}" hidden>
+        <input type="submit" th:value="${folder}" th:default="testdata">
+    </form><br/>
 </th:block>
 </body>
 </html>
