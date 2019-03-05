@@ -9,3 +9,12 @@ CREATE TABLE users(
   PRIMARY KEY (id)
 
 );
+
+CREATE TABLE files(
+  id        INT(1000)    NOT NULL AUTO_INCREMENT,
+  orig_name VARCHAR(50)  NOT NULL,
+  hash_name VARCHAR(50)  NOT NULL,
+  path      VARCHAR(50)  NOT NULL,
+
+  PRIMARY KEY (id)
+);
