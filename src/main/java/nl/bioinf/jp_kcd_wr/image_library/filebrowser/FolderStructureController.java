@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class FolderStructureController {
     @GetMapping("/nextfolder")
     public String NextFolder(@RequestParam(name="folder", required=false, defaultValue="testdata") String folder, Model model) {
-        FolderSearcher folderFinder = new FolderSearcher();
+        FolderController folderFinder = new FolderController();
         model.addAttribute("folders", folderFinder.getNextFolders(folder));
         return "folders";
     }

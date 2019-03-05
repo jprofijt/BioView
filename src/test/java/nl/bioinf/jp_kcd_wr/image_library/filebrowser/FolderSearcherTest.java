@@ -8,7 +8,7 @@ class FolderSearcherTest {
 
     @Test
     void findFolders() {
-        FolderSearcher folderSearcher = new FolderSearcher();
+        FolderController folderSearcher = new FolderController();
         String[] folders = folderSearcher.findFolders("testdata").toArray(new String[0]);
 
         for (String folder: folders) {
