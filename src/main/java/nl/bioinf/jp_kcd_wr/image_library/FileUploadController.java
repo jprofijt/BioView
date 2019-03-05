@@ -1,6 +1,8 @@
 package nl.bioinf.jp_kcd_wr.image_library;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +26,7 @@ import nl.bioinf.jp_kcd_wr.image_library.storage.StorageService;
 
 @Controller
 public class FileUploadController {
-
+    private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/tiff");
     private final StorageService storageService;
 
     @Autowired
@@ -55,11 +57,16 @@ public class FileUploadController {
     @PostMapping("/upload")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
                                    RedirectAttributes redirectAttributes) {
-
-        storageService.store(file);
-        redirectAttributes.addFlashAttribute("upload_message",
-                "You successfully uploaded " + file.getOriginalFilename() + "!");
-
+        String fileContentType = file.getContentType();
+        if(contentTypes.contains(fileContentType)){
+            storageService.store(file);
+            redirectAttributes.addFlashAttribute("upload_message",
+                    "You successfully uploaded " + file.getOriginalFilename() + "!");
+        } else {
+            redirectAttributes.addFlashAttribute("upload_message",
+                    file.getOriginalFilename() +
+                            " has an incorrect file type. Please provide an image file with a .png, .jpeg or .tiff extension!");
+        }
         return "redirect:/upload";
     }
 
