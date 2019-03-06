@@ -1,29 +1,33 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Getting Started: Serving Web Content</title>
+    <title th:text="${currentPath}">File Browser</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-
 </head>
 <body>
-<div class="container mx-auto">
+<div>
 <th:block th:each="folder: ${folders}">
 
     <form th:action="@{/nextfolder}" method="get">
-            <input name="folder" type="text" th:default="testdata" th:value="${folder}" hidden>
+            <input name="folder" type="hidden" th:default="testdata" th:value="${folder}">
             <input type="submit" th:value="${folder}" th:default="testdata">
     </form><br/>
 
 </th:block>
 </div>
+<div>
     <form th:action="@{/createfolder}" method="post">
-        <input name="directoryName" type="text" th:required="true">
-        <input name="currentPath" type="text" th:value="${currentPath}" th:default="testdata" hidden>
+        <label for="dirInput">Name for new subdirectory:</label>
+        <input id="dirInput" name="directoryName" type="text" th:required="true">
+        <input name="currentPath" type="hidden" th:value="${currentPath}" th:default="testdata">
         <input type="submit" value="Create Folder here">
     </form>
+</div>
 <div>
+    <form th:action="@{/createdatefolder}" method="post">
+        <input name="currentPath" type="hidden" th:value="${currentPath}">
+        <input type="submit" th:value="${'Create a directory '+date+' in '+currentPath}">
+    </form>
 
 </div>
 </body>
