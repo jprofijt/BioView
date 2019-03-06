@@ -14,9 +14,24 @@ public class FolderCreationController {
         try {
             creator.createNewFolder(directoryName, currentPath);
         } catch (DirectoryExistsException e) {
+            model.addAttribute("error", e.getMessage());
             return "directory-error";
         }
         model.addAttribute("folders", creator.getNextFolders(currentPath));
+        model.addAttribute("currentPath", currentPath);
+        return "folders";
+    }
+
+    @PostMapping("/createdatefolder")
+    public String createDateFolder(@RequestParam(name="currentPath", required=true) String currentPath, Model model){
+        FolderHandler dateCreator = new FolderHandler();
+        try {
+            dateCreator.createDateDirectory(currentPath);
+        } catch (DirectoryExistsException e){
+            model.addAttribute("error", e.getMessage());
+            return "directory-error";
+        }
+        model.addAttribute("folders", dateCreator.getNextFolders(currentPath));
         model.addAttribute("currentPath", currentPath);
         return "folders";
     }
