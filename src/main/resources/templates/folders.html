@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${currentPath}">File Browser</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<div>
+<th:block th:each="folder: ${folders}">
+
+    <form th:action="@{/nextfolder}" method="get">
+            <input name="folder" type="hidden" th:default="testdata" th:value="${folder}">
+            <input type="submit" th:value="${folder}" th:default="testdata">
+    </form><br/>
+
+</th:block>
+</div>
+<div>
+    <form th:action="@{/createfolder}" method="post">
+        <label for="dirInput">Name for new subdirectory:</label>
+        <input id="dirInput" name="directoryName" type="text" th:required="true">
+        <input name="currentPath" type="hidden" th:value="${currentPath}" th:default="testdata">
+        <input type="submit" value="Create Folder here">
+    </form>
+</div>
+<div>
+    <form th:action="@{/createdatefolder}" method="post">
+        <input name="currentPath" type="hidden" th:value="${currentPath}">
+        <input type="submit" th:value="${'Create a directory '+date+' in '+currentPath}">
+    </form>
+
+</div>
+</body>
+</html>
