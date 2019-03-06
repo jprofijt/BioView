@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS users;
 
-CREATE TABLE IF NOT EXISTS users(
+CREATE TABLE users(
   id                 INT(100)     NOT NULL AUTO_INCREMENT,
   name               VARCHAR(40)  NOT NULL,
   email              VARCHAR(254) NOT NULL,
