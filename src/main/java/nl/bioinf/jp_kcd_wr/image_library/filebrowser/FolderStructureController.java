@@ -5,6 +5,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
+
 @Controller
 public class FolderStructureController {
     @GetMapping("/nextfolder")
@@ -12,6 +14,7 @@ public class FolderStructureController {
         FolderHandler folderFinder = new FolderHandler();
         model.addAttribute("folders", folderFinder.getNextFolders(folder));
         model.addAttribute("currentPath", folder);
+        model.addAttribute("date", LocalDate.now().toString());
         return "folders";
     }
 
