@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS images;
 
 CREATE TABLE users(
   id        INT(100)     NOT NULL AUTO_INCREMENT,
@@ -10,8 +11,8 @@ CREATE TABLE users(
 
 );
 
-CREATE TABLE files(
-  id        INT(1000)    NOT NULL AUTO_INCREMENT,
+CREATE TABLE images(
+  id        INT(100)    NOT NULL AUTO_INCREMENT,
   orig_name VARCHAR(50)  NOT NULL,
   hash_name VARCHAR(50)  NOT NULL,
   path      VARCHAR(50)  NOT NULL,
