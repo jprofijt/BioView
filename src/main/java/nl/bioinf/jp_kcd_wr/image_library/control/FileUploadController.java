@@ -1,4 +1,4 @@
-package nl.bioinf.jp_kcd_wr.image_library;
+package nl.bioinf.jp_kcd_wr.image_library.control;
 
 import java.io.IOException;
 import java.util.Arrays;
