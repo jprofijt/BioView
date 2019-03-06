@@ -65,7 +65,7 @@ public class FileUploadController {
         } else {
             redirectAttributes.addFlashAttribute("upload_message",
                     file.getOriginalFilename() +
-                            " has an incorrect file type. Please provide an image file with a .png, .jpeg or .tiff extension!");
+                            " is of an incorrect file type. Please provide an image file with a .png, .jpeg or .tiff extension!");
         }
         return "redirect:/upload";
     }
