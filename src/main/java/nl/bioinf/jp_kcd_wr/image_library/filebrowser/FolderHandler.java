@@ -5,9 +5,11 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class FolderHandler implements FolderStructureProvider {
+
     @Override
     public ArrayList<String> getNextFolders(String nextFolders){
         File[] directories = new File(nextFolders).listFiles(File::isDirectory);
@@ -36,6 +38,15 @@ public class FolderHandler implements FolderStructureProvider {
     public void removeFolder(File directory) {
         throw new NotImplementedException();
 
+    }
+
+    public void createDateDirectory(String currentPath) throws DirectoryExistsException{
+        String date = LocalDate.now().toString();
+        try {
+            this.createNewFolder(date, currentPath);
+        } catch (DirectoryExistsException e){
+            throw new DirectoryExistsException(date + " already has a directory in " + currentPath);
+        }
     }
 
 
