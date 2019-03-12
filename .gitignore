@@ -5,6 +5,9 @@ HELP.md
 gradlew
 gradlew.bat
 gradle/
+testdata/
+/src/main/resources/application-dev.properties
+
 
 ### STS ###
 .apt_generated
@@ -21,13 +24,12 @@ gradle/
 *.iml
 *.ipr
 /out/
-
+plu
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
-
+src/test/resources/
 upload-dir/
-application.properties
