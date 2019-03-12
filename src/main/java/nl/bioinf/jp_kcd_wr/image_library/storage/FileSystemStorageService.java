@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
+import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -21,9 +22,11 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileSystemStorageService implements StorageService {
 
     private final Path rootLocation;
+    private final ImageDataSource imageDataSource;
 
     @Autowired
-    public FileSystemStorageService(StorageProperties properties) {
+    public FileSystemStorageService(StorageProperties properties, ImageDataSource imageDataSource) {
+        this.imageDataSource = imageDataSource;
         this.rootLocation = Paths.get(properties.getLocation());
     }
 
@@ -49,6 +52,11 @@ public class FileSystemStorageService implements StorageService {
         catch (IOException e) {
             throw new StorageException("Failed to store file " + filename, e);
         }
+    }
+
+    @Override
+    public void insertFileData(MultipartFile file) {
+        imageDataSource.insertImage("test", "Test", "test");
     }
 
     @Override
