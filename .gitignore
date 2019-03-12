@@ -6,6 +6,8 @@ gradlew
 gradlew.bat
 gradle/
 testdata/
+/src/main/resources/application-dev.properties
+
 
 ### STS ###
 .apt_generated
