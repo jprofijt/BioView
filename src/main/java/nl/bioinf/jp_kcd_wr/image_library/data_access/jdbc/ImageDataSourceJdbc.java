@@ -21,9 +21,9 @@ public class ImageDataSourceJdbc implements ImageDataSource {
     }
 
     @Override
-    public void insertImage(String origName, String hashName, String path) {
+    public void insertImage(Image image) {
         String insertQuery = "INSERT INTO images (orig_name, hash_name, path) VALUES (?, ?, ?)";
-        jdbcTemplate.update(insertQuery, origName, hashName, path);
+        jdbcTemplate.update(insertQuery, "test", "Test", "test");
     }
 
     @Override

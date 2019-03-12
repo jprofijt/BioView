@@ -10,6 +10,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
 import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageDataSource;
+import nl.bioinf.jp_kcd_wr.image_library.model.Image;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -56,7 +57,8 @@ public class FileSystemStorageService implements StorageService {
 
     @Override
     public void insertFileData(MultipartFile file) {
-        imageDataSource.insertImage("test", "Test", "test");
+        Image newImage = new Image();
+        imageDataSource.insertImage(newImage);
     }
 
     @Override

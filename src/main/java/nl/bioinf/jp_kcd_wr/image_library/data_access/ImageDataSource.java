@@ -3,7 +3,7 @@ package nl.bioinf.jp_kcd_wr.image_library.data_access;
 import nl.bioinf.jp_kcd_wr.image_library.model.Image;
 
 public interface ImageDataSource {
-    void insertImage(String origName, String hashName, String path);
+    void insertImage(Image image);
 
     Image getOrigNamebyHashName(String hash);
 }
