@@ -19,7 +19,7 @@ public class ImageLibraryApplication {
     @Bean
     CommandLineRunner init(StorageService storageService) {
         return (args) -> {
-            storageService.deleteAll(); //Deletes all files in 'upload-dir' folder on Spring run. Remove once no longer needed
+//            storageService.deleteAll(); //Deletes all files in 'upload-dir' folder on Spring run. Remove once no longer needed
             storageService.init();
         };
     }
