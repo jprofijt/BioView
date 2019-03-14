@@ -30,14 +30,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .authorizeRequests()
 //                .antMatchers("/upload")      /* this is to test roles */
 //                .access("hasRole('ADMIN')")
-                .antMatchers("/", "/home", "/login", "/files/*").permitAll()
+                .antMatchers("/", "/home", "/login", "/files/*", "/temp", "/js/**", "/img/**", "/css/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable()
                 .formLogin()
                 .loginPage("/login")
                 .permitAll()
-                .defaultSuccessUrl("/nextfolder")
+                .defaultSuccessUrl("/temp")
                 .and()
                 .logout()
                 .permitAll();
