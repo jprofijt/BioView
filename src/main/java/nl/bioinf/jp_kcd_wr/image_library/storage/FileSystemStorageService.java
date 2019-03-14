@@ -45,8 +45,13 @@ public class FileSystemStorageService implements StorageService {
                                 + filename);
             }
             try (InputStream inputStream = file.getInputStream()) {
-                Files.copy(inputStream, this.rootLocation.resolve(filename), // 'copies' file to upload-dir using the rootLocation and filename
+                Path filePath = this.rootLocation.resolve(filename);
+                Files.copy(inputStream, filePath, // 'copies' file to upload-dir using the rootLocation and filename
                         StandardCopyOption.REPLACE_EXISTING);                // file of same name in upload-dir will be overwritten
+
+                Image image = createImageData(filename, "test", filePath);
+
+                imageDataSource.insertImage(image);
                 //Files.move(oldName, newName)
             }
         }
@@ -56,9 +61,13 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
-    public void insertFileData(MultipartFile file) {
+    public Image createImageData(String origFileName, String hash, Path filePath) {
         Image newImage = new Image();
-        imageDataSource.insertImage(newImage);
+        newImage.setOrigName(origFileName);
+        newImage.setHash_name(hash);
+        newImage.setPath(filePath.toString());
+
+        return newImage;
     }
 
     @Override

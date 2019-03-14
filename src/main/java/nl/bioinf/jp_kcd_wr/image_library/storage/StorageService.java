@@ -1,5 +1,6 @@
 package nl.bioinf.jp_kcd_wr.image_library.storage;
 
+import nl.bioinf.jp_kcd_wr.image_library.model.Image;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,7 +13,7 @@ public interface StorageService {
 
     void store(MultipartFile file);
 
-    void insertFileData(MultipartFile file);
+    Image createImageData(String origFileName, String hash, Path filePath);
 
     Stream<Path> loadAll();
 
