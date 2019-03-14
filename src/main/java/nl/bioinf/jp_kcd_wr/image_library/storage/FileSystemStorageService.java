@@ -7,6 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageDataSource;
@@ -24,6 +26,8 @@ public class FileSystemStorageService implements StorageService {
 
     private final Path rootLocation;
     private final ImageDataSource imageDataSource;
+
+    private final static Pattern PATTERN = Pattern.compile("(.*?)(?:\\((\\d+)\\))?(\\.[^.]*)?");
 
     @Autowired
     public FileSystemStorageService(StorageProperties properties, ImageDataSource imageDataSource) {
@@ -45,14 +49,14 @@ public class FileSystemStorageService implements StorageService {
                                 + filename);
             }
             try (InputStream inputStream = file.getInputStream()) {
-                Path filePath = this.rootLocation.resolve(filename);
+                String newFilename = getNewName(filename);
+                Path filePath = this.rootLocation.resolve(newFilename);
                 Files.copy(inputStream, filePath, // 'copies' file to upload-dir using the rootLocation and filename
                         StandardCopyOption.REPLACE_EXISTING);                // file of same name in upload-dir will be overwritten
 
-                Image image = createImageData(filename, "test", filePath);
+                Image image = createImageData(filename, newFilename, filePath);
 
                 imageDataSource.insertImage(image);
-                //Files.move(oldName, newName)
             }
         }
         catch (IOException e) {
@@ -61,10 +65,32 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
-    public Image createImageData(String origFileName, String hash, Path filePath) {
+    public String getNewName(String filename) {
+        if (Files.exists(this.rootLocation.resolve(filename))){
+            Matcher m = PATTERN.matcher(filename);
+            if (m.matches()){
+                String prefix = m.group(1);
+                String number = m.group(2);
+                String suffix = m.group(3);
+
+                int count = 0;
+                if (number != null){
+                    count = Integer.parseInt(number);
+                }
+                do {
+                    count++;
+                    filename = prefix + "(" + count + ")" + suffix;
+                } while (Files.exists(this.rootLocation.resolve(filename)));
+            }
+        }
+        return filename;
+    }
+
+    @Override
+    public Image createImageData(String origFilename, String hash, Path filePath) {
         Image newImage = new Image();
-        newImage.setOrigName(origFileName);
-        newImage.setHash_name(hash);
+        newImage.setOrigName(origFilename);
+        newImage.setNewFilename(hash);
         newImage.setPath(filePath.toString());
 
         return newImage;

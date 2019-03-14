@@ -26,9 +26,9 @@ public class ImageDataSourceJdbc implements ImageDataSource {
     public void insertImage(Image image) {
         SqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("orig_name", image.getOrigName())
-                .addValue("hash_name", image.getHash_name())
+                .addValue("new_name", image.getNewFilename())
                 .addValue("path", image.getPath());
-        String insertQuery = "INSERT INTO images (orig_name, hash_name, path) VALUES (:orig_name, :hash_name, :path)";
+        String insertQuery = "INSERT INTO images (orig_name, new_name, path) VALUES (:orig_name, :new_name, :path)";
         namedJdbcTemplate.update(insertQuery, parameters);
     }
 

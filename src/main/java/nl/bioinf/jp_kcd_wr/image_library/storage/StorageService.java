@@ -13,7 +13,9 @@ public interface StorageService {
 
     void store(MultipartFile file);
 
-    Image createImageData(String origFileName, String hash, Path filePath);
+    String getNewName(String origFilename);
+
+    Image createImageData(String origFilename, String hash, Path filePath);
 
     Stream<Path> loadAll();
 
