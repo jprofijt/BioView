@@ -18,7 +18,7 @@ CREATE TABLE users(
 CREATE TABLE images(
   id        INT(100)    NOT NULL AUTO_INCREMENT,
   orig_name VARCHAR(50)  NOT NULL,
-  hash_name VARCHAR(50)  NOT NULL,
+  new_name VARCHAR(50)  NOT NULL,
   path      VARCHAR(260)  NOT NULL,
 
   PRIMARY KEY (id)
