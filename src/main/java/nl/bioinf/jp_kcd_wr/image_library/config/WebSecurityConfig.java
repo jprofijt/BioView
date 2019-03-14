@@ -23,6 +23,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
      * @throws Exception
      */
 
+
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
@@ -32,6 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .antMatchers("/", "/home", "/login", "/files/*").permitAll()
                 .anyRequest().authenticated()
                 .and()
+                .csrf().disable()
                 .formLogin()
                 .loginPage("/login")
                 .permitAll()
@@ -40,6 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .logout()
                 .permitAll();
     }
+
 
     /**
      * the passwordencoder, uses a BCryptpasswordencoder to encrypt passwords for security
@@ -63,8 +66,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         auth.jdbcAuthentication().dataSource(dataSource)
                 .passwordEncoder(passwordEncoder)
                 .usersByUsernameQuery(
-                        "select email, password, enabled from users where email = ? and enabled = true")
+                        "select name, password, enabled from users where name = ? and enabled = true")
                 .authoritiesByUsernameQuery(
-                        "select email, concat('ROLE_',role) from users where email = ?");
+                        "select name, concat('ROLE_',role) from users where name = ?");
     }
 }
