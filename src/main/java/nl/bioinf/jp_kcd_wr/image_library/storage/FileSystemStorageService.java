@@ -7,8 +7,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageDataSource;
+import nl.bioinf.jp_kcd_wr.image_library.model.Image;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -21,9 +25,13 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileSystemStorageService implements StorageService {
 
     private final Path rootLocation;
+    private final ImageDataSource imageDataSource;
+
+    private final static Pattern PATTERN = Pattern.compile("(.*?)(?:\\((\\d+)\\))?(\\.[^.]*)?");
 
     @Autowired
-    public FileSystemStorageService(StorageProperties properties) {
+    public FileSystemStorageService(StorageProperties properties, ImageDataSource imageDataSource) {
+        this.imageDataSource = imageDataSource;
         this.rootLocation = Paths.get(properties.getLocation());
     }
 
@@ -41,14 +49,51 @@ public class FileSystemStorageService implements StorageService {
                                 + filename);
             }
             try (InputStream inputStream = file.getInputStream()) {
-                Files.copy(inputStream, this.rootLocation.resolve(filename), // 'copies' file to upload-dir using the rootLocation and filename
+                String newFilename = getNewName(filename);
+                Path filePath = this.rootLocation.resolve(newFilename);
+                Files.copy(inputStream, filePath, // 'copies' file to upload-dir using the rootLocation and filename
                         StandardCopyOption.REPLACE_EXISTING);                // file of same name in upload-dir will be overwritten
-                //Files.move(oldName, newName)
+
+                Image image = createImageData(filename, newFilename, filePath);
+
+                imageDataSource.insertImage(image);
             }
         }
         catch (IOException e) {
             throw new StorageException("Failed to store file " + filename, e);
         }
+    }
+
+    @Override
+    public String getNewName(String filename) {
+        if (Files.exists(this.rootLocation.resolve(filename))){
+            Matcher m = PATTERN.matcher(filename);
+            if (m.matches()){
+                String prefix = m.group(1);
+                String number = m.group(2);
+                String suffix = m.group(3);
+
+                int count = 0;
+                if (number != null){
+                    count = Integer.parseInt(number);
+                }
+                do {
+                    count++;
+                    filename = prefix + "(" + count + ")" + suffix;
+                } while (Files.exists(this.rootLocation.resolve(filename)));
+            }
+        }
+        return filename;
+    }
+
+    @Override
+    public Image createImageData(String origFilename, String hash, Path filePath) {
+        Image newImage = new Image();
+        newImage.setOrigName(origFilename);
+        newImage.setNewFilename(hash);
+        newImage.setPath(filePath.toString());
+
+        return newImage;
     }
 
     @Override
