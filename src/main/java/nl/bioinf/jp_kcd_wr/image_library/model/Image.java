@@ -1,10 +1,10 @@
 package nl.bioinf.jp_kcd_wr.image_library.model;
 
 public class Image {
-    // id, orig_name, hash_name, path
+    // id, orig_name, NewFilename, path
     private int id;
     private String origName;
-    private String hash_name;
+    private String NewFilename;
     private String path;
 
     public int getId() {
@@ -23,12 +23,12 @@ public class Image {
         this.origName = origName;
     }
 
-    public String getHash_name() {
-        return hash_name;
+    public String getNewFilename() {
+        return NewFilename;
     }
 
-    public void setHash_name(String hash_name) {
-        this.hash_name = hash_name;
+    public void setNewFilename(String newFilename) {
+        this.NewFilename = newFilename;
     }
 
     public String getPath() {
@@ -39,10 +39,10 @@ public class Image {
         this.path = path;
     }
 
-    public Image(int id, String origName, String hash_name, String path) {
+    public Image(int id, String origName, String NewFilename, String path) {
         this.id = id;
         this.origName = origName;
-        this.hash_name = hash_name;
+        this.NewFilename = NewFilename;
         this.path = path;
     }
 
