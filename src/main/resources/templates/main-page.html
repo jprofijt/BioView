@@ -7,9 +7,16 @@
 <body>
 <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
 
-
 <form th:action="@{/logout}" method="post">
     <input type="submit" value="Sign Out"/>
 </form>
+<div th:replace="fragments/maps"></div>
+<div th:replace="fragments/image-view"></div>
+
+
+<div th:replace="fragments/footer :: ${#authorization.expression('hasRole(''ROLE_ADMIN'')')} ? 'footer-admin' : 'footer'">
+    &copy; placeholder
+
+</div>
 </body>
 </html>
