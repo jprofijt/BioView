@@ -101,7 +101,7 @@ public class FileSystemStorageService implements StorageService {
     public Stream<Path> loadAll() {
         try {
             return Files.walk(this.rootLocation, 1)
-                    .filter(path -> !path.equals(this.rootLocation))
+                    .filter(path -> !path.equals(this.rootLocation) && path.toFile().isFile())
                     .map(this.rootLocation::relativize);
         }
         catch (IOException e) {
