@@ -33,7 +33,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .antMatchers("/", "/home", "/login", "/files/*", "/temp", "/images/**", "/css/**", "/js/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .csrf().disable()
                 .formLogin()
                 .loginPage("/login")
                 .permitAll()

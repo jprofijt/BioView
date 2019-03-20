@@ -12,7 +12,7 @@ public class MvcConfig implements WebMvcConfigurer {
 
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/home").setViewName("home");
-        registry.addViewController("/").setViewName("home");
+        registry.addViewController("/").setViewName("login");
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/succes").setViewName("succes");
 
@@ -21,20 +21,8 @@ public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
-                .addResourceHandler("/resources/**")
-                .addResourceLocations("/resources/");
-
-        registry
-                .addResourceHandler("/static/js/**")
-                .addResourceLocations("resources/js/");
-
-        registry
-                .addResourceHandler("/static/css/**")
-                .addResourceLocations("/resources/css/");
-
-        registry
-                .addResourceHandler("/img/**")
-                .addResourceLocations("/resources/img/");
+                .addResourceHandler("/static/**")
+                .addResourceLocations("/static/");
     }
 
 }
