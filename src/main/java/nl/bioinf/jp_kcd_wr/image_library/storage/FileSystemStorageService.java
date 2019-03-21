@@ -98,10 +98,10 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
-    public Stream<Path> loadAll() {
+    public Stream<Path> loadAll(String currentFolder) {
         try {
-            return Files.walk(this.rootLocation, 1)
-                    .filter(path -> !path.equals(this.rootLocation) && path.toFile().isFile())
+            return Files.walk(this.rootLocation.resolve(currentFolder), 1)
+                    .filter(path -> !path.equals(this.rootLocation.resolve(currentFolder)) && path.toFile().isFile())
                     .map(this.rootLocation::relativize);
         }
         catch (IOException e) {
