@@ -30,7 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .authorizeRequests()
 //                .antMatchers("/upload")      /* this is to test roles */
 //                .access("hasRole('ADMIN')")
-                .antMatchers("/", "/home", "/login", "/files/*").permitAll()
+                .antMatchers("/", "/home", "/login", "/files/*", "/main", "/css/*", "/js/*").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
