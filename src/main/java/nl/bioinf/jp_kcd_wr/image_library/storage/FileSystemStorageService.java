@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageDataSource;
 import nl.bioinf.jp_kcd_wr.image_library.model.Image;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -24,15 +25,15 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class FileSystemStorageService implements StorageService {
 
-    private final Path rootLocation;
+    private Path rootLocation;
     private final ImageDataSource imageDataSource;
 
     private final static Pattern PATTERN = Pattern.compile("(.*?)(?:\\((\\d+)\\))?(\\.[^.]*)?");
 
     @Autowired
-    public FileSystemStorageService(StorageProperties properties, ImageDataSource imageDataSource) {
+    public FileSystemStorageService(ImageDataSource imageDataSource, Environment environment) {
         this.imageDataSource = imageDataSource;
-        this.rootLocation = Paths.get(properties.getLocation());
+        this.rootLocation = Paths.get(environment.getProperty("library.upload"));
     }
 
     @Override
