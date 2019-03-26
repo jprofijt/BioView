@@ -17,7 +17,9 @@ public interface StorageService {
 
     Image createImageData(String origFilename, String hash, Path filePath);
 
-    Stream<Path> loadAll();
+//    Stream<Path> loadAll();
+
+    Stream<Path> loadAll(String currentFolder);
 
     Path load(String filename);
 

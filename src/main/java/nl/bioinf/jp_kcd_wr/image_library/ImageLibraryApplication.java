@@ -1,18 +1,15 @@
 package nl.bioinf.jp_kcd_wr.image_library;
 
-import nl.bioinf.jp_kcd_wr.image_library.storage.StorageProperties;
 import nl.bioinf.jp_kcd_wr.image_library.storage.StorageService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
 @SpringBootApplication
-@EnableConfigurationProperties(StorageProperties.class)
 public class ImageLibraryApplication {
 
     public static void main(String[] args) {
