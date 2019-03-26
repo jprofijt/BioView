@@ -3,20 +3,25 @@ package nl.bioinf.jp_kcd_wr.image_library.control;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Controller
 public class UserController {
+    Logger logger = Logger.getLogger("nl.bioinf");
 
-    @RequestMapping(value = "/username", method = RequestMethod.GET)
-    @ResponseBody
-    public String getUserName(Authentication authentication) {
+    @GetMapping(value = "/roletest")
+    public String getUser(Authentication authentication, Model model) {
+
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        System.out.println("User has authorities: " + userDetails.getAuthorities());
-        System.out.println("User has email: " + userDetails.getUsername());
+        model.addAttribute("role", userDetails.getAuthorities());
+        logger.log(Level.INFO,userDetails.getUsername() + "has authority: "+userDetails.getAuthorities());
 
-        return "username";
+        return "role-test";
     }
+
+
 }
