@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.stream.Collectors;
 
@@ -37,7 +38,7 @@ public class DirectoryController {
             return "directory-error";
         }
         model.addAttribute("folders", folderHandler.getNextFolders(currentPath));
-        model.addAttribute("currentPath", currentPath);
+        model.addAttribute("currentPath", new File(currentPath));
         return "folders";
     }
 
@@ -50,14 +51,14 @@ public class DirectoryController {
             return "directory-error";
         }
         model.addAttribute("folders", folderHandler.getNextFolders(currentPath));
-        model.addAttribute("currentPath", currentPath);
+        model.addAttribute("currentPath", new File(currentPath));
         return "folders";
     }
 
     @GetMapping("/nextfolder")
     public String nextFolder(@RequestParam(name="folder", required=false, defaultValue="testdata") String folder, Model model) {
         model.addAttribute("folders", folderHandler.getNextFolders(folder));
-        model.addAttribute("currentPath", folder);
+        model.addAttribute("currentPath", new File(folder));
         model.addAttribute("date", LocalDate.now().toString());
 
         model.addAttribute("files", storageService.loadAll(folder).map(
