@@ -11,7 +11,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class FolderHandler implements FolderStructureProvider {
@@ -23,13 +24,9 @@ public class FolderHandler implements FolderStructureProvider {
     }
 
     @Override
-    public ArrayList<String> getNextFolders(String nextFolders){
+    public List<File> getNextFolders(String nextFolders){
         File[] directories = new File(String.valueOf(this.rootLocation.resolve(nextFolders))).listFiles(File::isDirectory);
-        ArrayList<String> folders = new ArrayList<>();
-        for (File folder: directories) {
-            folders.add(folder.getPath());
-        }
-        return folders;
+        return Arrays.asList(directories);
     }
 
     @Override
