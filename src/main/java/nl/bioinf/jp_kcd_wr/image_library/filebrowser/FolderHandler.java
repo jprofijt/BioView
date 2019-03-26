@@ -24,7 +24,7 @@ public class FolderHandler implements FolderStructureProvider {
 
     @Override
     public ArrayList<String> getNextFolders(String nextFolders){
-        File[] directories = new File(nextFolders).listFiles(File::isDirectory);
+        File[] directories = new File(String.valueOf(this.rootLocation.resolve(nextFolders))).listFiles(File::isDirectory);
         ArrayList<String> folders = new ArrayList<>();
         for (File folder: directories) {
             folders.add(folder.getPath());
@@ -34,7 +34,7 @@ public class FolderHandler implements FolderStructureProvider {
 
     @Override
     public void createNewFolder(String directoryName, String currentPath) throws DirectoryExistsException {
-        String path = currentPath + "/" + directoryName;
+        String path = this.rootLocation.resolve(currentPath) + File.separator + directoryName;
         File newDir = new File(path);
         try {
             Files.createDirectory(newDir.toPath());
