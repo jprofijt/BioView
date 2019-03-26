@@ -9,10 +9,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 @Controller
 public class DirectoryController {
+    private static final Logger logger = Logger.getLogger(DirectoryController.class.getName());
     @PostMapping("/createfolder")
     public String CreateFolder(@RequestParam(name="directoryName", required=true) String directoryName, @RequestParam(name="currentPath", required=true) String currentPath, Model model) {
         FolderHandler creator = new FolderHandler();
@@ -20,10 +23,12 @@ public class DirectoryController {
             creator.createNewFolder(directoryName, currentPath);
         } catch (DirectoryExistsException e) {
             model.addAttribute("error", e.getMessage());
+            logger.log(Level.WARNING, "{0} already exist", new Object[]{directoryName});
             return "directory-error";
         }
         model.addAttribute("folders", creator.getNextFolders(currentPath));
         model.addAttribute("currentPath", currentPath);
+        logger.log(Level.INFO, "Folders were created successfully!");
         return "folders";
     }
 
@@ -34,10 +39,12 @@ public class DirectoryController {
             dateCreator.createDateDirectory(currentPath);
         } catch (DirectoryExistsException e){
             model.addAttribute("error", e.getMessage());
+            logger.log(Level.WARNING, "{0} already exists");
             return "directory-error";
         }
         model.addAttribute("folders", dateCreator.getNextFolders(currentPath));
         model.addAttribute("currentPath", currentPath);
+        logger.log(Level.INFO, "Successfully created {0}", new Object[]{dateCreator.getNextFolders(currentPath)});
         return "folders";
     }
 
@@ -50,5 +57,5 @@ public class DirectoryController {
         return "folders";
     }
 
-    }
+}
 

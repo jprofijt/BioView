@@ -21,3 +21,5 @@ public class WebConfig extends WebMvcConfigurerAdapter {
                         "classpath:/static/images/",
                         "classpath:/static/css/",
                         "classpath:/static/js/");
+    }
+}
