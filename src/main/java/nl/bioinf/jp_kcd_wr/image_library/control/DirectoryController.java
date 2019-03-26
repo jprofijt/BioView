@@ -61,7 +61,7 @@ public class DirectoryController {
         model.addAttribute("date", LocalDate.now().toString());
 
         model.addAttribute("files", storageService.loadAll(folder).map(
-                path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
+                path -> MvcUriComponentsBuilder.fromMethodName(DirectoryController.class,
                         "serveFile", path.getFileName().toString()).build().toString())
                 .collect(Collectors.toList()));
         return "folders";
