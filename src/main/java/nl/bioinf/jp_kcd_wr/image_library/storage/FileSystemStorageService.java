@@ -25,7 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class FileSystemStorageService implements StorageService {
 
-    private Path rootLocation;
+    private final Path rootLocation;
     private final ImageDataSource imageDataSource;
 
     private final static Pattern PATTERN = Pattern.compile("(.*?)(?:\\((\\d+)\\))?(\\.[^.]*)?");
@@ -98,10 +98,10 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
-    public Stream<Path> loadAll() {
+    public Stream<Path> loadAll(String currentFolder) {
         try {
-            return Files.walk(this.rootLocation, 1)
-                    .filter(path -> !path.equals(this.rootLocation))
+            return Files.walk(this.rootLocation.resolve(currentFolder), 1)
+                    .filter(path -> !path.equals(this.rootLocation.resolve(currentFolder)) && path.toFile().isFile())
                     .map(this.rootLocation::relativize);
         }
         catch (IOException e) {

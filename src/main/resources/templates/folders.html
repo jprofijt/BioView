@@ -9,8 +9,9 @@
 <th:block th:each="folder: ${folders}">
 
     <form th:action="@{/nextfolder}" method="get">
-            <input name="folder" type="hidden" th:default="testdata" th:value="${folder}">
-            <input type="submit" th:value="${folder}" th:default="testdata">
+            <!--/*@thymesVar id="getPath" type="File"*/-->
+            <input name="folder" type="hidden" th:default="testdata" th:value="${folder.getPath()}">
+            <input type="submit" th:value="${folder.getName()}" th:default="testdata">
     </form><br/>
 
 </th:block>
@@ -26,9 +27,17 @@
 <div>
     <form th:action="@{/createdatefolder}" method="post">
         <input name="currentPath" type="hidden" th:value="${currentPath}">
-        <input type="submit" th:value="${'Create a directory '+date+' in '+currentPath}">
+        <input type="submit" th:value="${'Create a directory '+date+' in '+currentPath.getName()}">
     </form>
 
+</div>
+<div>
+    <ul>
+        <!--displays every file currently uploaded-->
+        <li th:each="file : ${files}">
+            <a th:href="${file}" th:text="${file}" />
+        </li>
+    </ul>
 </div>
 </body>
 </html>
