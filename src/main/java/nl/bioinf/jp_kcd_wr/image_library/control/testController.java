@@ -8,7 +8,7 @@ public class testController {
 
     @GetMapping("/temp")
     public String redirectToTemp(){
-        return "bootstrap-base";
+        return "main-page";
     }
 
 }
