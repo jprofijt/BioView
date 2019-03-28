@@ -16,29 +16,8 @@
             </div>
             <div class="col-md-8 border rounded">
                 <div class="docs-gallery">
-                    <ul class="pictures clearfix" style="height:805px; overflow: scroll">
-                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
-                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
-                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
-                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
-                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
-                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
-                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
-                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
-                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
-                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
-                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
-                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
-                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
-                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
-                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
-                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
-                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
-                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
-                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
-                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
-                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
-                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
+                    <ul class="pictures clearfix" th:each="image : ${images}" style="height:805px; overflow: scroll">
+                      <li th:href="${image.url}" th:alt="${image.description}" style="height: 200px; width: 200px"></li>
                     </ul>
                 </div>
             </div>
@@ -46,6 +25,7 @@
             <div class="col-md-2 border rounded" id="options">
                 <nav class="nav flex-column">
                     <a class="nav-link" th:href="@{/upload}"><i class="fas fa-file-upload"></i> Upload New Image</a>
+                    <a class="nav-link" th:href="@{/createnewfolder}"><i class="fas fa-folder-plus"></i> Create new sub-directory</a>
                 </nav>
             </div>
         </div>
