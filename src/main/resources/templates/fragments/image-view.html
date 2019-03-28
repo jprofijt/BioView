@@ -16,8 +16,10 @@
             </div>
             <div class="col-md-8 border rounded">
                 <div class="docs-gallery">
-                    <ul class="pictures clearfix" th:each="image : ${images}" style="height:805px; overflow: scroll">
-                      <li th:href="${image.url}" th:alt="${image.description}" style="height: 200px; width: 200px"></li>
+                    <ul class="pictures clearfix" style="height:805px; overflow: scroll">
+                        <th:block  th:each="image : ${images}" >
+                            <li class="img-thumbnail" th:src="${image.getPath()}" th:alt="${image.getNewFilename()}"></li>
+                        </th:block>
                     </ul>
                 </div>
             </div>
