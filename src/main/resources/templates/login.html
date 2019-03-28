@@ -5,25 +5,40 @@
 <head>
     <meta charset="UTF-8">
     <title>Login form</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/login.css}"/>
 </head>
 <body>
-<h2>Login form</h2>
-
-<div id="login_form_container">
-    <div th:if="${param.error}">
-        Invalid username and password.
-    </div>
-    <form action="#" th:action="@{/login}" method="post">
-        <div class="container">
-            <label>Username</label>
-            <input type="text" placeholder="Username" name="username" required="required"><br/>
-
-            <label>Password</label>
-            <input type="password" placeholder="Password" name="password" required="required"><br/>
-
-            <button type="submit">Login</button>
+<div>
+    <p>Place for a name header</p>
+</div>
+<div id="container" class="container main_div">
+    <div>
+        <div class="col-sm-6 offset-sm-3 text-center forum-background">
+            <br>
+            <h1>Login User</h1>
+            <div th:if="${param.error}">
+                Combination username and password is incorrect.
+            </div>
+            <form class="form-inline justify-content-center" action="#" th:action="@{/login}" method="post">
+                <div>
+                    <br/>
+                    <input type="text"  class="form-control" placeholder="Username" name="username" required="required">
+                    <br/><br/>
+                    <input type="password" class="form-control" placeholder="Password" name="password" required="required">
+                    <br/><br/>
+                    <div class="align-content-center">
+                        <label class="remember-text">Remember me:</label>
+                        <input type="checkbox" name="remember-me"/><br>
+                    </div><br>
+                    <button type="submit" class="btn btn-success">Login</button>
+                </div>
+            </form><br>
         </div>
-    </form>
+    </div>
+</div>
+<div th:replace="fragments/footer::'footer-login'">
+
 </div>
 
 </body>
