@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<main th:fragment="images-window">
+    <div class="container-fluid mt-4 mb-4">
+        <div class="row justify-content-around">
+            <div class="col-md-2">
+                <div class="row">
+                    <div class="container-fluid">
+                        <a href="#">dummyfolder/</a><a href="#">dummy2/</a><a href="#">currentdir/</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="tree" class="container-fluid"></div>
+                </div>
+            </div>
+            <div class="col-md-8 border rounded">
+                <div class="docs-gallery">
+                    <ul class="pictures clearfix" style="height:805px; overflow: scroll">
+                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
+                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
+                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
+                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
+                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
+                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
+                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
+                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
+                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
+                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
+                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
+                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
+                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
+                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
+                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
+                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
+                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
+                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
+                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
+                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
+                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
+                        <li><img th:src="@{/images/dummy-200x200.png}" th:alt="${'Something went wrong, image not found'}"></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-2 border rounded" id="options">
+                <nav class="nav flex-column">
+                    <a class="nav-link" th:href="@{/upload}"><i class="fas fa-file-upload"></i> Upload New Image</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

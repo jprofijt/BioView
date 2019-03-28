@@ -33,4 +33,4 @@ plu
 /.nb-gradle/
 src/test/resources/
 upload-dir/
-application-dev.properties
+/src/main/resources/application-prod.properties
