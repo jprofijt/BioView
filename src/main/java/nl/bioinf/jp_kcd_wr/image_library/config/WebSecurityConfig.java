@@ -11,10 +11,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
-
+    private static final Logger logger = Logger.getLogger(WebSecurityConfig.class.getName());
 
     @Autowired
     private DataSource dataSource;
@@ -31,6 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
+        logger.log(Level.WARNING, String.valueOf(rememberMe));
         httpSecurity
                 .authorizeRequests()
 //                .antMatchers("/upload")      /* this is to test roles */
@@ -43,7 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .and()
                 .logout().permitAll()
                 .and()
-                .rememberMe().key("uniqueAndSecret").tokenValiditySeconds(rememberMe);
+                .rememberMe().key("uniqueAndSecret").tokenValiditySeconds(86400);
 
 
     }

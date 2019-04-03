@@ -3,14 +3,14 @@ package nl.bioinf.jp_kcd_wr.image_library.control;
 import nl.bioinf.jp_kcd_wr.image_library.model.Image;
 import nl.bioinf.jp_kcd_wr.image_library.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
-import java.io.IOException;
-import java.util.ArrayList;
+
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
