@@ -45,7 +45,6 @@
         <!--displays every file currently uploaded-->
         <li th:each="file : ${files}">
             <a th:href="${file}" th:text="${file}" />
-            <img th:src="${file}">
         </li>
     </ul>
 </div>
