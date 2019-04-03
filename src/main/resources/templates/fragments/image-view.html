@@ -18,8 +18,9 @@
                 <div class="docs-gallery">
                     <ul class="pictures clearfix" style="height:805px; overflow: scroll">
                         <li th:each="image : ${Images}">
-                            <img th:src="${image}"/>
+                            <a th:href="${image}" target="_blank"><img th:src="${image}" /></a>
                         </li>
+
                     </ul>
                 </div>
             </div>
