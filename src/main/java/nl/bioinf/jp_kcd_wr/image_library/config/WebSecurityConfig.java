@@ -15,11 +15,12 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
+
     @Autowired
     private DataSource dataSource;
 
     @Value("${remember.me}")
-    private int rememberMe;
+    private static int rememberMe;
 
     /**
      * secures pages from being accessed without a login, except for the home and login page
@@ -34,7 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .authorizeRequests()
 //                .antMatchers("/upload")      /* this is to test roles */
 //                .access("hasRole('ADMIN')")
-                .antMatchers("/", "/home", "/login*", "/static/**")
+                .antMatchers("/", "/home", "/login*","/js/**", "/css/**","/static/**")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
