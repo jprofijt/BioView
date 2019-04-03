@@ -1,5 +1,6 @@
 package nl.bioinf.jp_kcd_wr.image_library.config;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -14,8 +15,12 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
+
     @Autowired
     private DataSource dataSource;
+
+    @Value("${remember.me}")
+    private static int rememberMe;
 
     /**
      * secures pages from being accessed without a login, except for the home and login page
@@ -30,16 +35,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .authorizeRequests()
 //                .antMatchers("/upload")      /* this is to test roles */
 //                .access("hasRole('ADMIN')")
-                .antMatchers("/", "/home", "/login", "/files/*", "/temp", "/images/**", "/css/**", "/js/**", "/static/**").permitAll()
+                .antMatchers("/", "/home", "/login*","/js/**", "/css/**","/static/**")
+                .permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .loginPage("/login")
-                .permitAll()
-                .defaultSuccessUrl("/imageview")
+                .formLogin().loginPage("/login").permitAll().defaultSuccessUrl("/temp")
                 .and()
-                .logout()
-                .permitAll();
+                .logout().permitAll()
+                .and()
+                .rememberMe().key("uniqueAndSecret").tokenValiditySeconds(rememberMe);
+
+
     }
 
 
