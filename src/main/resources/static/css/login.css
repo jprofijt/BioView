@@ -1,0 +1,16 @@
+.main_div{
+    margin-top:10%;
+}
+.forum-background{
+    background: #dee2e6;
+}
+.remember-text{
+    float: left;
+    margin-right: 5%;
+}
+
+.footer{
+    position: fixed;
+    bottom:0;
+}
+

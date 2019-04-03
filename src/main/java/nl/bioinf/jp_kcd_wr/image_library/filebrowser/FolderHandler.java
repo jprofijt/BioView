@@ -21,6 +21,7 @@ public class FolderHandler implements FolderStructureProvider {
     @Autowired
     public FolderHandler(Environment environment){
         this.rootLocation = Paths.get(environment.getProperty("library.upload"));
+        System.out.println(this.rootLocation);
     }
 
     @Override
