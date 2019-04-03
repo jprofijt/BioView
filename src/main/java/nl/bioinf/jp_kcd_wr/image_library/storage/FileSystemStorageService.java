@@ -1,5 +1,7 @@
 package nl.bioinf.jp_kcd_wr.image_library.storage;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -7,6 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -21,6 +25,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.imageio.ImageIO;
 
 @Service
 public class FileSystemStorageService implements StorageService {
@@ -140,9 +146,48 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
+    public void processThumbnails(File Directory) {
+
+    }
+
+    private List<File> listContents(File Directory){
+        ArrayList<File> contents = new ArrayList<>();
+        return contents;
+
+    }
+
+
+    /**
+     * Creates a new .cache directory with scaled tumbnail images
+     * @param Directory
+     * @throws IOException
+     */
+    private void createThumbnailsInDirectory(File Directory) throws IOException {
+
+        String cacheDirectory = Directory.getPath() + "/.cache/";
+        new File(cacheDirectory).mkdirs();
+
+        for (File image : Directory.listFiles(File::isFile)) {
+            String cacheLocation = cacheDirectory + image.getName();
+            System.out.println("cacheLocation = " + cacheLocation);
+            if (!new File(cacheLocation).exists()) {
+                BufferedImage img = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
+                img
+                        .createGraphics()
+                        .drawImage(ImageIO.read(image).getScaledInstance(200, 200, java.awt.Image.SCALE_SMOOTH), 0, 0, null);
+                ImageIO.write(img, "jpg", new File(cacheLocation));
+            }
+        }
+    }
+
+
+
+
+    @Override
     public void init() {
         try {
             Files.createDirectories(rootLocation);
+            createThumbnailsInDirectory(rootLocation.toFile());
         }
         catch (IOException e) {
             throw new StorageException("Could not initialize storage", e);
