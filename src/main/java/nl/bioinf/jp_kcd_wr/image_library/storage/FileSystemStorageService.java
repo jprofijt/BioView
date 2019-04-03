@@ -71,6 +71,7 @@ public class FileSystemStorageService implements StorageService {
                 Image image = createImageData(filename, newFilename, filePath);
 
                 imageDataSource.insertImage(image);
+
             }
         }
         catch (IOException e) {
@@ -191,19 +192,22 @@ public class FileSystemStorageService implements StorageService {
         new File(cacheDirectory).mkdirs();
 
         for (File image : Directory.listFiles(File::isFile)) {
-            String extenion = getFileExtension(image);
-            String cacheImage = image.getName().replace(extenion, ".jpg");
-            String cacheLocation = cacheDirectory + cacheImage;
-            System.out.println("cacheLocation = " + cacheLocation);
+            cacheImage(image, cacheDirectory);
+        }
+    }
 
-            if (!new File(cacheLocation).exists()) {
-                BufferedImage img = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
-                img
-                        .createGraphics()
-                        .drawImage(ImageIO.read(image).getScaledInstance(200, 200, java.awt.Image.SCALE_SMOOTH), 0, 0, null);
-                ImageIO.write(img, "jpg", new File(cacheLocation));
-                logger.log(Level.INFO, "Succesfully created cache of {0} in directory: {1}", new Object[] {image.getName(), cacheDirectory});
-            }
+    private void cacheImage(File image, String cacheDirectory) throws IOException {
+        String extenion = getFileExtension(image);
+        String cacheImage = image.getName().replace(extenion, ".jpg");
+        String cacheLocation = cacheDirectory + cacheImage;
+
+        if (!new File(cacheLocation).exists()) {
+            BufferedImage img = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
+            img
+                    .createGraphics()
+                    .drawImage(ImageIO.read(image).getScaledInstance(200, 200, java.awt.Image.SCALE_SMOOTH), 0, 0, null);
+            ImageIO.write(img, "jpg", new File(cacheLocation));
+            logger.log(Level.INFO, "Succesfully created cache of {0} in directory: {1}", new Object[] {image.getName(), cacheDirectory});
         }
     }
 

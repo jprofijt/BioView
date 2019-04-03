@@ -14,11 +14,11 @@
                     <div id="tree" class="container-fluid"></div>
                 </div>
             </div>
-            <div class="col-md-8 border rounded">
-                <div class="docs-gallery">
-                    <ul class="pictures clearfix" style="height:805px; overflow: scroll">
-                        <li th:each="image : ${Images}">
-                            <img th:src="${image}"/>
+            <div class="col-md-8">
+                <div class="docs-gallery col-12" >
+                    <ul class="pictures clearfix" style="height:800px; overflow: scroll">
+                        <li class="col-sm-12 col-md-6 col-lg-4" th:each="image : ${Images}">
+                            <img class="img-thumbnail img-fluid" th:src="${image}"/>
                         </li>
                     </ul>
                 </div>
