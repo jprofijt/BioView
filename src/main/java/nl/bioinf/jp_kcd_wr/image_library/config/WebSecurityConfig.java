@@ -1,5 +1,6 @@
 package nl.bioinf.jp_kcd_wr.image_library.config;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -17,6 +18,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     @Autowired
     private DataSource dataSource;
 
+    @Value("${remember.me}")
+    private int rememberMe;
+
     /**
      * secures pages from being accessed without a login, except for the home and login page
      * @param httpSecurity
@@ -30,7 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .authorizeRequests()
 //                .antMatchers("/upload")      /* this is to test roles */
 //                .access("hasRole('ADMIN')")
-                .antMatchers("/", "/home", "/login*", "/css/**", "/js/**", "/static/**")
+                .antMatchers("/", "/home", "/login*", "/static/**")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -38,7 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .and()
                 .logout().permitAll()
                 .and()
-                .rememberMe().key("uniqueAndSecret").tokenValiditySeconds(86400);
+                .rememberMe().key("uniqueAndSecret").tokenValiditySeconds(rememberMe);
 
 
     }
