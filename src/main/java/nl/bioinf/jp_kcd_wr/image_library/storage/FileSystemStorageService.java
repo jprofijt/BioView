@@ -18,7 +18,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import nl.bioinf.jp_kcd_wr.image_library.control.FileUploadController;
 import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageDataSource;
 import nl.bioinf.jp_kcd_wr.image_library.model.Image;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 @Service
 public class FileSystemStorageService implements StorageService {
@@ -41,11 +39,13 @@ public class FileSystemStorageService implements StorageService {
     private static final Logger logger = Logger.getLogger(FileSystemStorageService.class.getName());
 
     private final static Pattern PATTERN = Pattern.compile("(.*?)(?:\\((\\d+)\\))?(\\.[^.]*)?");
+    private final Path cacheLocation;
 
     @Autowired
     public FileSystemStorageService(ImageDataSource imageDataSource, Environment environment) {
         this.imageDataSource = imageDataSource;
         this.rootLocation = Paths.get(environment.getProperty("library.upload"));
+        this.cacheLocation = Paths.get(environment.getProperty("cache-location"));
         logger.log(Level.INFO, "Starting FileSystemStorage service using {0} as imageDataSource, and {1} as root location", new Object[] {this.imageDataSource, this.rootLocation});
     }
 
@@ -158,15 +158,15 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
-    public void processThumbnails(File Directory) {
+    public void processExistingImageLibrary(File Directory) {
         for (File contentDirectory : listDirectories(Directory)){
-            processThumbnails(contentDirectory);
+            processExistingImageLibrary(contentDirectory);
         }
 
         try {
-            if (!Directory.getName().equals(".cache")) {
-                createThumbnailsInDirectory(Directory);
-            }
+            IndexImages(Directory);
+            createThumbnails(Directory);
+
         } catch (IOException e) {
             logger.log(Level.WARNING, "Directory {0} not found", Directory.getPath());
         }
@@ -186,28 +186,42 @@ public class FileSystemStorageService implements StorageService {
      * @param Directory
      * @throws IOException
      */
-    private void createThumbnailsInDirectory(File Directory) throws IOException {
+    private void createThumbnails(File Directory) throws IOException {
 
-        String cacheDirectory = Directory.getPath() + "/.cache/";
-        new File(cacheDirectory).mkdirs();
 
         for (File image : Directory.listFiles(File::isFile)) {
-            cacheImage(image, cacheDirectory);
+            cacheImage(image);
         }
     }
 
-    private void cacheImage(File image, String cacheDirectory) throws IOException {
+    private void IndexImages(File directory){
+        for (File image : directory.listFiles(File::isFile)) {
+            Image anotatedImage = new Image();
+            anotatedImage.setPath(image.getPath());
+            anotatedImage.setOrigName(image.getName());
+            anotatedImage.setNewFilename(image.getName());
+            imageDataSource.insertImage(anotatedImage);
+        }
+    }
+
+    private void cacheImage(File image) throws IOException {
         String extenion = getFileExtension(image);
         String cacheImage = image.getName().replace(extenion, ".jpg");
-        String cacheLocation = cacheDirectory + cacheImage;
 
-        if (!new File(cacheLocation).exists()) {
+        int imageId = imageDataSource.getImageIdFromPath(image.getPath());
+        File cacheLocation = new File(this.cacheLocation.toString() + "/"+ imageId + ".jpg");
+
+        if (!imageDataSource.isCached(imageId)) {
+
             BufferedImage img = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
             img
                     .createGraphics()
                     .drawImage(ImageIO.read(image).getScaledInstance(200, 200, java.awt.Image.SCALE_SMOOTH), 0, 0, null);
-            ImageIO.write(img, "jpg", new File(cacheLocation));
-            logger.log(Level.INFO, "Succesfully created cache of {0} in directory: {1}", new Object[] {image.getName(), cacheDirectory});
+            ImageIO.write(img, "jpg", cacheLocation);
+            imageDataSource.insertCache(imageId, cacheLocation.toPath());
+            if (cacheLocation.isFile()) {
+                logger.log(Level.INFO, "Succesfully created cache of {0} in directory: {1}", new Object[]{image.getName(), this.cacheLocation});
+            }
         }
     }
 
@@ -225,7 +239,7 @@ public class FileSystemStorageService implements StorageService {
     public void init() {
         try {
             Files.createDirectories(rootLocation);
-            processThumbnails(rootLocation.toFile());
+            processExistingImageLibrary(rootLocation.toFile());
         }
         catch (IOException e) {
             logger.log(Level.SEVERE, "Storage system was not able to initialize");

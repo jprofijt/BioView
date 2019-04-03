@@ -1,5 +1,9 @@
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS cache;
 DROP TABLE IF EXISTS images;
+DROP TABLE IF EXISTS file_structure;
+DROP TABLE IF EXISTS directories;
+
 
 CREATE TABLE users(
   id                 INT(100)     NOT NULL AUTO_INCREMENT,
@@ -16,10 +20,31 @@ CREATE TABLE users(
 );
 
 CREATE TABLE images(
-  id        INT(100)    NOT NULL AUTO_INCREMENT,
-  orig_name VARCHAR(50)  NOT NULL,
-  new_name VARCHAR(50)  NOT NULL,
-  path      VARCHAR(260)  NOT NULL,
+  id          INT(100)      NOT NULL    AUTO_INCREMENT,
+  orig_name   VARCHAR(50)   NOT NULL,
+  new_name    VARCHAR(50)   NOT NULL,
+  path        VARCHAR(260)  NOT NULL    UNIQUE,
+
 
   PRIMARY KEY (id)
+);
+
+CREATE TABLE cache(
+  image_id    INT(100)      NOT NULL,
+  cache_path  VARCHAR(260)  NOT NULL    UNIQUE,
+  PRIMARY KEY (image_id),
+  FOREIGN KEY (image_id) REFERENCES images(id)
+);
+
+CREATE TABLE directories(
+  id          INT           NOT NULL    auto_increment,
+  creator     varchar(100),
+  primary key (id)
+);
+
+create table file_structure(
+  directory_id      int,
+  subdirectory_id   int,
+  FOREIGN KEY (directory_id) REFERENCES directories(id),
+  FOREIGN KEY (subdirectory_id) REFERENCES directories(id)
 );
