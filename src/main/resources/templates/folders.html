@@ -5,6 +5,15 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
+<div id="breadcrumb" class="breadcrumb">
+    <th:block th:each="breadcrumb, status: ${breadcrumbs}">
+        <li class="separator">&gt;</li>
+        <div th:if="${breadcrumb.url eq '#'}">
+            <a href="#" onclick="return false;"
+            <div th:if="${status.last}">class="last"</divth:if>>${breadcrumb.name}</a>
+        </div>
+
+    </th:block>
 <div>
 <th:block th:each="folder: ${folders}">
 
@@ -36,6 +45,7 @@
         <!--displays every file currently uploaded-->
         <li th:each="file : ${files}">
             <a th:href="${file}" th:text="${file}" />
+            <img src="file:${file}">
         </li>
     </ul>
 </div>

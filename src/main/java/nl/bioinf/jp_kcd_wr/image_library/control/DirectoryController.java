@@ -1,5 +1,6 @@
 package nl.bioinf.jp_kcd_wr.image_library.control;
 
+import nl.bioinf.jp_kcd_wr.image_library.breadcrumbs.BreadcrumbBuilder;
 import nl.bioinf.jp_kcd_wr.image_library.filebrowser.DirectoryExistsException;
 import nl.bioinf.jp_kcd_wr.image_library.filebrowser.FolderHandler;
 import nl.bioinf.jp_kcd_wr.image_library.storage.StorageService;
@@ -23,11 +24,13 @@ import java.util.stream.Collectors;
 public class DirectoryController {
     private final StorageService storageService;
     private final FolderHandler folderHandler;
+    private final BreadcrumbBuilder breadcrumbBuilder;
 
     @Autowired
-    public DirectoryController(StorageService storageService, FolderHandler folderHandler) {
+    public DirectoryController(StorageService storageService, FolderHandler folderHandler, BreadcrumbBuilder breadcrumbBuilder) {
         this.storageService = storageService;
         this.folderHandler = folderHandler;
+        this.breadcrumbBuilder = breadcrumbBuilder;
     }
 
     private static final Logger logger = Logger.getLogger(DirectoryController.class.getName());
@@ -72,8 +75,22 @@ public class DirectoryController {
                 path -> MvcUriComponentsBuilder.fromMethodName(DirectoryController.class,
                         "serveFile", path.getFileName().toString()).build().toString())
                 .collect(Collectors.toList()));
+        model.addAttribute("breadcrumbs", breadcrumbBuilder.getBreadcrumbs(folder, new File(folder)));
         return "folders";
     }
+//    @GetMapping("/nextfoldertest")
+//    public String nextFoldertest(@RequestParam(name="folder", required=false, defaultValue="testdata") String folder, Model model) {
+//        model.addAttribute("folders", folderHandler.getNextFolders(folder));
+//        model.addAttribute("currentPath", new File(folder));
+//        model.addAttribute("date", LocalDate.now().toString());
+//
+//        model.addAttribute("files", storageService.loadAll(folder).map(
+//                path -> MvcUriComponentsBuilder.fromMethodName(DirectoryController.class,
+//                        "serveFile", path.getFileName().toString()).build().toString())
+//                .collect(Collectors.toList()));
+//        model.addAttribute("breadcrumbs", breadcrumbBuilder.getBreadcrumbs(folder, new File(folder)));
+//        return "redirect:/nextfolder";
+//    }
 
     @GetMapping("/files/{filename:.+}")
     @ResponseBody
