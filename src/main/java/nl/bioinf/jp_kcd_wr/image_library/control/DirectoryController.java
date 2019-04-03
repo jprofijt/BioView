@@ -44,7 +44,7 @@ public class DirectoryController {
         model.addAttribute("folders", folderHandler.getNextFolders(currentPath));
         model.addAttribute("currentPath", new File(currentPath));
         logger.log(Level.INFO, "Folders were created successfully!");
-        return "folders";
+        return "redirect:/nextfolder";
     }
 
     @PostMapping("/createdatefolder")
@@ -59,7 +59,7 @@ public class DirectoryController {
         model.addAttribute("folders", folderHandler.getNextFolders(currentPath));
         model.addAttribute("currentPath", new File(currentPath));
         logger.log(Level.INFO, "Successfully created {0}", new Object[]{currentPath});
-        return "folders";
+        return "redirect:/nextfolder";
     }
 
     @GetMapping("/nextfolder")
