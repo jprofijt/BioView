@@ -7,16 +7,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.logging.Logger;
+
 @Controller
 public class LoginController {
+    private static final Logger logger = Logger.getLogger(LoginController.class.getName());
+
     @GetMapping(value={"/login", "/"})
     public ModelAndView loginController(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (!(auth instanceof AnonymousAuthenticationToken)) {
 
-            /* The user is logged in :) */
-            return new ModelAndView("forward:/temp");
+            return new ModelAndView("forward:/imageview");
         }
         else {
             return new ModelAndView("/login");
