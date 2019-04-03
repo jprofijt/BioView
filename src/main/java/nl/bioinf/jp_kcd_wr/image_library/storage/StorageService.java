@@ -4,6 +4,7 @@ import nl.bioinf.jp_kcd_wr.image_library.model.Image;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
@@ -26,5 +27,7 @@ public interface StorageService {
     Resource loadAsResource(String filename);
 
     void deleteAll();
+
+    void processThumbnails(File Directory);
 
 }

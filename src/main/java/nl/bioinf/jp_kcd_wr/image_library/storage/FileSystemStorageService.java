@@ -12,6 +12,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,6 +31,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 @Service
 public class FileSystemStorageService implements StorageService {
@@ -44,6 +46,7 @@ public class FileSystemStorageService implements StorageService {
     public FileSystemStorageService(ImageDataSource imageDataSource, Environment environment) {
         this.imageDataSource = imageDataSource;
         this.rootLocation = Paths.get(environment.getProperty("library.upload"));
+        logger.log(Level.INFO, "Starting FileSystemStorage service using {0} as imageDataSource, and {1} as root location", new Object[] {this.imageDataSource, this.rootLocation});
     }
 
     @Override
@@ -71,6 +74,7 @@ public class FileSystemStorageService implements StorageService {
             }
         }
         catch (IOException e) {
+            logger.log(Level.WARNING, "File {0} could not be stored", filename);
             throw new StorageException("Failed to store file " + filename, e);
         }
     }
@@ -115,6 +119,7 @@ public class FileSystemStorageService implements StorageService {
                     .map(this.rootLocation::relativize);
         }
         catch (IOException e) {
+            logger.log(Level.SEVERE, "Storage service could not read stored files");
             throw new StorageException("Failed to read stored files", e);
         }
 
@@ -140,6 +145,7 @@ public class FileSystemStorageService implements StorageService {
             }
         }
         catch (MalformedURLException e) {
+            logger.log(Level.WARNING, "Could not read file {0}", filename);
             throw new StorageFileNotFoundException("Could not read file: " + filename, e);
         }
     }
@@ -147,6 +153,7 @@ public class FileSystemStorageService implements StorageService {
     @Override
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
+        logger.log(Level.WARNING, "Deleting ALL library contents");
     }
 
     @Override
@@ -160,8 +167,9 @@ public class FileSystemStorageService implements StorageService {
                 createThumbnailsInDirectory(Directory);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.WARNING, "Directory {0} not found", Directory.getPath());
         }
+        logger.log(Level.INFO, "Completed caching images for library location {0}", Directory.getPath());
 
     }
 
@@ -183,19 +191,30 @@ public class FileSystemStorageService implements StorageService {
         new File(cacheDirectory).mkdirs();
 
         for (File image : Directory.listFiles(File::isFile)) {
-            String cacheLocation = cacheDirectory + image.getName();
+            String extenion = getFileExtension(image);
+            String cacheImage = image.getName().replace(extenion, ".jpg");
+            String cacheLocation = cacheDirectory + cacheImage;
             System.out.println("cacheLocation = " + cacheLocation);
+
             if (!new File(cacheLocation).exists()) {
                 BufferedImage img = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
                 img
                         .createGraphics()
                         .drawImage(ImageIO.read(image).getScaledInstance(200, 200, java.awt.Image.SCALE_SMOOTH), 0, 0, null);
                 ImageIO.write(img, "jpg", new File(cacheLocation));
+                logger.log(Level.INFO, "Succesfully created cache of {0} in directory: {1}", new Object[] {image.getName(), cacheDirectory});
             }
         }
     }
 
-
+    private String getFileExtension(File file) {
+        String name = file.getName();
+        int lastIndexOf = name.lastIndexOf(".");
+        if (lastIndexOf == -1) {
+            return "";
+        }
+        return name.substring(lastIndexOf);
+    }
 
 
     @Override
@@ -205,6 +224,7 @@ public class FileSystemStorageService implements StorageService {
             processThumbnails(rootLocation.toFile());
         }
         catch (IOException e) {
+            logger.log(Level.SEVERE, "Storage system was not able to initialize");
             throw new StorageException("Could not initialize storage", e);
         }
     }
