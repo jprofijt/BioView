@@ -23,7 +23,7 @@ public class ImageViewController {
     public ImageViewController(StorageService storageService) {this.storageService = storageService;}
 
     @GetMapping("/imageview")
-    public String getImages(@RequestParam(name="location", required = false, defaultValue = "") String location, Model model) {
+    public String getImages(@RequestParam(name="location", required = false, defaultValue = "Coccidia/.cache") String location, Model model) {
         model.addAttribute("Images", storageService.loadAll(location).map(
                 path -> MvcUriComponentsBuilder.fromMethodName(DirectoryController.class,
                         "serveFile", path.getFileName().toString()).build().toString())
