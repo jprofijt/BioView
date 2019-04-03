@@ -10,11 +10,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+import nl.bioinf.jp_kcd_wr.image_library.control.FileUploadController;
 import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageDataSource;
 import nl.bioinf.jp_kcd_wr.image_library.model.Image;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +36,7 @@ public class FileSystemStorageService implements StorageService {
 
     private final Path rootLocation;
     private final ImageDataSource imageDataSource;
+    private static final Logger logger = Logger.getLogger(FileSystemStorageService.class.getName());
 
     private final static Pattern PATTERN = Pattern.compile("(.*?)(?:\\((\\d+)\\))?(\\.[^.]*)?");
 
@@ -147,11 +151,22 @@ public class FileSystemStorageService implements StorageService {
 
     @Override
     public void processThumbnails(File Directory) {
+        for (File contentDirectory : listDirectories(Directory)){
+            processThumbnails(contentDirectory);
+        }
+
+        try {
+            if (!Directory.getName().equals(".cache")) {
+                createThumbnailsInDirectory(Directory);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
-    private List<File> listContents(File Directory){
-        ArrayList<File> contents = new ArrayList<>();
+    private List<File> listDirectories(File Directory){
+        ArrayList<File> contents = new ArrayList<>(Arrays.asList(Directory.listFiles(File::isDirectory)));
         return contents;
 
     }
@@ -187,7 +202,7 @@ public class FileSystemStorageService implements StorageService {
     public void init() {
         try {
             Files.createDirectories(rootLocation);
-            createThumbnailsInDirectory(rootLocation.toFile());
+            processThumbnails(rootLocation.toFile());
         }
         catch (IOException e) {
             throw new StorageException("Could not initialize storage", e);
