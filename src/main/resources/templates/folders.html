@@ -9,8 +9,15 @@
     <th:block th:each="breadcrumb, status: ${breadcrumbs}">
         <li class="separator">&gt;</li>
         <div th:if="${breadcrumb.url eq '#'}">
-            <a href="#" onclick="return false;"
-            <div th:if="${status.last}">class="last"</divth:if>>${breadcrumb.name}</a>
+            <a th:href="#" onclick="return false;">
+
+                <div th:text="${breadcrumb.name}"></div>
+            </a>
+        </div>
+        <div th:unless="${breadcrumb.url eq '#'}">
+            <a th:href="${breadcrumb.url}">
+                <div th:text="${breadcrumb.name}"></div>
+            </a>
         </div>
 
     </th:block>

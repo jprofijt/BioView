@@ -12,5 +12,5 @@ public interface ImageDataSource {
 
     ArrayList<Image> getImagesInDirectory(String directory);
 
-    List<Image> returnAllImages();
+//    List<Image> returnAllImages();
 }
