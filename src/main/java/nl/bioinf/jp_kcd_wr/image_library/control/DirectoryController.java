@@ -66,7 +66,15 @@ public class DirectoryController {
     }
 
     @GetMapping("/nextfolder")
-    public String nextFolder(@RequestParam(name="folder", required=false, defaultValue="") String folder, Model model) {
+    public String nextFolder(@RequestParam(name="folder", required=false, defaultValue="testdata") String folder, Model model) {
+        return getFolders(folder, model);
+    }
+    @PostMapping("/nextfolder")
+    public String nextFolderPost(@RequestParam(name="folder", required=false, defaultValue="testdata") String folder, Model model) {
+        return getFolders(folder, model);
+    }
+
+    private String getFolders(@RequestParam(name = "folder", required = false, defaultValue = "testdata") String folder, Model model) {
         model.addAttribute("folders", folderHandler.getNextFolders(folder));
         model.addAttribute("currentPath", new File(folder));
         model.addAttribute("date", LocalDate.now().toString());

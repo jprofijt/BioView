@@ -5,19 +5,19 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<div id="breadcrumb" class="breadcrumb">
-    <th:block th:each="breadcrumb, status: ${breadcrumbs}">
-        <li class="separator">&gt;</li>
-        <div th:if="${breadcrumb.url eq '#'}">
-            <a href="#" onclick="return false;"
-            <div th:if="${status.last}">class="last"</divth:if>>${breadcrumb.name}</a>
-        </div>
+<!--<div id="breadcrumb" class="breadcrumb">-->
+    <!--<th:block th:each="breadcrumb, status: ${breadcrumbs}">-->
+        <!--<li class="separator">&gt;</li>-->
+        <!--<div th:if="${breadcrumb.url eq '#'}">-->
+            <!--<a href="#" onclick="return false;"-->
+            <!--<div th:if="${status.last}">class="last"</divth:if>>${breadcrumb.name}</a>-->
+        <!--</div>-->
 
-    </th:block>
-<div>
+    <!--</th:block>-->
+<!--<div>-->
 <th:block th:each="folder: ${folders}">
 
-    <form th:action="@{/nextfolder}" method="get">
+    <form th:action="@{/nextfolder{path}(path=${folder.getPath()})}" method="post">
             <!--/*@thymesVar id="getPath" type="File"*/-->
             <input name="folder" type="hidden" th:default="testdata" th:value="${folder.getPath()}">
             <input type="submit" th:value="${folder.getName()}" th:default="testdata">
