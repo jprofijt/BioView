@@ -15,10 +15,12 @@
                 </div>
             </div>
             <div class="col-md-8">
-                <div class="docs-gallery col-12" >
+                <div class="docs-galleSry col-12" >
                     <ul class="pictures clearfix" style="height:800px; overflow: scroll">
                         <li class="col-sm-12 col-md-6 col-lg-4" th:each="image : ${Images}">
-                            <a th:href="${image}" target="_blank"><img class="img-thumbnail img-fluid" th:src="${image}" /></a>
+                            <a ondblclick="openimage()">
+                                <img class="img-thumbnail img-fluid" th:src="${image}" />
+                            </a>
                         </li>
 
                     </ul>
