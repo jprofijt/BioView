@@ -225,7 +225,6 @@ public class FileSystemStorageService implements StorageService {
     public void init() {
         try {
             Files.createDirectories(rootLocation);
-            processThumbnails(rootLocation.toFile());
         }
         catch (IOException e) {
             logger.log(Level.SEVERE, "Storage system was not able to initialize");
