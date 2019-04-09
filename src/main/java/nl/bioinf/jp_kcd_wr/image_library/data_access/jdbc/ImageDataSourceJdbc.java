@@ -81,7 +81,7 @@ public class ImageDataSourceJdbc implements ImageDataSource {
 
     @Override
     public void insertCache(int imageId, Path cacheLocation) {
-        if (!isCached(imageId) && !cacheLocation.toFile().isFile()) {
+        if (!isCached(imageId) && cacheLocation.toFile().isFile()) {
             SqlParameterSource parameterSource = new MapSqlParameterSource()
                     .addValue("image_id", imageId)
                     .addValue("cache_path", cacheLocation.toString());
