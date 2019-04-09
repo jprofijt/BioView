@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<main th:fragment="images-window">
+    <div class="container-fluid mt-4 mb-4">
+        <div class="row justify-content-around">
+            <div class="col-md-2">
+                <div class="row">
+                    <div class="container-fluid">
+                        <a href="#">dummyfolder/</a><a href="#">dummy2/</a><a href="#">currentdir/</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="tree" class="container-fluid"></div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="docs-gallery col-12" >
+                    <ul class="pictures clearfix" style="height:800px; overflow: scroll">
+                        <li class="col-sm-12 col-md-6 col-lg-4" th:each="image : ${Images}">
+                            <a th:href="${image}" target="_blank"><img class="img-thumbnail img-fluid" th:src="${image}" /></a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-2 border rounded" id="options">
+                <nav class="nav flex-column">
+                    <a class="nav-link" th:href="@{/upload}"><i class="fas fa-file-upload"></i> Upload New Image</a>
+                    <a class="nav-link" th:href="@{/nextfolder}"><i class="fas fa-folder-plus"></i> Create new sub-directory</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
