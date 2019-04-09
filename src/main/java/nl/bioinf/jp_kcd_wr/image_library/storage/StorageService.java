@@ -28,6 +28,6 @@ public interface StorageService {
 
     void deleteAll();
 
-    void processThumbnails(File Directory);
+    void processExistingImageLibrary(File Directory);
 
 }
