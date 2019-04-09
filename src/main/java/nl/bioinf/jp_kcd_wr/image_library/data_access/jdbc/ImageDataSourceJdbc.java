@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 @Component
 public class ImageDataSourceJdbc implements ImageDataSource {
 
@@ -102,5 +103,4 @@ public class ImageDataSourceJdbc implements ImageDataSource {
 
         return result >= 1;
     }
-
 }
