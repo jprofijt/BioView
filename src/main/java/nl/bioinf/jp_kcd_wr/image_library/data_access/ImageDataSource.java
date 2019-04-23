@@ -20,4 +20,6 @@ public interface ImageDataSource {
     void insertCache(int imageId, Path cacheLocation);
 
     boolean isCached(int ImageId);
+
+    Path getCache(int ImageId);
 }

@@ -136,4 +136,20 @@ public class ImageDataSourceJdbc implements ImageDataSource {
 
         return result >= 1;
     }
+
+    /**
+     * gets cache path for image id
+     * @param ImageId image id
+     * @return cache path;
+     */
+    @Override
+    public Path getCache(int ImageId) {
+        SqlParameterSource parameterSource = new MapSqlParameterSource()
+                .addValue("image_id", ImageId);
+        String query = "SELECT path FROM cache WHERE image_id = :image_id";
+
+        Path result = namedJdbcTemplate.queryForObject(query, parameterSource, Path.class);
+
+        return result;
+    }
 }
