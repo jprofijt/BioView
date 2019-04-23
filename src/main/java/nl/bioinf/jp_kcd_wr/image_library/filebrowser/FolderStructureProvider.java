@@ -1,9 +1,10 @@
 package nl.bioinf.jp_kcd_wr.image_library.filebrowser;
 
+import nl.bioinf.jp_kcd_wr.image_library.model.Directory;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 public interface FolderStructureProvider {
 
@@ -12,7 +13,7 @@ public interface FolderStructureProvider {
      * @param nextFolder
      * @return
      */
-    List<File> getNextFolders(String nextFolder);
+    ArrayList<Directory> getNextFolders(String nextFolder);
 
     /**
      * Creates a new directory in th current directory

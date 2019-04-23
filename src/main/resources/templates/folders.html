@@ -5,23 +5,23 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<div id="breadcrumb" class="breadcrumb">
-    <th:block th:each="breadcrumb, status: ${breadcrumbs}">
-        <li class="separator">&gt;</li>
-        <div th:if="${breadcrumb.url eq '#'}">
-            <a th:href="#" onclick="return false;">
+<!--<div id="breadcrumb" class="breadcrumb">-->
+    <!--<th:block th:each="breadcrumb, status: ${breadcrumbs}">-->
+        <!--<li class="separator">&gt;</li>-->
+        <!--<div th:if="${breadcrumb.url eq '#'}">-->
+            <!--<a th:href="#" onclick="return false;">-->
 
-                <div th:text="${breadcrumb.name}"></div>
-            </a>
-        </div>
-        <div th:unless="${breadcrumb.url eq '#'}">
-            <a th:href="${breadcrumb.url}">
-                <div th:text="${breadcrumb.name}"></div>
-            </a>
-        </div>
+                <!--<div th:text="${breadcrumb.name}"></div>-->
+            <!--</a>-->
+        <!--</div>-->
+        <!--<div th:unless="${breadcrumb.url eq '#'}">-->
+            <!--<a th:href="${breadcrumb.url}">-->
+                <!--<div th:text="${breadcrumb.name}"></div>-->
+            <!--</a>-->
+        <!--</div>-->
 
-    </th:block>
-<div>
+    <!--</th:block>-->
+<!--<div>-->
 <th:block th:each="folder: ${folders}">
 
     <form th:action="@{/nextfolder}" method="get">
