@@ -75,7 +75,7 @@ public class DirectoryController {
                 path -> MvcUriComponentsBuilder.fromMethodName(DirectoryController.class,
                         "serveFile", path.getFileName().toString()).build().toString())
                 .collect(Collectors.toList()));
-//        model.addAttribute("breadcrumbs", breadcrumbBuilder.getBreadcrumbs(folder, new File(folder)));
+        model.addAttribute("breadcrumbs", breadcrumbBuilder.getBreadcrumbs(folder));
         return "folders";
     }
 
