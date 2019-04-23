@@ -47,7 +47,7 @@ public class DirectoryController {
         model.addAttribute("folders", folderHandler.getNextFolders(currentPath));
         model.addAttribute("currentPath", new File(currentPath));
         logger.log(Level.INFO, "Folders were created successfully!");
-        return "redirect:/nextfolder";
+        return "redirect:/nextfolder?folder=" + currentPath;
     }
 
     @PostMapping("/createdatefolder")
@@ -62,7 +62,7 @@ public class DirectoryController {
         model.addAttribute("folders", folderHandler.getNextFolders(currentPath));
         model.addAttribute("currentPath", new File(currentPath));
         logger.log(Level.INFO, "Successfully created {0}", new Object[]{currentPath});
-        return "redirect:/nextfolder";
+        return "redirect:/nextfolder?folder=" + currentPath;
     }
 
     @GetMapping("/nextfolder")
@@ -78,19 +78,7 @@ public class DirectoryController {
 //        model.addAttribute("breadcrumbs", breadcrumbBuilder.getBreadcrumbs(folder, new File(folder)));
         return "folders";
     }
-//    @GetMapping("/nextfoldertest")
-//    public String nextFoldertest(@RequestParam(name="folder", required=false, defaultValue="testdata") String folder, Model model) {
-//        model.addAttribute("folders", folderHandler.getNextFolders(folder));
-//        model.addAttribute("currentPath", new File(folder));
-//        model.addAttribute("date", LocalDate.now().toString());
-//
-//        model.addAttribute("files", storageService.loadAll(folder).map(
-//                path -> MvcUriComponentsBuilder.fromMethodName(DirectoryController.class,
-//                        "serveFile", path.getFileName().toString()).build().toString())
-//                .collect(Collectors.toList()));
-//        model.addAttribute("breadcrumbs", breadcrumbBuilder.getBreadcrumbs(folder, new File(folder)));
-//        return "redirect:/nextfolder";
-//    }
+
 
     @GetMapping("/files/{filename:.+}")
     @ResponseBody
