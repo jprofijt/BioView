@@ -24,11 +24,9 @@ CREATE TABLE users(
 
 CREATE TABLE images(
   id          INT(100)      NOT NULL    AUTO_INCREMENT,
-  orig_name   VARCHAR(50)   NOT NULL,
-  new_name    VARCHAR(50)   NOT NULL,
+  orig_name   VARCHAR(500)  NOT NULL,
+  new_name    VARCHAR(500)  NOT NULL,
   path        VARCHAR(260)  NOT NULL    UNIQUE,
-
-
   PRIMARY KEY (id)
 );
 
