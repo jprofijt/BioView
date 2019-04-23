@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class ImageDataSourceJdbc implements ImageDataSource {
@@ -40,6 +41,11 @@ public class ImageDataSourceJdbc implements ImageDataSource {
     @Override
     public ArrayList<Image> getImagesInDirectory(String directory) {
         String sql = "SELECT * FROM images where path = ?";
+        return null;
+    }
+
+    @Override
+    public List<Image> returnAllImages() {
         return null;
     }
 }
