@@ -44,8 +44,8 @@ public class ImageDataSourceJdbc implements ImageDataSource {
         return null;
     }
 
-    @Override
-    public List<Image> returnAllImages() {
-        return null;
-    }
+//    @Override
+//    public List<Image> returnAllImages() {
+//        return null;
+//    }
 }
