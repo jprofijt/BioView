@@ -18,10 +18,11 @@
                 <div class="docs-galleSry col-12" >
                     <ul class="pictures clearfix" style="height:800px; overflow: scroll">
                         <li class="col-sm-12 col-md-6 col-lg-4" th:each="image : ${Images}">
-                            <a ondblclick="openimage()">
+                            <a th:ondblclick="openImageOnDblclick(${Image})">
                                 <img class="img-thumbnail img-fluid" th:src="${image}" />
                             </a>
                         </li>
+
 
                     </ul>
                 </div>
