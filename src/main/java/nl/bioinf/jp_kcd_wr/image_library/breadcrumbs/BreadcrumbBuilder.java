@@ -9,9 +9,7 @@ import java.io.File;
 import java.util.List;
 
 public interface BreadcrumbBuilder {
-    List<Breadcrumb> getBreadcrumbs(String directory, File folder);
+    List<Breadcrumb> getBreadcrumbs(String directory);
 
-    Breadcrumb getParentDirectoryBreadcrumb(File folder);
-
-    Breadcrumb getFolderBreadCrumb(File folder);
+    Breadcrumb getFolderBreadCrumb(List<String> crumbSubList);
 }

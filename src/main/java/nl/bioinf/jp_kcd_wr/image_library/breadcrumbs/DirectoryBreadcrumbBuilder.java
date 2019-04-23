@@ -9,6 +9,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -21,27 +22,34 @@ public class DirectoryBreadcrumbBuilder implements BreadcrumbBuilder{
     }
 
     @Override
-    public List<Breadcrumb> getBreadcrumbs(String directory, File folder) throws IllegalArgumentException{
+    public List<Breadcrumb> getBreadcrumbs(String directory) throws IllegalArgumentException{
         final List<Breadcrumb> breadcrumbs = new ArrayList<>();
-        Breadcrumb parent = getParentDirectoryBreadcrumb(folder);
-        breadcrumbs.add(parent);
-        Breadcrumb currentFolder = getFolderBreadCrumb(folder);
-        breadcrumbs.add(currentFolder);
+        if (directory != null) {
+            String[] crumbs = directory.split(File.separator);
+            List<String> crumbList = Arrays.asList(crumbs);
+            for (int i = 0; i < crumbList.size()+1; i++) {
+                List<String> crumbSubList = crumbList.subList(0, i);
+                Breadcrumb breadcrumb = getFolderBreadCrumb(crumbSubList);
+                breadcrumbs.add(breadcrumb);
+            }
+        }
 
         return breadcrumbs;
     }
-    @Override
-    public Breadcrumb getParentDirectoryBreadcrumb(File folder){
-        final String directoryURL = "/nextfolder/" + folder.getParentFile();
-        System.out.println(directoryURL);
-        System.out.println(folder.getParentFile());
-        System.out.println(folder.getParent());
-        return new Breadcrumb(folder.getParent(), directoryURL);
-    }
+//    @Override
+//    public Breadcrumb getParentDirectoryBreadcrumb(File folder){
+//        final String directoryURL = "/nextfolder/" + folder.getParentFile();
+//        System.out.println(directoryURL);
+//        System.out.println(folder.getParentFile());
+//        System.out.println(folder.getParent());
+//        return new Breadcrumb(folder.getParent(), directoryURL);
+//    }
 
     @Override
-    public Breadcrumb getFolderBreadCrumb(File folder){
-        final String folderURL = "/nextfolder/" + folder;
-        return new Breadcrumb(folder.getName(), folderURL);
+    public Breadcrumb getFolderBreadCrumb(List<String> crumbSubList){
+        String crumbPath = String.join(File.separator, crumbSubList);
+        final String directoryURL = "/nextfolder?folder=" + crumbPath;
+        File folder = new File(crumbPath);
+        return new Breadcrumb(folder.getName(), directoryURL);
     }
 }
