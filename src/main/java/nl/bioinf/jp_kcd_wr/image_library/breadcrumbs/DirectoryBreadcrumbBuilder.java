@@ -12,15 +12,31 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Class to create breadcrumbs manually given a (relative) directory path
+ * It contains methods that create the breadcrumb and then add them to a list
+ *
+ * @author Kim Chau Duong
+ * @version 1.0
+ */
 @Service
 public class DirectoryBreadcrumbBuilder implements BreadcrumbBuilder{
     private final Path rootLocation;
 
+    /**
+     * constructor
+     */
     @Autowired
     public DirectoryBreadcrumbBuilder(Environment environment) {
         this.rootLocation = Paths.get(environment.getProperty("library.upload"));
     }
 
+    /**
+     * Gathers all created breadcrumbs into a list
+     * @param directory current directory
+     * @return list of breadcrumbs
+     * @throws IllegalArgumentException
+     */
     @Override
     public List<Breadcrumb> getBreadcrumbs(String directory) throws IllegalArgumentException{
         final List<Breadcrumb> breadcrumbs = new ArrayList<>();
@@ -33,18 +49,14 @@ public class DirectoryBreadcrumbBuilder implements BreadcrumbBuilder{
                 breadcrumbs.add(breadcrumb);
             }
         }
-
         return breadcrumbs;
     }
-//    @Override
-//    public Breadcrumb getParentDirectoryBreadcrumb(File folder){
-//        final String directoryURL = "/nextfolder/" + folder.getParentFile();
-//        System.out.println(directoryURL);
-//        System.out.println(folder.getParentFile());
-//        System.out.println(folder.getParent());
-//        return new Breadcrumb(folder.getParent(), directoryURL);
-//    }
 
+    /**
+     * Creates breadcrumb object
+     * @param crumbSubList relative directory of the breadcrumb
+     * @return breadcrumb object
+     */
     @Override
     public Breadcrumb getFolderBreadCrumb(List<String> crumbSubList){
         String crumbPath = String.join(File.separator, crumbSubList);

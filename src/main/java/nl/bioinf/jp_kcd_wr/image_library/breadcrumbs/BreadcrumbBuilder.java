@@ -1,5 +1,7 @@
-package nl.bioinf.jp_kcd_wr.image_library.breadcrumbs;/*
- * Copyright (c) 2018 Kim Chau Duong
+package nl.bioinf.jp_kcd_wr.image_library.breadcrumbs;
+
+/**
+ * Copyright (c) 2019 Kim Chau Duong
  * All rights reserved
  */
 

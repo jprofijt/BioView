@@ -6,28 +6,38 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Class that handles all DAO processes
+ *
+ * @author Kim Chau Duong
+ * @version 1.0
+ */
 @Component
 public class ImageDataSourceJdbc implements ImageDataSource {
 
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
     private static final Logger logger = Logger.getLogger(ImageDataSourceJdbc.class.getName());
 
-
+    /**
+     * constructor
+     */
     @Autowired
     public ImageDataSourceJdbc(NamedParameterJdbcTemplate namedJdbcTemplate) {
         this.namedJdbcTemplate = namedJdbcTemplate;
 
     }
 
+    /**
+     * Inserts image data into the database
+     * @param image image object with data
+     */
     @Override
     public void insertImage(Image image) {
         if (!isIndexed(image)) {

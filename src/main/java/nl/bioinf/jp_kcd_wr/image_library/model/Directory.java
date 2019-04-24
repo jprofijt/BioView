@@ -7,11 +7,8 @@ package nl.bioinf.jp_kcd_wr.image_library.model;
 import java.nio.file.Path;
 
 /**
- * This class is
- * It contains
- *
- * @author Kim Chau Duong
- * @version 1.0
+ * Copyright (c) 2019 Kim Chau Duong
+ * All rights reserved
  */
 public class Directory {
     private Path path;

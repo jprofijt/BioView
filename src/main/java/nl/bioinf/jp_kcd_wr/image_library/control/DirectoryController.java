@@ -65,6 +65,13 @@ public class DirectoryController {
         return "redirect:/nextfolder?folder=" + currentPath;
     }
 
+    /**
+     * Get request that provides all folders, files and the current path
+     * @param folder current directory path
+     * @param model
+     * @return
+     * @author Jouke Profijt, Kim Chau Duong
+     */
     @GetMapping("/nextfolder")
     public String nextFolder(@RequestParam(name="folder", required=false, defaultValue="testdata") String folder, Model model) {
         model.addAttribute("folders", folderHandler.getNextFolders(folder));
@@ -79,7 +86,12 @@ public class DirectoryController {
         return "folders";
     }
 
-
+    /**
+     * Loads file body
+     * @param filename given filename
+     * @return file body
+     * @author Kim Chau Duong
+     */
     @GetMapping("/files/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {

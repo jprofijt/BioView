@@ -6,6 +6,10 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Copyright (c) 2019 Kim Chau Duong
+ * All rights reserved
+ */
 public interface ImageDataSource {
     void insertImage(Image image);
 
