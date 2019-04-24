@@ -45,9 +45,9 @@ public class DirectoryController {
             return "directory-error";
         }
         model.addAttribute("folders", folderHandler.getNextFolders(currentPath));
-        model.addAttribute("currentPath", new File(currentPath));
+        model.addAttribute("currentPath", new File(currentPath.replace("\\", "/")));
         logger.log(Level.INFO, "Folders were created successfully!");
-        return "redirect:/nextfolder?folder=" + currentPath;
+        return "redirect:/nextfolder?folder=" + currentPath.replace("\\", "/");
     }
 
     @PostMapping("/createdatefolder")
@@ -60,9 +60,9 @@ public class DirectoryController {
             return "directory-error";
         }
         model.addAttribute("folders", folderHandler.getNextFolders(currentPath));
-        model.addAttribute("currentPath", new File(currentPath));
+        model.addAttribute("currentPath", new File(currentPath.replace("\\", "/")));
         logger.log(Level.INFO, "Successfully created {0}", new Object[]{currentPath});
-        return "redirect:/nextfolder?folder=" + currentPath;
+        return "redirect:/nextfolder?folder=" + currentPath.replace("\\", "/");
     }
 
     /**
@@ -75,7 +75,7 @@ public class DirectoryController {
     @GetMapping("/nextfolder")
     public String nextFolder(@RequestParam(name="folder", required=false, defaultValue="testdata") String folder, Model model) {
         model.addAttribute("folders", folderHandler.getNextFolders(folder));
-        model.addAttribute("currentPath", new File(folder));
+        model.addAttribute("currentPath", new File(folder.replace("\\", "/")));
         model.addAttribute("date", LocalDate.now().toString());
 
         model.addAttribute("files", storageService.loadAll(folder).map(
