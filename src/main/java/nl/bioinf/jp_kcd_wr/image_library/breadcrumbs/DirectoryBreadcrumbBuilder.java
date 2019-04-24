@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -41,27 +42,36 @@ public class DirectoryBreadcrumbBuilder implements BreadcrumbBuilder{
     public List<Breadcrumb> getBreadcrumbs(String directory) throws IllegalArgumentException{
         final List<Breadcrumb> breadcrumbs = new ArrayList<>();
         if (directory != null) {
-            String[] crumbs = directory.split(File.separator);
-            List<String> crumbList = Arrays.asList(crumbs);
-            for (int i = 0; i < crumbList.size()+1; i++) {
-                List<String> crumbSubList = crumbList.subList(0, i);
-                Breadcrumb breadcrumb = getFolderBreadCrumb(crumbSubList);
+            Path path = Paths.get(directory);
+            Iterator<Path> it= path.iterator();
+            StringBuilder crumbPath = new StringBuilder();
+            while (it.hasNext()){
+                crumbPath.append(it.next()).append("/");
+                Breadcrumb breadcrumb = getFolderBreadCrumb(crumbPath);
                 breadcrumbs.add(breadcrumb);
             }
+
+//            String[] crumbs = directory.split(File.separator);
+//            List<String> crumbList = Arrays.asList(crumbs);
+//            for (int i = 0; i < crumbList.size()+1; i++) {
+//                List<String> crumbSubList = crumbList.subList(0, i);
+//                Breadcrumb breadcrumb = getFolderBreadCrumb(crumbSubList);
+//                breadcrumbs.add(breadcrumb);
+//            }
         }
         return breadcrumbs;
     }
 
     /**
      * Creates breadcrumb object
-     * @param crumbSubList relative directory of the breadcrumb
+     * @param crumbPath relative directory of the breadcrumb
      * @return breadcrumb object
      */
     @Override
-    public Breadcrumb getFolderBreadCrumb(List<String> crumbSubList){
-        String crumbPath = String.join(File.separator, crumbSubList);
+    public Breadcrumb getFolderBreadCrumb(StringBuilder crumbPath){
+//        String crumbPath = String.join(File.separator, crumbSubList);
         final String directoryURL = "/nextfolder?folder=" + crumbPath;
-        File folder = new File(crumbPath);
+        File folder = new File(String.valueOf(crumbPath));
         return new Breadcrumb(folder.getName(), directoryURL);
     }
 }
