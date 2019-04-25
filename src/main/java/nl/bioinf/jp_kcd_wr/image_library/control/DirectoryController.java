@@ -80,7 +80,7 @@ public class DirectoryController {
 
         model.addAttribute("files", storageService.loadAll(folder).map(
                 path -> MvcUriComponentsBuilder.fromMethodName(DirectoryController.class,
-                        "serveFile", path.getFileName().toString()).build().toString())
+                        "serveFile", path.getFileName().toString(), folder).build().toString())
                 .collect(Collectors.toList()));
         model.addAttribute("breadcrumbs", breadcrumbBuilder.getBreadcrumbs(folder));
         return "folders";
@@ -94,9 +94,9 @@ public class DirectoryController {
      */
     @GetMapping("/files/{filename:.+}")
     @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+    public ResponseEntity<Resource> serveFile(@PathVariable String filename, String directory) {
 
-        Resource file = storageService.loadAsResource(filename);
+        Resource file = storageService.loadAsResource(filename, directory);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "inline; filename=\"" + file.getFilename() + "\"").body(file);
     }

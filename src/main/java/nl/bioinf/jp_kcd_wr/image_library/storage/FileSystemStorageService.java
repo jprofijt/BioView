@@ -158,23 +158,25 @@ public class FileSystemStorageService implements StorageService {
 
     /**
      * Builds file path from the root location and the provided directory path
-     * @param filename directory path
+     * @param filename name of file
+     * @param directory directory path of the file
      * @return file path
      */
     @Override
-    public Path load(String filename) {
-        return rootLocation.resolve(filename);
+    public Path load(String filename, String directory) {
+        return rootLocation.resolve(directory + '/' + filename);
     }
 
     /**
      * Loads file as a resource
      * @param filename name of file
+     * @param directory directory path of the file
      * @return file resource
      */
     @Override
-    public Resource loadAsResource(String filename) {
+    public Resource loadAsResource(String filename, String directory) {
         try {
-            Path file = load(filename);
+            Path file = load(filename, directory);
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
                 return resource;

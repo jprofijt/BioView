@@ -26,7 +26,7 @@ public class ImageViewController {
     public String getImages(@RequestParam(name="location", required = false, defaultValue = "") String location, Model model) {
         model.addAttribute("Images", storageService.loadAll(location).map(
                 path -> MvcUriComponentsBuilder.fromMethodName(DirectoryController.class,
-                        "serveFile", path.getFileName().toString()).build().toString())
+                        "serveFile", path.getFileName().toString(),location).build().toString())
                 .collect(Collectors.toList()));
 
         return "main-page";
