@@ -14,8 +14,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Class that implements the ImageDataSource as a JDBC
- * @author jouke Profijt, Kim Chau Duong
+ * Class that handles all DAO processes
+ *
+ * @author Kim Chau Duong, Jouke Profijt
+ * @version 1.0
  */
 @Component
 public class ImageDataSourceJdbc implements ImageDataSource {

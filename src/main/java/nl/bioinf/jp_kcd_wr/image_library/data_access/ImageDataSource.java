@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Interface for the image data source
- * @author Jouke Profijt, Kim Chau Duong
+ * Interface for Image data sources
+ *
+ * Copyright (c) 2019 Kim Chau Duong
+ * All rights reserved
  */
 public interface ImageDataSource {
     void insertImage(Image image);

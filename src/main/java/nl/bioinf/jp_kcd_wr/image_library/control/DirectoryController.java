@@ -1,5 +1,6 @@
 package nl.bioinf.jp_kcd_wr.image_library.control;
 
+import nl.bioinf.jp_kcd_wr.image_library.breadcrumbs.BreadcrumbBuilder;
 import nl.bioinf.jp_kcd_wr.image_library.filebrowser.DirectoryExistsException;
 import nl.bioinf.jp_kcd_wr.image_library.filebrowser.FolderHandler;
 import nl.bioinf.jp_kcd_wr.image_library.storage.StorageService;
@@ -23,11 +24,13 @@ import java.util.stream.Collectors;
 public class DirectoryController {
     private final StorageService storageService;
     private final FolderHandler folderHandler;
+    private final BreadcrumbBuilder breadcrumbBuilder;
 
     @Autowired
-    public DirectoryController(StorageService storageService, FolderHandler folderHandler) {
+    public DirectoryController(StorageService storageService, FolderHandler folderHandler, BreadcrumbBuilder breadcrumbBuilder) {
         this.storageService = storageService;
         this.folderHandler = folderHandler;
+        this.breadcrumbBuilder = breadcrumbBuilder;
     }
 
     private static final Logger logger = Logger.getLogger(DirectoryController.class.getName());
@@ -42,9 +45,9 @@ public class DirectoryController {
             return "directory-error";
         }
         model.addAttribute("folders", folderHandler.getNextFolders(currentPath));
-        model.addAttribute("currentPath", new File(currentPath));
+        model.addAttribute("currentPath", new File(currentPath.replace("\\", "/")));
         logger.log(Level.INFO, "Folders were created successfully!");
-        return "folders";
+        return "redirect:/nextfolder?folder=" + currentPath.replace("\\", "/");
     }
 
     @PostMapping("/createdatefolder")
@@ -57,24 +60,38 @@ public class DirectoryController {
             return "directory-error";
         }
         model.addAttribute("folders", folderHandler.getNextFolders(currentPath));
-        model.addAttribute("currentPath", new File(currentPath));
+        model.addAttribute("currentPath", new File(currentPath.replace("\\", "/")));
         logger.log(Level.INFO, "Successfully created {0}", new Object[]{currentPath});
-        return "folders";
+        return "redirect:/nextfolder?folder=" + currentPath.replace("\\", "/");
     }
 
+    /**
+     * Get request that provides all folders, files and the current path
+     * @param folder current directory path
+     * @param model
+     * @return
+     * @author Jouke Profijt, Kim Chau Duong
+     */
     @GetMapping("/nextfolder")
-    public String nextFolder(@RequestParam(name="folder", required=false, defaultValue="") String folder, Model model) {
+    public String nextFolder(@RequestParam(name="folder", required=false, defaultValue="testdata") String folder, Model model) {
         model.addAttribute("folders", folderHandler.getNextFolders(folder));
-        model.addAttribute("currentPath", new File(folder));
+        model.addAttribute("currentPath", new File(folder.replace("\\", "/")));
         model.addAttribute("date", LocalDate.now().toString());
 
         model.addAttribute("files", storageService.loadAll(folder).map(
                 path -> MvcUriComponentsBuilder.fromMethodName(DirectoryController.class,
                         "serveFile", path.getFileName().toString()).build().toString())
                 .collect(Collectors.toList()));
+        model.addAttribute("breadcrumbs", breadcrumbBuilder.getBreadcrumbs(folder));
         return "folders";
     }
 
+    /**
+     * Loads file body
+     * @param filename given filename
+     * @return file body
+     * @author Kim Chau Duong
+     */
     @GetMapping("/files/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
