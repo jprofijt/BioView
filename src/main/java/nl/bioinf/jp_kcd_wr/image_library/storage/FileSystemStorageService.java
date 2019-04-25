@@ -211,7 +211,7 @@ public class FileSystemStorageService implements StorageService {
         int imageId = imageDataSource.getImageIdFromPath(image.getPath());
         File cacheLocation = new File(this.cacheLocation.toString() + "/"+ imageId + ".jpg");
 
-        if (!imageDataSource.isCached(imageId)) {
+        if (imageDataSource.isNotCached(imageId)) {
 
             BufferedImage img = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
             img

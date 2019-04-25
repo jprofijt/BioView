@@ -6,6 +6,10 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Interface for the image data source
+ * @author Jouke Profijt, Kim Chau Duong
+ */
 public interface ImageDataSource {
     void insertImage(Image image);
 
@@ -19,7 +23,7 @@ public interface ImageDataSource {
 
     void insertCache(int imageId, Path cacheLocation);
 
-    boolean isCached(int ImageId);
+    boolean isNotCached(int ImageId);
 
     Path getCache(int ImageId);
 }

@@ -6,31 +6,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Class that implements the ImageDataSource as a JDBC
+ * @author jouke Profijt, Kim Chau Duong
+ */
 @Component
 public class ImageDataSourceJdbc implements ImageDataSource {
 
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
     private static final Logger logger = Logger.getLogger(ImageDataSourceJdbc.class.getName());
 
-
+    /**
+     * Constructor creates Jdbc template
+     * @param namedJdbcTemplate
+     * @author Kim Chau Duong
+     */
     @Autowired
     public ImageDataSourceJdbc(NamedParameterJdbcTemplate namedJdbcTemplate) {
         this.namedJdbcTemplate = namedJdbcTemplate;
+        logger.log(Level.INFO, "Instantiated new Jdbc");
 
     }
 
     /**
-     * Insetrs a new image object into the database
+     * Inserts a new image object into the database
      * @param image Image object
+     * @author Jouke Profijt
      */
     @Override
     public void insertImage(Image image) {
@@ -49,6 +57,7 @@ public class ImageDataSourceJdbc implements ImageDataSource {
      * Return true if an image has been indexed in the database
      * @param image Image object to check
      * @return boolean
+     * @author Jouke Profijt
      */
     private boolean isIndexed(Image image) {
         SqlParameterSource parameterSource = new MapSqlParameterSource()
@@ -70,18 +79,21 @@ public class ImageDataSourceJdbc implements ImageDataSource {
      * gets all images in the given directory
      * @param directory path to directory
      * @return
+     * @author Jouke Profijt
      */
     @Override
     public List<Image> getImagesInDirectory(String directory) {
         String sql = "SELECT * FROM images WHERE path = :path";
         SqlParameterSource parameter = new MapSqlParameterSource()
                 .addValue("path", directory);
+        logger.log(Level.INFO, "Querying all images in {0}", directory);
         return namedJdbcTemplate.query(sql, parameter, new ImageRowMapper());
     }
 
     /**
      * returns all images stored in database
      * @return List of image objects
+     * @author Jouke Profijt
      */
     @Override
     public List<Image> returnAllImages() {
@@ -94,6 +106,7 @@ public class ImageDataSourceJdbc implements ImageDataSource {
      * gets the id for the image that is located in path
      * @param path image path
      * @return image id
+     * @author Jouke Profijt
      */
     @Override
     public int getImageIdFromPath(String path) {
@@ -107,10 +120,11 @@ public class ImageDataSourceJdbc implements ImageDataSource {
      * inserts image cache location
      * @param imageId id for the image to be cached
      * @param cacheLocation location for cached image
+     * @author Jouke Profijt
      */
     @Override
     public void insertCache(int imageId, Path cacheLocation) {
-        if (!isCached(imageId) && cacheLocation.toFile().isFile()) {
+        if (isNotCached(imageId) && cacheLocation.toFile().isFile()) {
             SqlParameterSource parameterSource = new MapSqlParameterSource()
                     .addValue("image_id", imageId)
                     .addValue("cache_path", cacheLocation.toString());
@@ -124,9 +138,10 @@ public class ImageDataSourceJdbc implements ImageDataSource {
      * checks if image has been cached yet
      * @param ImageId image id
      * @return boolean if the image is cached
+     * @author Jouke Profijt
      */
     @Override
-    public boolean isCached(int ImageId) {
+    public boolean isNotCached(int ImageId) {
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("image_id", ImageId);
         String query = "SELECT count(*) FROM cache WHERE image_id = :image_id";
@@ -134,13 +149,16 @@ public class ImageDataSourceJdbc implements ImageDataSource {
         int result = namedJdbcTemplate.queryForObject(query, parameterSource, Integer.class);
 
 
-        return result >= 1;
+
+
+        return result < 1;
     }
 
     /**
      * gets cache path for image id
      * @param ImageId image id
-     * @return cache path;
+     * @return cache path
+     * @author Jouke Profijt
      */
     @Override
     public Path getCache(int ImageId) {
@@ -148,8 +166,6 @@ public class ImageDataSourceJdbc implements ImageDataSource {
                 .addValue("image_id", ImageId);
         String query = "SELECT path FROM cache WHERE image_id = :image_id";
 
-        Path result = namedJdbcTemplate.queryForObject(query, parameterSource, Path.class);
-
-        return result;
+        return namedJdbcTemplate.queryForObject(query, parameterSource, Path.class);
     }
 }
