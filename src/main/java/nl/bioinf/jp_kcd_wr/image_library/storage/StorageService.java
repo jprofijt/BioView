@@ -30,7 +30,7 @@ public interface StorageService {
 
     Path load(String filename);
 
-    Resource loadAsResource(String filename);
+    Resource loadAsResource(String filename, String directory);
 
     void deleteAll();
 
