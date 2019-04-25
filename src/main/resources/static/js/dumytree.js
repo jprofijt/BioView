@@ -1,3 +1,6 @@
+// Dummy tree as a concept for breadcrumbs
+// Author: Jouke Profijt
+
 $(document).ready(function (){
     $('#tree').fancytree({
         source: [

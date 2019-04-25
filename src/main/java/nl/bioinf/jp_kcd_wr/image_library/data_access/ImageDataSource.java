@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Interface for Image data sources
+ *
  * Copyright (c) 2019 Kim Chau Duong
  * All rights reserved
  */
@@ -23,5 +25,7 @@ public interface ImageDataSource {
 
     void insertCache(int imageId, Path cacheLocation);
 
-    boolean isCached(int ImageId);
+    boolean isNotCached(int ImageId);
+
+    Path getCache(int ImageId);
 }
