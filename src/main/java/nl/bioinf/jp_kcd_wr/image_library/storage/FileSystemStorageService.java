@@ -35,7 +35,7 @@ import javax.imageio.ImageIO;
  * Class that handles the file uploads
  * It contains
  *
- * @author Kim Chau Duong
+ * @author Kim Chau Duong, Jouke Profijt
  * @version 1.0
  */
 @Service
@@ -62,6 +62,8 @@ public class FileSystemStorageService implements StorageService {
     /**
      * Stores the file in the directory and the data in database
      * @param file uploaded file
+     *
+     * @author Kim Chau Duong, Jouke Profijt
      */
     @Override
     public void store(MultipartFile file) {
@@ -98,6 +100,8 @@ public class FileSystemStorageService implements StorageService {
      * Gives the file a new name with a number attached in case it already exists
      * @param filename name of the uploaded file
      * @return the new name
+     *
+     * @author Kim Chau Duong
      */
     @Override
     public String getNewName(String filename) {
@@ -127,6 +131,8 @@ public class FileSystemStorageService implements StorageService {
      * @param newName new file name
      * @param filePath directory path that the file is stored in
      * @return
+     *
+     * @author Kim Chau Duong
      */
     @Override
     public Image createImageData(String origFilename, String newName, Path filePath) {
@@ -142,12 +148,13 @@ public class FileSystemStorageService implements StorageService {
      * Loads all stored file in that particular directory
      * @param currentFolder directory that contains the stored files
      * @return stream of file paths of the files
+     *
+     * @author Kim Chau Duong
      */
     @Override
     public Stream<Path> loadAll(String currentFolder) {
         try {
-            return Files.walk(this.rootLocation.resolve(currentFolder), 1)
-                    .filter(path -> !path.equals(this.rootLocation.resolve(currentFolder)) && path.toFile().isFile())
+            return walkThroughFiles(currentFolder)
                     .map(this.rootLocation::relativize);
         }
         catch (IOException e) {
@@ -157,9 +164,35 @@ public class FileSystemStorageService implements StorageService {
     }
 
     /**
+     * loads absolute file path
+     * @param currentFolder folder to search
+     * @return stream of paths
+     *
+     * @author Jouke Profijt
+     */
+    @Override
+    public Stream<Path> loadAbsolute(String currentFolder) {
+        try {
+            return walkThroughFiles(currentFolder);
+        }
+        catch (IOException e) {
+            logger.log(Level.SEVERE, "Storage service could not read stored files");
+            throw new StorageException("Failed to read stored files", e);
+        }
+    }
+
+    private Stream<Path> walkThroughFiles(String currentFolder) throws IOException {
+        return Files.walk(this.rootLocation.resolve(currentFolder), 1)
+                .filter(path -> !path.equals(this.rootLocation.resolve(currentFolder)) && path.toFile().isFile());
+
+    }
+
+    /**
      * Builds file path from the root location and the provided directory path
      * @param filename directory path
      * @return file path
+     *
+     * @author Kim Chau Duong
      */
     @Override
     public Path load(String filename) {
@@ -170,6 +203,8 @@ public class FileSystemStorageService implements StorageService {
      * Loads file as a resource
      * @param filename name of file
      * @return file resource
+     *
+     * @author Kim Chau Duong
      */
     @Override
     public Resource loadAsResource(String filename) {
@@ -200,6 +235,12 @@ public class FileSystemStorageService implements StorageService {
         logger.log(Level.WARNING, "Deleting ALL library contents");
     }
 
+    /**
+     * For each image in existing image library will create a cached image if it doesn't exist and makes a database insert
+     * @param Directory Root directory to recursively
+     *
+     * @author Jouke Profijt
+     */
     @Override
     public void processExistingImageLibrary(File Directory) {
         for (File contentDirectory : listDirectories(Directory)){
@@ -226,17 +267,24 @@ public class FileSystemStorageService implements StorageService {
 
     /**
      * Creates a new .cache directory with scaled tumbnail images
-     * @param Directory
+     * @param Directory Directory for caching
      * @throws IOException
+     *
+     * @author Jouke Profijt
      */
     private void createThumbnails(File Directory) throws IOException {
-
 
         for (File image : Directory.listFiles(File::isFile)) {
             cacheImage(image);
         }
     }
 
+    /**
+     * Indexes existing images into database
+     * @param directory directory with images to be indexed
+     *
+     * @author Jouke Profijt
+     */
     private void IndexImages(File directory){
         for (File image : directory.listFiles(File::isFile)) {
             Image anotatedImage = new Image();
@@ -247,6 +295,13 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 
+    /**
+     * Creates a 200x200 thumbnail of given image and inserts cache location into database
+     * @param image image to be processed into cache
+     * @throws IOException If image doesn't exist throws IOException
+     *
+     * @author Jouke Profijt
+     */
     private void cacheImage(File image) throws IOException {
         String extenion = getFileExtension(image);
         String cacheImage = image.getName().replace(extenion, ".jpg");
@@ -268,6 +323,14 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 
+
+    /**
+     * Small function that determines image file extension
+     * @param file file to get extension from
+     * @return file extension
+     *
+     * @author Jouke Profijt
+     */
     private String getFileExtension(File file) {
         String name = file.getName();
         int lastIndexOf = name.lastIndexOf(".");
@@ -279,6 +342,8 @@ public class FileSystemStorageService implements StorageService {
 
     /**
      * Initializes the file storage
+     *
+     * @author Kim Chau Duong
      */
     @Override
     public void init() {

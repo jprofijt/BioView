@@ -170,4 +170,14 @@ public class ImageDataSourceJdbc implements ImageDataSource {
 
         return namedJdbcTemplate.queryForObject(query, parameterSource, Path.class);
     }
+
+    @Override
+    public String getCacheFromImagePath(String PathToImage) {
+        System.out.println(PathToImage);
+        SqlParameterSource parameterSource = new MapSqlParameterSource()
+                .addValue("image_path", PathToImage);
+        String query = "SELECT cache.cache_path from cache INNER JOIN images i on cache.image_id = i.id WHERE i.path = :image_path";
+
+        return namedJdbcTemplate.queryForObject(query, parameterSource, String.class);
+    }
 }

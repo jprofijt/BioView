@@ -26,6 +26,8 @@ public interface StorageService {
 
     Stream<Path> loadAll(String currentFolder);
 
+    Stream<Path> loadAbsolute(String currentFolder);
+
     Path load(String filename);
 
     Resource loadAsResource(String filename);
