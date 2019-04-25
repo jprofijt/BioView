@@ -19,7 +19,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-
+/**
+ * Controller that handles storage interaction by users
+ *
+ * @author Jouke Profijt, Kim Chau Duong
+ *
+ * @version 1.0
+ */
 @Controller
 public class DirectoryController {
     private final StorageService storageService;
@@ -34,6 +40,16 @@ public class DirectoryController {
     }
 
     private static final Logger logger = Logger.getLogger(DirectoryController.class.getName());
+
+    /**
+     * Mapping for the users to create directories
+     * @param directoryName Name for the new directory
+     * @param currentPath Path where the new directory will go
+     * @param model request model
+     * @return redirect to current page
+     *
+     * @author Jouke Profijt, Kim Chau Duong
+     */
     @PostMapping("/createfolder")
     public String CreateFolder(@RequestParam(name="directoryName", required=true) String directoryName, @RequestParam(name="currentPath", required=true) String currentPath, Model model) {
 //        FolderHandler creator = new FolderHandler();
@@ -50,6 +66,14 @@ public class DirectoryController {
         return "redirect:/nextfolder?folder=" + currentPath.replace("\\", "/");
     }
 
+    /**
+     * mapping that lets users create a folder with the data as name
+     * @param currentPath path where directory should be located
+     * @param model request model
+     * @return redirect to current page
+     *
+     * @author Jouke Profijt
+     */
     @PostMapping("/createdatefolder")
     public String createDateFolder(@RequestParam(name="currentPath", required=true) String currentPath, Model model){
         try {
@@ -69,7 +93,8 @@ public class DirectoryController {
      * Get request that provides all folders, files and the current path
      * @param folder current directory path
      * @param model
-     * @return
+     * @return Folders contained in current view
+     *
      * @author Jouke Profijt, Kim Chau Duong
      */
     @GetMapping("/nextfolder")
@@ -90,6 +115,7 @@ public class DirectoryController {
      * Loads file body
      * @param filename given filename
      * @return file body
+     *
      * @author Kim Chau Duong
      */
     @GetMapping("/files/{filename:.+}")

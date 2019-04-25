@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 /**
  * Controller that handles image view for the users
+ *
  * @author Jouke Profijt
  */
 @Controller
