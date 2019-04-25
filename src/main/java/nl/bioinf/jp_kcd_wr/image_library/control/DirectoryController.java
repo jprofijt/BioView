@@ -45,9 +45,9 @@ public class DirectoryController {
             return "directory-error";
         }
         model.addAttribute("folders", folderHandler.getNextFolders(currentPath));
-        model.addAttribute("currentPath", new File(currentPath));
+        model.addAttribute("currentPath", new File(currentPath.replace("\\", "/")));
         logger.log(Level.INFO, "Folders were created successfully!");
-        return "redirect:/nextfolder?folder=" + currentPath;
+        return "redirect:/nextfolder?folder=" + currentPath.replace("\\", "/");
     }
 
     @PostMapping("/createdatefolder")
@@ -60,15 +60,22 @@ public class DirectoryController {
             return "directory-error";
         }
         model.addAttribute("folders", folderHandler.getNextFolders(currentPath));
-        model.addAttribute("currentPath", new File(currentPath));
+        model.addAttribute("currentPath", new File(currentPath.replace("\\", "/")));
         logger.log(Level.INFO, "Successfully created {0}", new Object[]{currentPath});
-        return "redirect:/nextfolder?folder=" + currentPath;
+        return "redirect:/nextfolder?folder=" + currentPath.replace("\\", "/");
     }
 
+    /**
+     * Get request that provides all folders, files and the current path
+     * @param folder current directory path
+     * @param model
+     * @return
+     * @author Jouke Profijt, Kim Chau Duong
+     */
     @GetMapping("/nextfolder")
     public String nextFolder(@RequestParam(name="folder", required=false, defaultValue="testdata") String folder, Model model) {
         model.addAttribute("folders", folderHandler.getNextFolders(folder));
-        model.addAttribute("currentPath", new File(folder));
+        model.addAttribute("currentPath", new File(folder.replace("\\", "/")));
         model.addAttribute("date", LocalDate.now().toString());
 
         model.addAttribute("files", storageService.loadAll(folder).map(
@@ -79,7 +86,12 @@ public class DirectoryController {
         return "folders";
     }
 
-
+    /**
+     * Loads file body
+     * @param filename given filename
+     * @return file body
+     * @author Kim Chau Duong
+     */
     @GetMapping("/files/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {

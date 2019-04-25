@@ -1,5 +1,9 @@
 package nl.bioinf.jp_kcd_wr.image_library.model;
 
+/**
+ * Copyright (c) 2019 Kim Chau Duong
+ * All rights reserved
+ */
 public class Image {
     // id, orig_name, NewFilename, path
     private int id;

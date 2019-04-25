@@ -23,10 +23,22 @@ public class FolderHandler implements FolderStructureProvider {
         this.rootLocation = Paths.get(environment.getProperty("library.upload"));
     }
 
+    /**
+     * Gets the path without the root location
+     * @param directory full directory path
+     * @return the relative path
+     * @author Kim Chau Duong
+     */
     private Path getRelativePath(String directory){
         return rootLocation.relativize(Paths.get(directory));
     }
 
+    /**
+     * Creates directory object
+     * @param directory directory path
+     * @return directory object
+     * @author Kim Chau Duong
+     */
     private Directory createDirectoryObject(File directory){
         Directory newDirectory = new Directory();
         newDirectory.setName(directory.getName());
@@ -35,6 +47,12 @@ public class FolderHandler implements FolderStructureProvider {
         return newDirectory;
     }
 
+    /**
+     * Gathers all folders present in the current directory
+     * @param nextFolders current directory path
+     * @return list of directory objects
+     * @author Kim Chau duong, Jouke Profijt
+     */
     @Override
     public ArrayList<Directory> getNextFolders(String nextFolders){
         File[] directories = new File(String.valueOf(this.rootLocation.resolve(nextFolders))).listFiles(File::isDirectory);

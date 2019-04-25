@@ -26,6 +26,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import nl.bioinf.jp_kcd_wr.image_library.storage.StorageFileNotFoundException;
 import nl.bioinf.jp_kcd_wr.image_library.storage.StorageService;
 
+/**
+ * Controller class that handles file upload requests from the upload page
+ *
+ * @author Kim Chau Duong
+ * @version 1.0
+ */
 @Controller
 public class FileUploadController {
     private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/tiff");
@@ -37,12 +43,26 @@ public class FileUploadController {
         this.storageService = storageService;
     }
 
+    /**
+     * Get request that loads the initial page
+     *
+     * @param model
+     * @return
+     * @throws IOException
+     */
     @GetMapping("/upload")
     public String listUploadedFiles(Model model) throws IOException {
 
         return "upload-form";
     }
 
+    /**
+     * Post request that handles file uploads
+     *
+     * @param file the file to be uploaded
+     * @param redirectAttributes
+     * @return
+     */
     @PostMapping("/upload")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
                                    RedirectAttributes redirectAttributes) {
@@ -62,6 +82,11 @@ public class FileUploadController {
         return "redirect:/upload";
     }
 
+    /**
+     * Handles file not found error
+     * @param exc
+     * @return
+     */
     @ExceptionHandler(StorageFileNotFoundException.class)
     public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
         return ResponseEntity.notFound().build();
