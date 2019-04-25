@@ -6,7 +6,10 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
+/**
+ * ImageRowMapper is a class that implements a RowMapper for the Image object so we can get the info from the database.
+ * @author Jouke Profijt
+ */
 public class ImageRowMapper implements RowMapper<Image> {
     @Override
     public Image mapRow(ResultSet rs, int rowNum) throws SQLException {
