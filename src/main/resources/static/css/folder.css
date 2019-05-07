@@ -1,0 +1,114 @@
+
+.theme-structure.big-file-manager {
+    width: 100%;
+    height: 90vh;
+    background: #f7f7f7;
+    border-bottom: 1px solid #2196F3;
+    overflow:auto;
+    padding: 10px 0;
+}
+.big-file-manager.theme-structure ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    user-select:none;
+}
+.big-file-manager.theme-structure ul li {
+    padding: 0;
+}
+.big-file-manager.theme-structure ul > li {
+    cursor: pointer;
+    vertical-align: top;
+}
+.big-file-manager.theme-structure ul > li > b {
+    display: block;
+    user-select:none;
+    text-align: center;
+    transform: scale(1);
+    transition: transform 0.1s linear;
+    width: 74px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px;
+    padding: 10px 4px;
+}
+
+
+.big-file-manager.theme-structure ul > li:not(.show-up) > b:active {
+    transform: scale(0.95);
+}
+.big-file-manager.theme-structure ul > li > b svg {
+    display: block;
+    margin: 0 auto;
+    font-size: 25px;
+    margin-bottom: 5px;
+}
+.big-file-manager.theme-structure ul li[data-file-icon="folder"] > b > svg {
+    color: #F7D774;
+}
+
+.big-file-manager.theme-structure ul ul {
+    display: none;
+}
+.big-file-manager.theme-structure ul > li .no-item-inside-folder {
+    padding: 10px;
+    opacity: 0.6;
+    cursor: default;
+    user-select: none;
+}
+.big-file-manager.theme-structure ul > li.data-moving:not(.show-up) > b {
+    opacity: 0.6;
+}
+.big-file-manager.theme-structure ul > li > b:hover {
+    background: #343a4026;
+}
+.big-file-manager.theme-structure ul > li.context-visible > b,
+.big-file-manager.theme-structure ul > li.select > b{
+    background: #03a9f42e;
+    outline: 1px solid #03A9F4;
+}
+.big-file-manager.theme-structure ul > li span.name {
+    border: 1px solid transparent;
+}
+.big-file-manager.theme-structure ul > li.renaming span.name {
+    border: 1px solid #929292;
+    display: block;
+    outline: 0;
+    cursor: text;
+}
+/*-----------UnderStad-------------------|START--------*/
+.big-file-manager.theme-structure ul li.show-up.select > b {
+    background: transparent;
+    outline: none;
+}
+.big-file-manager.theme-structure ul > li.show-up > b .cm-folder-back {
+    float: left;
+}
+.big-file-manager.theme-structure ul > li.show-up > b {
+    background: transparent;
+}
+.big-file-manager.theme-structure ul > li.show-up > b .cm-folder-back + svg {
+    display: none !important;
+}
+.big-file-manager.theme-structure ul > li.show-up > b .cm-folder-back svg {
+    font-size: 16px;
+}
+.big-file-manager.theme-structure ul li.file-sub-active.hide-up > b {
+    display: none;
+}
+.big-file-manager.theme-structure ul > li.show-up > b .cm-folder-back {
+    padding: 0 10px;
+    background: #00000012;
+}
+.big-file-manager.theme-structure ul > li > b i.cm-folder-back svg {
+    position: relative;
+    top: 3px;
+}
+.big-file-manager.theme-structure ul li {
+    display: inline-block;
+}
+
+
+
+
+
