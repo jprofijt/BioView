@@ -11,18 +11,43 @@
                 <div class="docs-galleSry col-12" >
                     <ul class="pictures clearfix" style="height:800px; overflow: scroll">
                         <li class="col-sm-12 col-md-6 col-lg-4" th:each="image : ${Images}">
-                            <form th:id="'imageForm'+ ${image}" th:action="@{/image-editor}" th:method="post">
-                                <input th:type="hidden" th:name="imagePath" th:value="${image}" />
-                                <a th:ondblclick="document.getElementById('imageForm' + [[${image}]]).submit()">
-                                    <img class="img-thumbnail img-fluid" th:src="${image}" />
-                                </a>
-                            </form>
+
+                            <a th:href="'#myModal'" th:class="btn" th:id="link">
+                                <img class="img-thumbnail img-fluid" th:src="${image}" />
+                            </a>
+
+                            <!-- Modal -->
+                            <div th:id="myModal" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Modal Header</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <img th:src="${image}"/>
+                                            <p>Some text in the modal.</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
                         </li>
 
 
                     </ul>
                 </div>
             </div>
+            <script>
+                $('#link').dblclick(function () {
+                    $('#myModal').modal('toggle');
+                });
+            </script>
             <div class="col-md-2 border rounded" id="options">
                 <nav class="nav flex-column">
                     <a class="nav-link" th:href="@{/upload}"><i class="fas fa-file-upload"></i> Upload New Image</a>
@@ -35,3 +60,11 @@
 </main>
 </body>
 </html>
+
+<!--<form th:id="'imageForm'+ ${image}" th:action="@{/image-editor}" th:method="post">-->
+    <!--<input th:type="hidden" th:name="imagePath" th:value="${image}" />-->
+    <!--<a th:ondblclick="document.getElementById('imageForm' + [[${image}]]).submit()">-->
+        <!--<img class="img-thumbnail img-fluid" th:src="${image}" />-->
+    <!--</a>-->
+<!--</form>-->
+<!--PATH NAAR ITEM MOET files/-->
