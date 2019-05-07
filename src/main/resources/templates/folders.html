@@ -1,10 +1,17 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="${currentPath}">File Browser</title>
+    <title th:text="${currentPath.getName()}">File Browser</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
+<div id="breadcrumb" class="breadcrumb">
+    <th:block th:each="breadcrumb : ${breadcrumbs}">
+        <a th:href="${breadcrumb.getUrl()}" th:text="${breadcrumb.getName()}"></a>
+        <li class="separator">&gt;</li>
+    </th:block>
+</div>
+
 <div>
 <th:block th:each="folder: ${folders}">
 
@@ -35,7 +42,7 @@
     <ul>
         <!--displays every file currently uploaded-->
         <li th:each="file : ${files}">
-            <a th:href="${file}" th:text="${file}" />
+            <a th:href="${file}" th:text="${file}" ></a>
         </li>
     </ul>
 </div>

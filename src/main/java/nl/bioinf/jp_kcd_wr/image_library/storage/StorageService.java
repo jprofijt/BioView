@@ -8,6 +8,10 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
+/**
+ * Copyright (c) 2019 Kim Chau Duong
+ * All rights reserved
+ */
 public interface StorageService {
 
     void init();
@@ -24,7 +28,7 @@ public interface StorageService {
 
     Path load(String filename);
 
-    Resource loadAsResource(String filename);
+    Resource loadAsResource(String filename, String directory);
 
     void deleteAll();
 

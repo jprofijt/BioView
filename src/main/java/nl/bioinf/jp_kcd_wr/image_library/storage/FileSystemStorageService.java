@@ -31,6 +31,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 
+/**
+ * Class that handles the file uploads
+ * It contains
+ *
+ * @author Kim Chau Duong
+ * @version 1.0
+ */
 @Service
 public class FileSystemStorageService implements StorageService {
 
@@ -41,6 +48,9 @@ public class FileSystemStorageService implements StorageService {
     private final static Pattern PATTERN = Pattern.compile("(.*?)(?:\\((\\d+)\\))?(\\.[^.]*)?");
     private final Path cacheLocation;
 
+    /**
+     * Contructor
+     */
     @Autowired
     public FileSystemStorageService(ImageDataSource imageDataSource, Environment environment) {
         this.imageDataSource = imageDataSource;
@@ -49,6 +59,10 @@ public class FileSystemStorageService implements StorageService {
         logger.log(Level.INFO, "Starting FileSystemStorage service using {0} as imageDataSource, and {1} as root location", new Object[] {this.imageDataSource, this.rootLocation});
     }
 
+    /**
+     * Stores the file in the directory and the data in database
+     * @param file uploaded file
+     */
     @Override
     public void store(MultipartFile file) {
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
@@ -80,6 +94,11 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 
+    /**
+     * Gives the file a new name with a number attached in case it already exists
+     * @param filename name of the uploaded file
+     * @return the new name
+     */
     @Override
     public String getNewName(String filename) {
         if (Files.exists(this.rootLocation.resolve(filename))){
@@ -102,16 +121,28 @@ public class FileSystemStorageService implements StorageService {
         return filename;
     }
 
+    /**
+     * Creates image object with data to be stored in the database
+     * @param origFilename original uploaded file name
+     * @param newName new file name
+     * @param filePath directory path that the file is stored in
+     * @return
+     */
     @Override
-    public Image createImageData(String origFilename, String hash, Path filePath) {
+    public Image createImageData(String origFilename, String newName, Path filePath) {
         Image newImage = new Image();
         newImage.setOrigName(origFilename);
-        newImage.setNewFilename(hash);
+        newImage.setNewFilename(newName);
         newImage.setPath(filePath.toString());
 
         return newImage;
     }
 
+    /**
+     * Loads all stored file in that particular directory
+     * @param currentFolder directory that contains the stored files
+     * @return stream of file paths of the files
+     */
     @Override
     public Stream<Path> loadAll(String currentFolder) {
         try {
@@ -123,17 +154,30 @@ public class FileSystemStorageService implements StorageService {
             logger.log(Level.SEVERE, "Storage service could not read stored files");
             throw new StorageException("Failed to read stored files", e);
         }
-
     }
 
+    /**
+     * Builds file path from the root location and the provided directory path
+     * @param filename name of file
+     * @return file path
+     */
     @Override
     public Path load(String filename) {
         return rootLocation.resolve(filename);
     }
 
+    /**
+     * Loads file as a resource
+     * @param filename name of file
+     * @param directory directory path of the file
+     * @return file resource
+     */
     @Override
-    public Resource loadAsResource(String filename) {
+    public Resource loadAsResource(String filename, String directory) {
         try {
+            if(directory != null && !directory.isEmpty()) {
+                filename = directory + '/' + filename;
+            }
             Path file = load(filename);
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
@@ -151,6 +195,9 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 
+    /**
+     * Deletes all existing files
+     */
     @Override
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
@@ -211,7 +258,7 @@ public class FileSystemStorageService implements StorageService {
         int imageId = imageDataSource.getImageIdFromPath(image.getPath());
         File cacheLocation = new File(this.cacheLocation.toString() + "/"+ imageId + ".jpg");
 
-        if (!imageDataSource.isCached(imageId)) {
+        if (imageDataSource.isNotCached(imageId)) {
 
             BufferedImage img = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
             img
@@ -234,7 +281,9 @@ public class FileSystemStorageService implements StorageService {
         return name.substring(lastIndexOf);
     }
 
-
+    /**
+     * Initializes the file storage
+     */
     @Override
     public void init() {
         try {
