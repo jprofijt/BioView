@@ -9,6 +9,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.logging.Logger;
 
+/**
+ * controller for managing login rememberMe requests
+ * @author Wietse Reitsma
+ */
+
 @Controller
 public class LoginController {
     private static final Logger logger = Logger.getLogger(LoginController.class.getName());
@@ -18,7 +23,6 @@ public class LoginController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (!(auth instanceof AnonymousAuthenticationToken)) {
-
             return new ModelAndView("forward:/imageview");
         }
         else {

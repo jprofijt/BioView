@@ -14,6 +14,12 @@ import javax.sql.DataSource;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ *Security config file for securing the webapp.
+ * @author Wietse Reitsma
+ */
+
+
 
 @Configuration
 @EnableWebSecurity
@@ -35,7 +41,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        logger.log(Level.WARNING, String.valueOf(rememberMe));
         httpSecurity
                 .authorizeRequests()
 //                .antMatchers("/upload")      /* this is to test roles */
