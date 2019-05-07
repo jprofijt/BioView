@@ -3,12 +3,14 @@ package nl.bioinf.jp_kcd_wr.image_library.data_access.jdbc;
 import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageDataSource;
 import nl.bioinf.jp_kcd_wr.image_library.model.Image;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Component;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,16 +25,19 @@ import java.util.logging.Logger;
 public class ImageDataSourceJdbc implements ImageDataSource {
 
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
+    private final Path rootLocation;
     private static final Logger logger = Logger.getLogger(ImageDataSourceJdbc.class.getName());
 
     /**
      * Constructor creates Jdbc template
      * @param namedJdbcTemplate
+     * @param
      * @author Kim Chau Duong
      */
     @Autowired
-    public ImageDataSourceJdbc(NamedParameterJdbcTemplate namedJdbcTemplate) {
+    public ImageDataSourceJdbc(NamedParameterJdbcTemplate namedJdbcTemplate, Environment environment) {
         this.namedJdbcTemplate = namedJdbcTemplate;
+        this.rootLocation = Paths.get(environment.getProperty("library.upload"));
         logger.log(Level.INFO, "Instantiated new Jdbc");
 
     }
@@ -171,13 +176,21 @@ public class ImageDataSourceJdbc implements ImageDataSource {
         return namedJdbcTemplate.queryForObject(query, parameterSource, Path.class);
     }
 
+    /**
+     * gets the cache for an image by their path
+     * @param PathToImage Path
+     * @return Cache path
+     * @author Jouke Profijt
+     */
     @Override
-    public String getCacheFromImagePath(String PathToImage) {
+    public Path getCacheFromImagePath(String PathToImage) {
         System.out.println(PathToImage);
+
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("image_path", PathToImage);
         String query = "SELECT cache.cache_path from cache INNER JOIN images i on cache.image_id = i.id WHERE i.path = :image_path";
-
-        return namedJdbcTemplate.queryForObject(query, parameterSource, String.class);
+        String result = namedJdbcTemplate.queryForObject(query, parameterSource, String.class);
+        Path path = Paths.get(result).getFileName();
+        return path;
     }
 }

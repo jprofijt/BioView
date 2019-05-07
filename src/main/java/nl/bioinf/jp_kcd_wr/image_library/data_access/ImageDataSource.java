@@ -29,5 +29,5 @@ public interface ImageDataSource {
 
     Path getCache(int ImageId);
 
-    String getCacheFromImagePath(String PathToImage);
+    Path getCacheFromImagePath(String PathToImage);
 }

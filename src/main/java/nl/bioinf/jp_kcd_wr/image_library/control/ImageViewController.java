@@ -41,6 +41,7 @@ public class ImageViewController {
         logger.log(Level.INFO, "Creating Image view for images in {0}", location);
         List<Path> list = storageService.loadAbsolute(location).collect(Collectors.toList());
         model.addAttribute("Images", loadCaches(list));
+        model.addAttribute("cache_path", "../cache/");
 
         return "main-page";
     }
@@ -48,8 +49,9 @@ public class ImageViewController {
     private List<Path> loadCaches(List<Path> image_paths){
         ArrayList<Path> cacheLocations = new ArrayList<>();
         for (Path image: image_paths) {
-            cacheLocations.add(Paths.get(this.imageDataSource.getCacheFromImagePath(image.toString())));
+            cacheLocations.add(this.imageDataSource.getCacheFromImagePath(image.toString()));
         }
+
 
         return cacheLocations;
     }
