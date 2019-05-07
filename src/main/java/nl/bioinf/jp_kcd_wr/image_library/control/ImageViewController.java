@@ -44,10 +44,16 @@ public class ImageViewController {
         List<Path> list = storageService.loadAbsolute(location).collect(Collectors.toList());
         model.addAttribute("Images", loadCaches(list));
         model.addAttribute("cache_path", "../cache/");
+        model.addAttribute("location", location);
 
         return "main-page";
     }
 
+    /**
+     * Creates imageRequest object list for displaying images in directory
+     * @param image_paths
+     * @return List of ImageRequest Objects
+     */
     private List<ImageRequest> loadCaches(List<Path> image_paths){
         ArrayList<ImageRequest> cacheLocations = new ArrayList<>();
         for (Path image: image_paths) {
