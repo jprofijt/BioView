@@ -8,25 +8,30 @@
 
             </div>
             <div class="col-md-8">
-                <div class="docs-gallery col-12" >
+                <div class="docs-galleSry col-12" >
                     <ul class="pictures clearfix" style="height:800px; overflow: scroll">
                         <li class="col-sm-12 col-md-6 col-lg-4" th:each="image : ${Images}">
-                            <a th:href="${image}" target="_blank"><img class="img-thumbnail img-fluid" th:src="${'files/'+ image + '?directory=' + cache_path}" /></a>
+                            <form th:id="'imageForm'+ ${image.getActual()}" th:action="@{/image-editor}" th:method="post">
+                                <input th:type="hidden" th:name="imagePath" th:value="${image.getActual()}" />
+                                <a th:ondblclick="document.getElementById('imageForm' + [[${image.getActual().toString()}]]).submit()">
+                                    <img class="img-thumbnail img-fluid" th:src="${'files/'+ image.getThumbnail() + '?directory=' + cache_path}" />
+                                </a>
+                            </form>
                         </li>
+
 
                     </ul>
                 </div>
             </div>
-
             <div class="col-md-2 border rounded" id="options">
                 <nav class="nav flex-column">
                     <a class="nav-link" th:href="@{/upload}"><i class="fas fa-file-upload"></i> Upload New Image</a>
                     <a class="nav-link" th:href="@{/nextfolder}"><i class="fas fa-folder-plus"></i> Create new sub-directory</a>
                 </nav>
             </div>
+
         </div>
     </div>
 </main>
-
 </body>
 </html>

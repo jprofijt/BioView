@@ -346,6 +346,11 @@ public class FileSystemStorageService implements StorageService {
         return name.substring(lastIndexOf);
     }
 
+    @Override
+    public Path getRootLocation(){
+        return this.rootLocation;
+    }
+
     /**
      * Initializes the file storage
      *

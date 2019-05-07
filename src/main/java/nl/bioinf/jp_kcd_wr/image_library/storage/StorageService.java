@@ -36,4 +36,6 @@ public interface StorageService {
 
     void processExistingImageLibrary(File Directory);
 
+    Path getRootLocation();
+
 }

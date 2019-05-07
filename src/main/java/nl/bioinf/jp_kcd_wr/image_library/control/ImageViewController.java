@@ -1,8 +1,10 @@
 package nl.bioinf.jp_kcd_wr.image_library.control;
 
 import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageDataSource;
+import nl.bioinf.jp_kcd_wr.image_library.model.ImageRequest;
 import nl.bioinf.jp_kcd_wr.image_library.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,13 +48,18 @@ public class ImageViewController {
         return "main-page";
     }
 
-    private List<Path> loadCaches(List<Path> image_paths){
-        ArrayList<Path> cacheLocations = new ArrayList<>();
+    private List<ImageRequest> loadCaches(List<Path> image_paths){
+        ArrayList<ImageRequest> cacheLocations = new ArrayList<>();
         for (Path image: image_paths) {
-            cacheLocations.add(this.imageDataSource.getCacheFromImagePath(image.toString()));
+            ImageRequest imageRequest = new ImageRequest();
+
+            imageRequest.setThumbnail(this.imageDataSource.getCacheFromImagePath(image.toString()));
+            imageRequest.setActual(
+                    Paths.get(image.toString().replace(storageService.getRootLocation().toString() + "/", "")));
+            System.out.println("image = " + imageRequest.getActual());
+
+            cacheLocations.add(imageRequest);
         }
-
-
         return cacheLocations;
     }
 }
