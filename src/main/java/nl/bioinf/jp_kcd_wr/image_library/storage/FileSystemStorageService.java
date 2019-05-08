@@ -56,7 +56,25 @@ public class FileSystemStorageService implements StorageService {
         this.imageDataSource = imageDataSource;
         this.rootLocation = Paths.get(environment.getProperty("library.upload"));
         this.cacheLocation = Paths.get(environment.getProperty("cache-location"));
+        makeLibraryLocations();
         logger.log(Level.INFO, "Starting FileSystemStorage service using {0} as imageDataSource, and {1} as root location", new Object[] {this.imageDataSource, this.rootLocation});
+    }
+
+    /**
+     * creates new library locations if they don't already exist
+     */
+    private void makeLibraryLocations(){
+        File Root = this.rootLocation.toFile();
+        File Thumbnails = this.cacheLocation.toFile();
+        if (!Root.exists()){
+            Root.mkdir();
+            logger.log(Level.WARNING, "Given library location doesn't exist, creating new library location");
+        }
+
+        if (!Thumbnails.exists()){
+            Thumbnails.mkdir();
+            logger.log(Level.WARNING, "Given Thumbnail location doesn't exist, creating new thumbnail location");
+        }
     }
 
     /**
