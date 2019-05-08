@@ -28,4 +28,6 @@ public interface ImageDataSource {
     boolean isNotCached(int ImageId);
 
     Path getCache(int ImageId);
+
+    Path getCacheFromImagePath(String PathToImage);
 }

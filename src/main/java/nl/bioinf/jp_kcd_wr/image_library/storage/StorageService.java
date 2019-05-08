@@ -26,6 +26,8 @@ public interface StorageService {
 
     Stream<Path> loadAll(String currentFolder);
 
+    Stream<Path> loadAbsolute(String currentFolder);
+
     Path load(String filename);
 
     Resource loadAsResource(String filename, String directory);
@@ -33,5 +35,7 @@ public interface StorageService {
     void deleteAll();
 
     void processExistingImageLibrary(File Directory);
+
+    Path getRootLocation();
 
 }
