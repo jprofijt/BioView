@@ -23,11 +23,11 @@ public interface ImageDataSource {
 
     int getImageIdFromPath(String path);
 
-    void insertCache(int imageId, Path cacheLocation);
+    void storeThumbnailCacheDataPath(int imageId, Path cacheLocation);
 
-    boolean isNotCached(int ImageId);
+    boolean checkThumbnailStatus(int ImageId);
 
-    Path getCache(int ImageId);
+    Path getThumbnailPath(int ImageId);
 
-    Path getCacheFromImagePath(String PathToImage);
+    Path getThumbnailPathFromImagePath(String PathToImage);
 }

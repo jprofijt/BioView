@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 public class ImageDataSourceJdbc implements ImageDataSource {
 
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
-    private final Path rootLocation;
     private static final Logger logger = Logger.getLogger(ImageDataSourceJdbc.class.getName());
 
     /**
@@ -37,7 +36,6 @@ public class ImageDataSourceJdbc implements ImageDataSource {
     @Autowired
     public ImageDataSourceJdbc(NamedParameterJdbcTemplate namedJdbcTemplate, Environment environment) {
         this.namedJdbcTemplate = namedJdbcTemplate;
-        this.rootLocation = Paths.get(environment.getProperty("library.upload"));
         logger.log(Level.INFO, "Instantiated new Jdbc");
 
     }
@@ -49,7 +47,7 @@ public class ImageDataSourceJdbc implements ImageDataSource {
      */
     @Override
     public void insertImage(Image image) {
-        if (!isIndexed(image)) {
+        if (!checkImageIndex(image)) {
             SqlParameterSource parameters = new MapSqlParameterSource()
                     .addValue("orig_name", image.getOrigName())
                     .addValue("new_name", image.getNewFilename())
@@ -66,7 +64,7 @@ public class ImageDataSourceJdbc implements ImageDataSource {
      * @return boolean
      * @author Jouke Profijt
      */
-    private boolean isIndexed(Image image) {
+    private boolean checkImageIndex(Image image) {
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("path", image.getPath());
         String query = "SELECT count(*) FROM images WHERE path = :path";
@@ -120,7 +118,8 @@ public class ImageDataSourceJdbc implements ImageDataSource {
         String query = "SELECT id from images where path = :path";
         SqlParameterSource parameter = new MapSqlParameterSource()
                 .addValue("path", path);
-        return namedJdbcTemplate.queryForObject(query, parameter, Integer.class);
+        Integer ImageId = namedJdbcTemplate.queryForObject(query, parameter, Integer.class);
+        return ImageId;
     }
 
     /**
@@ -130,8 +129,8 @@ public class ImageDataSourceJdbc implements ImageDataSource {
      * @author Jouke Profijt
      */
     @Override
-    public void insertCache(int imageId, Path cacheLocation) {
-        if (isNotCached(imageId) && cacheLocation.toFile().isFile()) {
+    public void storeThumbnailCacheDataPath(int imageId, Path cacheLocation) {
+        if (checkThumbnailStatus(imageId) && cacheLocation.toFile().isFile()) {
             SqlParameterSource parameterSource = new MapSqlParameterSource()
                     .addValue("image_id", imageId)
                     .addValue("cache_path", cacheLocation.toString());
@@ -148,7 +147,7 @@ public class ImageDataSourceJdbc implements ImageDataSource {
      * @author Jouke Profijt
      */
     @Override
-    public boolean isNotCached(int ImageId) {
+    public boolean checkThumbnailStatus(int ImageId) {
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("image_id", ImageId);
         String query = "SELECT count(*) FROM cache WHERE image_id = :image_id";
@@ -168,7 +167,7 @@ public class ImageDataSourceJdbc implements ImageDataSource {
      * @author Jouke Profijt
      */
     @Override
-    public Path getCache(int ImageId) {
+    public Path getThumbnailPath(int ImageId) {
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("image_id", ImageId);
         String query = "SELECT path FROM cache WHERE image_id = :image_id";
@@ -183,7 +182,7 @@ public class ImageDataSourceJdbc implements ImageDataSource {
      * @author Jouke Profijt
      */
     @Override
-    public Path getCacheFromImagePath(String PathToImage) {
+    public Path getThumbnailPathFromImagePath(String PathToImage) {
         System.out.println(PathToImage);
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()

@@ -281,7 +281,7 @@ public class FileSystemStorageService implements StorageService {
     private void createThumbnails(File Directory) throws IOException {
 
         for (File image : Directory.listFiles(File::isFile)) {
-            cacheImage(image);
+            storeImageThumbnail(image);
         }
     }
 
@@ -308,21 +308,21 @@ public class FileSystemStorageService implements StorageService {
      *
      * @author Jouke Profijt
      */
-    private void cacheImage(File image) throws IOException {
+    private void storeImageThumbnail(File image) throws IOException {
         String extenion = getFileExtension(image);
         String cacheImage = image.getName().replace(extenion, ".jpg");
 
         int imageId = imageDataSource.getImageIdFromPath(image.getPath());
         File cacheLocation = new File(this.cacheLocation.toString() + "/"+ imageId + ".jpg");
 
-        if (imageDataSource.isNotCached(imageId)) {
+        if (imageDataSource.checkThumbnailStatus(imageId)) {
 
             BufferedImage img = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
             img
                     .createGraphics()
                     .drawImage(ImageIO.read(image).getScaledInstance(200, 200, java.awt.Image.SCALE_SMOOTH), 0, 0, null);
             ImageIO.write(img, "jpg", cacheLocation);
-            imageDataSource.insertCache(imageId, cacheLocation.toPath());
+            imageDataSource.storeThumbnailCacheDataPath(imageId, cacheLocation.toPath());
             if (cacheLocation.isFile()) {
                 logger.log(Level.INFO, "Succesfully created cache of {0} in directory: {1}", new Object[]{image.getName(), this.cacheLocation});
             }
