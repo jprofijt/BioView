@@ -56,7 +56,25 @@ public class FileSystemStorageService implements StorageService {
         this.imageDataSource = imageDataSource;
         this.rootLocation = Paths.get(environment.getProperty("library.upload"));
         this.cacheLocation = Paths.get(environment.getProperty("cache-location"));
+
         logger.log(Level.INFO, "Starting FileSystemStorage service using {0} as imageDataSource, and {1} as root location", new Object[] {this.imageDataSource, this.rootLocation});
+    }
+
+    /**
+     * creates new library locations if they don't already exist
+     */
+    private void makeLibraryLocations(){
+        File Root = this.rootLocation.toFile();
+        File Thumbnails = this.cacheLocation.toFile();
+        if (!Root.exists()){
+            Root.mkdirs();
+            logger.log(Level.WARNING, "Given library location doesn't exist, creating new library location");
+        }
+
+        if (!Thumbnails.exists()){
+            Thumbnails.mkdirs();
+            logger.log(Level.WARNING, "Given Thumbnail location doesn't exist, creating new thumbnail location");
+        }
     }
 
     /**
@@ -260,8 +278,14 @@ public class FileSystemStorageService implements StorageService {
         } catch (IOException e) {
             logger.log(Level.WARNING, "Directory {0} not found", Directory.getPath());
         }
-        logger.log(Level.INFO, "Completed caching images for library location {0}", Directory.getPath());
 
+    }
+
+    private void processLibrary() {
+        File Directory = this.rootLocation.toFile();
+        logger.log(Level.INFO, "processing Image library...");
+        processExistingImageLibrary(Directory);
+        logger.log(Level.INFO, "processing complete!");
     }
 
     private List<File> listDirectories(File Directory){
@@ -281,7 +305,7 @@ public class FileSystemStorageService implements StorageService {
     private void createThumbnails(File Directory) throws IOException {
 
         for (File image : Directory.listFiles(File::isFile)) {
-            cacheImage(image);
+            storeImageThumbnail(image);
         }
     }
 
@@ -292,6 +316,7 @@ public class FileSystemStorageService implements StorageService {
      * @author Jouke Profijt
      */
     private void IndexImages(File directory){
+
         for (File image : directory.listFiles(File::isFile)) {
             Image anotatedImage = new Image();
             anotatedImage.setPath(image.getPath());
@@ -308,24 +333,21 @@ public class FileSystemStorageService implements StorageService {
      *
      * @author Jouke Profijt
      */
-    private void cacheImage(File image) throws IOException {
-        String extenion = getFileExtension(image);
-        String cacheImage = image.getName().replace(extenion, ".jpg");
+    private void storeImageThumbnail(File image) throws IOException {
+        String fileExtension = getFileExtension(image);
+        String cacheImage = image.getName().replace(fileExtension, ".jpg");
 
         int imageId = imageDataSource.getImageIdFromPath(image.getPath());
         File cacheLocation = new File(this.cacheLocation.toString() + "/"+ imageId + ".jpg");
 
-        if (imageDataSource.isNotCached(imageId)) {
+        if (imageDataSource.checkThumbnailStatus(imageId)) {
 
             BufferedImage img = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
             img
                     .createGraphics()
                     .drawImage(ImageIO.read(image).getScaledInstance(200, 200, java.awt.Image.SCALE_SMOOTH), 0, 0, null);
             ImageIO.write(img, "jpg", cacheLocation);
-            imageDataSource.insertCache(imageId, cacheLocation.toPath());
-            if (cacheLocation.isFile()) {
-                logger.log(Level.INFO, "Succesfully created cache of {0} in directory: {1}", new Object[]{image.getName(), this.cacheLocation});
-            }
+            imageDataSource.storeThumbnailCacheDataPath(imageId, cacheLocation.toPath());
         }
     }
 
@@ -358,13 +380,7 @@ public class FileSystemStorageService implements StorageService {
      */
     @Override
     public void init() {
-        try {
-            Files.createDirectories(rootLocation);
-            processExistingImageLibrary(rootLocation.toFile());
-        }
-        catch (IOException e) {
-            logger.log(Level.SEVERE, "Storage system was not able to initialize");
-            throw new StorageException("Could not initialize storage", e);
-        }
+            makeLibraryLocations();
+            processLibrary();
     }
 }
