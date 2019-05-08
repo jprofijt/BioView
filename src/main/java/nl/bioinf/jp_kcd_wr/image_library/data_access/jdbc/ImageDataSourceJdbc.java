@@ -53,7 +53,6 @@ public class ImageDataSourceJdbc implements ImageDataSource {
                     .addValue("new_name", image.getNewFilename())
                     .addValue("path", image.getPath());
             String insertQuery = "INSERT INTO images (orig_name, new_name, path) VALUES (:orig_name, :new_name, :path)";
-            logger.log(Level.INFO, "Inserting new image into image database from path: {0}", image.getPath());
             namedJdbcTemplate.update(insertQuery, parameters);
         }
     }
@@ -135,7 +134,6 @@ public class ImageDataSourceJdbc implements ImageDataSource {
                     .addValue("image_id", imageId)
                     .addValue("cache_path", cacheLocation.toString());
             String insertQuery = "INSERT INTO cache (image_id, cache_path) VALUES (:image_id, :cache_path)";
-            logger.log(Level.INFO, "Inserting indexing cache for image with id: {0}, in {1}", new Object[]{imageId, cacheLocation});
             namedJdbcTemplate.update(insertQuery, parameterSource);
         }
     }
