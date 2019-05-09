@@ -11,6 +11,7 @@
     <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
     <script th:src="@{/js/popper.min.js}" src="../static/js/popper.min.js"></script>
     <script th:src="@{/js/bootstrap.bundle.min.js}" src="../static/js/bootstrap.bundle.min.js"></script>
+    <script src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
     <script th:src="@{/js/jquery-ui.js}"></script>
 
     <link th:href="@{/css/folder.css}" rel="stylesheet">
@@ -27,12 +28,13 @@
     </th:block>
 </div>
 
-<div class="theme-structure folder-manager">
-    <ul>
+
+<div class="folder-manager">
+    <ul id="folders">
         <li data-file-icon="folder" th:each="folder: ${folders}">
 
 
-            <i class="fas fa-folder folder-color fa-5x"></i>
+            <!--<i class="fas fa-folder folder-color fa-5x"></i>-->
             <b th:text="${folder.getName()}"></b>
             <form th:action="@{/nextfolder}" method="get">
                 <!--/*@thymesVar id="getPath" type="File"*/-->

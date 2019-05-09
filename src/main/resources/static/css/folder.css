@@ -1,26 +1,26 @@
 
-.theme-structure.folder-manager {
+.folder-manager {
     width: 50%;
     height: 70vh;
     background: #f7f7f7;
-    border-bottom: 1px solid #2196F3;
+    /*border-bottom: 1px solid #2196F3;*/
     overflow:auto;
     padding: 10px 0;
 }
-.folder-manager.theme-structure ul {
-    padding: 10px;
+.folder-manager ul {
+    padding: 0;
     margin: 0;
     list-style: none;
     user-select:none;
 }
-.folder-manager.theme-structure ul li {
-    padding: 10px;
+.folder-manager ul li {
+    padding: 0;
 }
-.folder-manager.theme-structure ul > li {
+.folder-manager ul > li {
     cursor: pointer;
     vertical-align: top;
 }
-.folder-manager.theme-structure ul > li > b {
+.folder-manager ul > li > b {
     display: block;
     user-select:none;
     text-align: center;
@@ -34,16 +34,18 @@
 }
 
 
-.folder-manager.theme-structure ul > li > b:active {
+.folder-manager ul > li > b:active {
     transform: scale(0.95);
 }
-.folder-manager.theme-structure ul > li > b svg {
+/*---icon size---*/
+
+.folder-manager ul > li > b svg {
     display: block;
     margin: 0 auto;
-    font-size: 25px;
+    font-size: 50px;
     margin-bottom: 5px;
 }
-.folder-color {
+.folder-manager ul li[data-file-icon="folder"] > b > svg {
     color: #F7D774;
 }
 
@@ -55,10 +57,10 @@
     /*background: #343a4026;*/
 /*}*/
 /*.folder-manager.theme-structure ul > li.context-visible > b,*/
-/*.folder-manager.theme-structure ul > li.select > b{*/
-    /*background: #03a9f42e;*/
-    /*outline: 1px solid #03A9F4;*/
-/*}*/
+.folder-manager ul > li.select > b{
+    background: #03a9f42e;
+    outline: 1px solid #03A9F4;
+}
 /*.folder-manager.theme-structure ul > li span.name {*/
     /*border: 1px solid transparent;*/
 /*}*/
@@ -96,7 +98,7 @@
     /*position: relative;*/
     /*top: 3px;*/
 /*}*/
-.folder-manager.theme-structure ul li {
+.folder-manager ul li {
     display: inline-block;
 }
 
