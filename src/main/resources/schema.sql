@@ -49,3 +49,15 @@ create table file_structure(
   FOREIGN KEY (directory_id) REFERENCES directories(id),
   FOREIGN KEY (subdirectory_id) REFERENCES directories(id)
 );
+
+create table tags(
+    tag             varchar(50)     UNICODE,
+    primary key (tag)
+);
+
+create table image_tags(
+    image_id        int,
+    tag             varchar(50),
+    FOREIGN KEY (image_id) REFERENCES images(id),
+    FOREIGN KEY (tag) REFERENCES tags(tag)
+);
