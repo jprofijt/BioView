@@ -1,11 +1,13 @@
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS cache;
 drop table if exists image_tags;
+DROP table if exists tags;
 drop table if exists roi;
 drop table if exists meta_data;
 DROP TABLE IF EXISTS images;
 DROP TABLE IF EXISTS file_structure;
 DROP TABLE IF EXISTS directories;
+
 
 
 CREATE TABLE users(
@@ -23,7 +25,7 @@ CREATE TABLE users(
 );
 
 CREATE TABLE images(
-  id          INT(100)      NOT NULL    AUTO_INCREMENT,
+  id          INT           NOT NULL    AUTO_INCREMENT,
   orig_name   VARCHAR(500)  NOT NULL,
   new_name    VARCHAR(500)  NOT NULL,
   path        VARCHAR(260)  NOT NULL    UNIQUE,
@@ -51,7 +53,7 @@ create table file_structure(
 );
 
 create table tags(
-    tag             varchar(50)     UNICODE,
+    tag             varchar(50)     UNIQUE,
     primary key (tag)
 );
 
