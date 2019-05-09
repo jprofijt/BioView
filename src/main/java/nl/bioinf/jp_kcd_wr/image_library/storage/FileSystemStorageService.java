@@ -213,9 +213,11 @@ public class FileSystemStorageService implements StorageService {
      * @author Kim Chau Duong
      */
     @Override
-    public Path load(String filename) {
+    public Path loadImage(String filename) {
         return rootLocation.resolve(filename);
     }
+
+    private Path loadThumbnail(String filename) {return cacheLocation.resolve(filename);}
 
     /**
      * Loads file as a resource
@@ -231,18 +233,45 @@ public class FileSystemStorageService implements StorageService {
             if(directory != null && !directory.isEmpty()) {
                 filename = directory + '/' + filename;
             }
-            Path file = load(filename);
-            Resource resource = new UrlResource(file.toUri());
-            if (resource.exists() || resource.isReadable()) {
-                return resource;
-            }
-            else {
-                throw new StorageFileNotFoundException(
-                        "Could not read file: " + filename);
-
-            }
+            Path file = loadImage(filename);
+            return loadResource(new UrlResource(file.toUri()));
         }
         catch (MalformedURLException e) {
+            logger.log(Level.WARNING, "Could not read file {0}", filename);
+            throw new StorageFileNotFoundException("Could not read file: " + filename, e);
+        }
+    }
+
+
+    /**
+     * loads resource if resource is accessible
+     * @param resource the new resource
+     * @return return correct resource
+     * @author Kim Chau Duong
+     */
+    private Resource loadResource(Resource resource) {
+        if (resource.exists() || resource.isReadable()) {
+            return resource;
+        }
+        else {
+            throw new StorageFileNotFoundException(
+                    "Could not read file: " + resource.getFilename());
+
+        }
+    }
+
+    /**
+     * Separate resource loader for thumbnails
+     * @param filename thumbnail filename
+     * @return Resource
+     * @author Jouke Profijt
+     */
+    @Override
+    public Resource loadThumbnailAsResource(String filename) {
+        try {
+            Path thumbnail = loadThumbnail(filename);
+            return loadResource(new UrlResource(thumbnail.toUri()));
+        } catch (MalformedURLException e) {
             logger.log(Level.WARNING, "Could not read file {0}", filename);
             throw new StorageFileNotFoundException("Could not read file: " + filename, e);
         }
@@ -280,6 +309,8 @@ public class FileSystemStorageService implements StorageService {
         }
 
     }
+
+
 
     private void processLibrary() {
         File Directory = this.rootLocation.toFile();

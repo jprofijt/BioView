@@ -127,5 +127,15 @@ public class DirectoryController {
                 "inline; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
+    @GetMapping("/cache/{filename:.+}")
+    @ResponseBody
+    public ResponseEntity<Resource> serveThumbnail(@PathVariable String filename) {
+
+        Resource thumbnail = storageService.loadThumbnailAsResource(filename);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                "inline; filename=\"" + thumbnail.getFilename() + "\"").body(thumbnail);
+
+    }
+
 }
 
