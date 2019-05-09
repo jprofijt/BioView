@@ -10,25 +10,25 @@
             <div class="col-md-8">
                 <div class="docs-galleSry col-12" >
                     <ul class="pictures clearfix" style="height:800px; overflow: scroll">
-                        <li class="col-sm-12 col-md-6 col-lg-4" th:each="image : ${Images}">
+                        <li class="col-sm-12 col-md-6 col-lg-4" th:each="image, iterStat : ${Images}">
 
-                            <a th:href="'#myModal'" th:class="btn" th:id="link">
+                            <a th:ondblclick="openDynamicModal([[${iterStat.count}]])" th:class="modallink" th:id="'link'+${iterStat.count}">
                                 <img class="img-thumbnail img-fluid" th:src="${image}" />
+                                <p th:text="${iterStat.count}">id</p>
                             </a>
 
                             <!-- Modal -->
-                            <div th:id="myModal" class="modal fade" role="dialog">
+                            <div th:id="'myModal'+ ${iterStat.count}" class="modal fade, image-modal" role="dialog">
                                 <div class="modal-dialog">
 
                                     <!-- Modal content-->
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title">Modal Header</h4>
+                                            <h4 class="modal-title">Image editor</h4>
                                         </div>
                                         <div class="modal-body">
-                                            <img th:src="${image}"/>
-                                            <p>Some text in the modal.</p>
+                                            <img class="modal-image" th:src="${image}"/>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -38,15 +38,22 @@
                                 </div>
                             </div>
                         </li>
-
-
                     </ul>
                 </div>
             </div>
             <script>
-                $('#link').dblclick(function () {
-                    $('#myModal').modal('toggle');
-                });
+                function openDynamicModal(id){
+                    $("#myModal"+ id).modal('toggle');
+                }
+                    // $(".modallink").on("dblclick", function () {
+                    //     var listId = $('.image-modal').attr("id");
+                    //     alert(listId);
+                    //     $("#"+listId).modal('toggle');
+                    // });
+                    // $("#"+$('.image-modal').attr("id")).on('show.bs.modal', function (e){
+                    //     var src = $(e.relatedTarget).attr('src');
+                    //     $(this).find('.modal-body > img.modal-image').attr('src', src);
+                    // });
             </script>
             <div class="col-md-2 border rounded" id="options">
                 <nav class="nav flex-column">
@@ -67,4 +74,6 @@
         <!--<img class="img-thumbnail img-fluid" th:src="${image}" />-->
     <!--</a>-->
 <!--</form>-->
+<!--@{{beeld}(beeld=${image})}-->
 <!--PATH NAAR ITEM MOET files/-->
+
