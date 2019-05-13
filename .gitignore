@@ -36,3 +36,4 @@ upload-dir/
 logs/
 /src/main/resources/application-prod.properties
 bin/
+test_directory/
