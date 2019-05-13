@@ -34,12 +34,9 @@
         <li data-file-icon="folder" th:each="folder: ${folders}">
 
 
-            <!--<i class="fas fa-folder folder-color fa-5x"></i>-->
             <b th:text="${folder.getName()}"></b>
             <form th:action="@{/nextfolder}" method="get">
-                <!--/*@thymesVar id="getPath" type="File"*/-->
                 <input name="folder" type="hidden" th:default="testdata" th:value="${folder.getPath()}">
-                <!--<input type="submit" th:value="${folder.getName()}" th:default="testdata">-->
             </form><br/>
 
         </li>

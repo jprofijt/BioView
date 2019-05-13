@@ -1,9 +1,7 @@
-
 .folder-manager {
     width: 50%;
     height: 70vh;
     background: #f7f7f7;
-    /*border-bottom: 1px solid #2196F3;*/
     overflow:auto;
     padding: 10px 0;
 }
@@ -26,13 +24,12 @@
     text-align: center;
     transform: scale(1);
     transition: transform 0.1s linear;
-    width: 74px;
+    width: 94px;
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 12px;
     padding: 10px 4px;
 }
-
 
 .folder-manager ul > li > b:active {
     transform: scale(0.95);
@@ -49,55 +46,15 @@
     color: #F7D774;
 }
 
+.folder-manager ul > li > b:hover {
+    background: #343a4026;
+}
 
-/*.folder-manager.theme-structure ul > li.data-moving:not(.show-up) > b {*/
-    /*opacity: 0.6;*/
-/*}*/
-/*.folder-manager.theme-structure ul > li > i:hover {*/
-    /*background: #343a4026;*/
-/*}*/
-/*.folder-manager.theme-structure ul > li.context-visible > b,*/
 .folder-manager ul > li.select > b{
     background: #03a9f42e;
     outline: 1px solid #03A9F4;
 }
-/*.folder-manager.theme-structure ul > li span.name {*/
-    /*border: 1px solid transparent;*/
-/*}*/
-/*.folder-manager.theme-structure ul > li.renaming span.name {*/
-    /*border: 1px solid #929292;*/
-    /*display: block;*/
-    /*outline: 0;*/
-    /*cursor: text;*/
-/*}*/
-/*-----------UnderStad-------------------|START--------*/
-/*.folder-manager.theme-structure ul li.show-up.select > b {*/
-    /*background: transparent;*/
-    /*outline: none;*/
-/*}*/
-/*.folder-manager.theme-structure ul > li.show-up > b .cm-folder-back {*/
-    /*float: left;*/
-/*}*/
-/*.folder-manager.theme-structure ul > li.show-up > b {*/
-    /*background: transparent;*/
-/*}*/
-/*.folder-manager.theme-structure ul > li.show-up > b .cm-folder-back + svg {*/
-    /*display: none !important;*/
-/*}*/
-/*.folder-manager.theme-structure ul > li.show-up > b .cm-folder-back svg {*/
-    /*font-size: 16px;*/
-/*}*/
-/*.folder-manager.theme-structure ul li.file-sub-active.hide-up > b {*/
-    /*display: none;*/
-/*}*/
-/*.folder-manager.theme-structure ul > li.show-up > b .cm-folder-back {*/
-    /*padding: 0 10px;*/
-    /*background: #00000012;*/
-/*}*/
-/*.folder-manager.theme-structure ul > li > b i.cm-folder-back svg {*/
-    /*position: relative;*/
-    /*top: 3px;*/
-/*}*/
+
 .folder-manager ul li {
     display: inline-block;
 }

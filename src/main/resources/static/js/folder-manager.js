@@ -1,3 +1,4 @@
+// Adds icon to folder titles
 $(document).ready(function() {
     $("#folders li").each(function() {
         var getType = $(this).attr("data-file-icon");
@@ -10,39 +11,36 @@ $(document).ready(function() {
 
 });
 
+// Submits on double click
+$(document).on('dblclick', '.folder-manager ul li', function(e) {
+    $(this).addClass('folder-active');
+    $(this).children('form').submit();
+});
+
+
+// Adds select class to selected folder(s)
 $(document).on("click", "[data-file-icon]", function(e) {
     if (e.ctrlKey) {
         $(this).addClass("select");
-        // $(this).removeClass("renaming");
     } else {
         $(".select").removeClass("select");
         $(this)
             .addClass("select")
             .siblings()
             .removeClass("select");
-        // $(this).removeClass("renaming");
     }
 });
 
-
+// Deselects when clicking elsewhere
 $(document).on("click dblclick", function() {
     $("[data-file-icon]")
-        // .removeClass("context-visible")
         .removeClass("select");
-    // $(".append-option-box").remove();
-    // removeUnwanted();
-    // $(".name").attr("contenteditable", false);
 });
-// $(document).on("click contextmenu", ".append-option-box", function(e) {
-//     e.stopPropagation();
-//     $("[data-file-icon]")
-//         .removeClass("context-visible")
-//         .removeClass("select");
-//     $(".append-option-box").remove();
-// });
+
 $(document).on("click", "[data-file-icon]", function(e) {
     e.stopPropagation();
 });
-// function removeUnwanted(){
-//     $('.active-folder-wrapper ~ .active-folder-wrapper,.active-folder-wrapper ~ .no-item-inside-folder').remove();
-// }
+
+
+/*---Context Menu ---*/
+
