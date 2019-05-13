@@ -26,12 +26,18 @@ public interface StorageService {
 
     Stream<Path> loadAll(String currentFolder);
 
-    Path load(String filename);
+    Stream<Path> loadAbsolute(String currentFolder);
+
+    Path loadImage(String filename);
 
     Resource loadAsResource(String filename, String directory);
 
     void deleteAll();
 
     void processExistingImageLibrary(File Directory);
+
+    Resource loadThumbnailAsResource(String filename);
+
+    Path getRootLocation();
 
 }
