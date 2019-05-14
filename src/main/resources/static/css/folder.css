@@ -1,0 +1,107 @@
+.breadcrumb {
+    font-size: 15px;
+}
+
+.folder-manager {
+    width: 50%;
+    height: 70vh;
+    background: #f7f7f7;
+    overflow:auto;
+    padding: 10px 0;
+}
+.folder-manager ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    user-select:none;
+}
+.folder-manager ul li {
+    padding: 0;
+}
+.folder-manager ul > li {
+    cursor: pointer;
+    vertical-align: top;
+}
+.folder-manager ul > li > b {
+    display: block;
+    user-select:none;
+    text-align: center;
+    transform: scale(1);
+    transition: transform 0.1s linear;
+    width: 94px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px;
+    padding: 10px 4px;
+}
+
+.folder-manager ul > li > b:active {
+    transform: scale(0.95);
+}
+/*---icon size---*/
+
+.folder-manager ul > li > b svg {
+    display: block;
+    margin: 0 auto;
+    font-size: 50px;
+    margin-bottom: 5px;
+}
+.folder-manager ul li[data-file-icon="folder"] > b > svg {
+    color: #F7D774;
+}
+
+.folder-manager ul > li > b:hover {
+    background: #343a4026;
+}
+
+.folder-manager ul > li.select > b{
+    background: #03a9f42e;
+    outline: 1px solid #03A9F4;
+}
+
+.folder-manager ul li {
+    display: inline-block;
+}
+
+/*---Folder Context Menu---*/
+.append-option-box {
+    position: fixed;
+    background: #fff;
+    border: 1px solid #b1b1b1;
+    box-shadow: 0 1px 1px #0000003d;
+    font-size: 12px;
+    padding: 5px 0;
+    width: 200px;
+    top: 45px;
+    z-index: 999;
+    left: 57px;
+}
+.append-option-box>div>div {
+    padding: 2px 15px;
+    cursor:pointer;
+}
+.append-option-box>div>div:hover {
+    background: #2196F3;
+    color: #fff;
+}
+
+.popup-folder-creation {
+    width: auto;
+    visibility : hidden;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    border: 3px solid #f1f1f1;
+    z-index: 9;
+}
+
+.popup-folder-container {
+    /*max-width: 300px;*/
+    background-color: white;
+    text-align: center;
+    font-size: 12px;
+}
+
+
+
+

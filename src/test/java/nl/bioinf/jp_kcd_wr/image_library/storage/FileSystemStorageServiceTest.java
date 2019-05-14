@@ -59,8 +59,6 @@ class FileSystemStorageServiceTest {
             FileInputStream inputStream = new FileInputStream(outfile);
             return new MockMultipartFile("test-img", outfile.getName(), "png", IOUtils.toByteArray(inputStream));
 
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -119,5 +117,8 @@ class FileSystemStorageServiceTest {
     void rootLocationShouldThrowException(){
         Throwable exception = assertThrows(IllegalArgumentException.class, () -> testDirectoryLocations("", "test_directory/thumbnails"));
         assertEquals(exception.getMessage(), "library.upload parameter is empty");
+
+        Throwable exception_thumbnails = assertThrows(IllegalArgumentException.class, () -> testDirectoryLocations("test_directory/thumbnails", ""));
+        assertEquals(exception_thumbnails.getMessage(), "cache-location parameter is empty");
     }
 }
