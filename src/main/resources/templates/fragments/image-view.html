@@ -18,7 +18,7 @@
 
                             <!-- Modal -->
                             <div th:id="'myModal'+ ${iterStat.count}" class="modal fade image-modal" role="dialog">
-                                <div class="modal-dialog">
+                                <div class="modal-dialog modal-dialog-bioview">
 
                                     <!-- Modal content-->
                                     <div class="modal-content">
@@ -62,20 +62,6 @@
                     </ul>
                 </div>
             </div>
-            <script>
-                function openDynamicModal(id){
-                    $("#myModal"+ id).modal({backdrop: 'static', keyboard: false});
-                }
-                    // $(".modallink").on("dblclick", function () {
-                    //     var listId = $('.image-modal').attr("id");
-                    //     alert(listId);
-                    //     $("#"+listId).modal('toggle');
-                    // });
-                    // $("#"+$('.image-modal').attr("id")).on('show.bs.modal', function (e){
-                    //     var src = $(e.relatedTarget).attr('src');
-                    //     $(this).find('.modal-body > img.modal-image').attr('src', src);
-                    // });
-            </script>
             <div class="col-md-2 border rounded" id="options">
                 <nav class="nav flex-column">
                     <a class="nav-link" th:href="@{/upload}"><i class="fas fa-file-upload"></i> Upload New Image</a>
@@ -88,59 +74,3 @@
 </main>
 </body>
 </html>
-
-<!--<a ondblclick="openDynamicModal()" class="modallink"id="link" data-backdrop="static" data-keyboard="false">-->
-    <!--<img class="img-thumbnail img-fluid" src="https://news.northwestern.edu/assets/Stories/2018/10/cells640.jpg"/-->
-<!--</a>-->
-<!--&lt;!&ndash; Modal &ndash;&gt;-->
-<!--<div id="myModal" class="modal fade image-modal" role="dialog">-->
-    <!--<div class="modal-dialog">-->
-        <!--&lt;!&ndash; Modal content&ndash;&gt;-->
-        <!--<div class="modal-content">-->
-            <!--<div class="modal-header">-->
-                <!--<h4 class="modal-title">Image editor</h4>-->
-                <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
-            <!--</div>-->
-            <!--<div class="modal-body ">-->
-                <!--<div class="container-fluid">-->
-                    <!--<div class="row">-->
-                        <!--<div class="col">-->
-                            <!--<img class="modal-image" src="https://news.northwestern.edu/assets/Stories/2018/10/cells640.jpg"/>-->
-                            <!--<p>Image</p>-->
-                        <!--</div>-->
-                        <!--<div class="col">-->
-                            <!--<p>ROI's</p>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="row">-->
-                        <!--<div class="col">-->
-                            <!--<p>Description</p>-->
-                        <!--</div>-->
-                        <!--<div class="col">-->
-                            <!--<p>Tags</p>-->
-
-                        <!--</div>-->
-                    <!--</div>-->
-
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="modal-footer">-->
-                <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
-
-<!--</div>-->
-
-<!--</div>-->
-
-<!--<form th:id="'imageForm'+ ${image}" th:action="@{/image-editor}" th:method="post">-->
-    <!--<input th:type="hidden" th:name="imagePath" th:value="${image}" />-->
-    <!--<a th:ondblclick="document.getElementById('imageForm' + [[${image}]]).submit()">-->
-        <!--<img class="img-thumbnail img-fluid" th:src="${image}" />-->
-    <!--</a>-->
-<!--</form>-->
-<!--@{{beeld}(beeld=${image})}-->
-<!--PATH NAAR ITEM MOET files/-->
-
