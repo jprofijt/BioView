@@ -44,7 +44,7 @@ class FileSystemStorageServiceTest {
 
         environment = new MockEnvironment();
         environment.setProperty("library.upload", "test_directory/upload");
-        environment.setProperty("thumbnail-storage", "test_directory/thumbnails");
+        environment.setProperty("cache-location", "test_directory/thumbnails");
         imageDataSource = new ImageDataSourceMock();
         storageService = new FileSystemStorageService(imageDataSource, environment);
     }
@@ -106,7 +106,7 @@ class FileSystemStorageServiceTest {
     private void testDirectoryLocations(String rootLocation, String thumbnailLocation){
         NamedParameterJdbcTemplate jdbcTemplateMock = Mockito.mock(NamedParameterJdbcTemplate.class);
         environment.setProperty("library.upload", rootLocation);
-        environment.setProperty("thumbnail-storage", thumbnailLocation);
+        environment.setProperty("cache-location", thumbnailLocation);
         imageDataSource = new ImageDataSourceJdbc(jdbcTemplateMock, environment);
         storageService = new FileSystemStorageService(imageDataSource, environment);
 

@@ -55,7 +55,7 @@ public class FileSystemStorageService implements StorageService {
     public FileSystemStorageService(ImageDataSource imageDataSource, Environment environment) {
         this.imageDataSource = imageDataSource;
         rootLocation = Paths.get(environment.getProperty("library.upload"));
-        this.cacheLocation = Paths.get(environment.getProperty("thumbnail-storage"));
+        this.cacheLocation = Paths.get(environment.getProperty("cache-location"));
 
         logger.log(Level.INFO, "Starting FileSystemStorage service using {0} as imageDataSource, and {1} as root location", new Object[] {this.imageDataSource, this.rootLocation});
 

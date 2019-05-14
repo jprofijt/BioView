@@ -17,7 +17,7 @@ public class ImageEditorController {
 
     @PostMapping("/image-editor")
     public String openImage(@RequestParam(name="imagePath") String image, Model model){
-        model.addAttribute("imagepath", image);
+        model.addAttribute("imagepath", "files/"+image);
         return "image-editor";
     }
 
