@@ -68,42 +68,21 @@ class FileSystemStorageServiceTest {
         return null;
     }
 
+    /**
+     * Tests if system has storage capability
+     *
+     * @author Jouke Profijt
+     */
     @Test
     void storejpg() {
-        storageService.store(getImageFromUrl("https://craftingbeerthailand.files.wordpress.com/2017/05/11.png"));
-        Path testimage = Paths.get(environment.getProperty("library.upload"));
+        storageService.store(getImageFromUrl("https://image.shutterstock.com/z/stock-photo--d-illustration-of-t-cells-or-cancer-cells-433526728.jpg"));
+        Path testimage = Paths.get(environment.getProperty("library.upload") + "/test-img.png");
 
-        //System.out.println("testimage.isFile() = " + testimage.);
+       assertTrue(testimage.toFile().isFile());
+
+       testimage.toFile().delete();
 
 
-    }
-
-    @Test
-    void getNewName() {
-    }
-
-    @Test
-    void createImageData() {
-    }
-
-    @Test
-    void loadAll() {
-    }
-
-    @Test
-    void loadAbsolute() {
-    }
-
-    @Test
-    void loadImage() {
-    }
-
-    @Test
-    void loadAsResource() {
-    }
-
-    @Test
-    void loadThumbnailAsResource() {
     }
 
     /**

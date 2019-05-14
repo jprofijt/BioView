@@ -181,13 +181,10 @@ public class ImageDataSourceJdbc implements ImageDataSource {
      */
     @Override
     public Path getThumbnailPathFromImagePath(String PathToImage) {
-        System.out.println(PathToImage);
-
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("image_path", PathToImage);
         String query = "SELECT cache.cache_path from cache INNER JOIN images i on cache.image_id = i.id WHERE i.path = :image_path";
         String result = namedJdbcTemplate.queryForObject(query, parameterSource, String.class);
-        Path path = Paths.get(result).getFileName();
-        return path;
+        return Paths.get(result).getFileName();
     }
 }

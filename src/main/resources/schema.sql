@@ -1,3 +1,7 @@
+/*
+ database scheme
+ Authors: Jouke Profijt, Wietse Reitsema, Kim Chau Duong
+ */
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS cache;
 drop table if exists image_tags;
@@ -15,7 +19,7 @@ CREATE TABLE users(
   name               VARCHAR(40)  NOT NULL,
   email              VARCHAR(254) NOT NULL,
   password           VARCHAR(128) NOT NULL,
-  role               VARCHAR(6)   NOT NULL,
+  role               enum('ADMIN', 'USER')   NOT NULL,
   enabled            TINYINT,
   created_date       DATETIME,
   password_token     VARCHAR(200),

@@ -54,10 +54,23 @@ public class FileSystemStorageService implements StorageService {
     @Autowired
     public FileSystemStorageService(ImageDataSource imageDataSource, Environment environment) {
         this.imageDataSource = imageDataSource;
-        this.rootLocation = Paths.get(environment.getProperty("library.upload"));
-        this.cacheLocation = Paths.get(environment.getProperty("cache-location"));
+        rootLocation = Paths.get(environment.getProperty("library.upload"));
+        this.cacheLocation = Paths.get(environment.getProperty("thumbnail-storage"));
 
         logger.log(Level.INFO, "Starting FileSystemStorage service using {0} as imageDataSource, and {1} as root location", new Object[] {this.imageDataSource, this.rootLocation});
+
+        checkParameters();
+    }
+
+    private void checkParameters() throws IllegalArgumentException{
+        File directory = rootLocation.toFile();
+
+        if (directory.exists() && (!directory.canRead() || !directory.canWrite())){
+            throw new IllegalArgumentException("Cannot access library.upload location");
+        }
+        if (directory.toString().isEmpty()){
+            throw new IllegalArgumentException("library.upload parameter is empty");
+        }
     }
 
     /**
