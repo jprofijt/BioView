@@ -1,0 +1,13 @@
+.modal-dialog-bioview {
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.modal-content{
+    height: auto;
+    min-height: 100%;
+    border-radius: 0;
+}

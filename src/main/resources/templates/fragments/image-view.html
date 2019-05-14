@@ -10,16 +10,55 @@
             <div class="col-md-8">
                 <div class="docs-galleSry col-12" >
                     <ul class="pictures clearfix" style="height:800px; overflow: scroll">
-                        <li class="col-sm-12 col-md-6 col-lg-4" th:each="image : ${Images}">
-                            <form th:id="'imageForm'+ ${image.getActual()}" th:action="@{/image-editor}" th:method="post">
-                                <input th:type="hidden" th:name="imagePath" th:value="${image.getActual()}" />
-                                <a th:ondblclick="document.getElementById('imageForm' + [[${image.getActual().toString()}]]).submit()">
-                                    <img class="img-thumbnail img-fluid" th:src="${'files/'+ image.getThumbnail() + '?directory=' + cache_path}" />
-                                </a>
-                            </form>
+                        <li class="col-sm-12 col-md-6 col-lg-4" th:each="image, iterStat : ${Images}">
+
+                            <a th:ondblclick="openDynamicModal([[${iterStat.count}]])" th:class="modallink" th:id="'link'+${iterStat.count}">
+                                <img class="img-thumbnail img-fluid" th:src="${'files/' + image.getThumbnail() + '?directory=' + cache_path}" />
+                            </a>
+
+                            <!-- Modal -->
+                            <div th:id="'myModal'+ ${iterStat.count}" class="modal fade image-modal" role="dialog">
+                                <div class="modal-dialog modal-dialog-bioview">
+
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Image editor</h4>
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <img class="modal-image" th:src="${'files/' + image.getActual()}"/>
+                                                    </div>
+                                                    <div class="col">
+                                                        <p>ROI's</p>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <p>Description</p>
+                                                    </div>
+                                                    <div class="col">
+                                                        <p>Tags</p>
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
                         </li>
-
-
                     </ul>
                 </div>
             </div>

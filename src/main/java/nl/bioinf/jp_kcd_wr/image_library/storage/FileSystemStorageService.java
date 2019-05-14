@@ -54,11 +54,57 @@ public class FileSystemStorageService implements StorageService {
     @Autowired
     public FileSystemStorageService(ImageDataSource imageDataSource, Environment environment) {
         this.imageDataSource = imageDataSource;
-        this.rootLocation = Paths.get(environment.getProperty("library.upload"));
-        this.cacheLocation = Paths.get(environment.getProperty("cache-location"));
+        rootLocation = getVerifiedRootLocation(environment);
+        this.cacheLocation = getVerifiedThumbnailLocation(environment);
 
         logger.log(Level.INFO, "Starting FileSystemStorage service using {0} as imageDataSource, and {1} as root location", new Object[] {this.imageDataSource, this.rootLocation});
+
+        checkParameters();
     }
+
+    private Path getVerifiedRootLocation(Environment environment){
+        String Location = environment.getProperty("library.upload");
+        if (Location == null || Location.isEmpty()){
+            throw new IllegalArgumentException("library.upload parameter is empty");
+        }
+        else{
+            return Paths.get(Location);
+        }
+    }
+
+
+
+    private Path getVerifiedThumbnailLocation(Environment environment){
+        String Location = environment.getProperty("cache-location");
+        if (Location == null || Location.isEmpty()){
+            throw new IllegalArgumentException("cache-location parameter is empty");
+        }
+        else{
+            return Paths.get(Location);
+        }
+    }
+
+    /**
+     * Simple function that checks storage related parameters for errors.
+     *
+     *
+     * @throws IllegalArgumentException if parameters are incorrect or cause errors
+     * @author Jouke Profijt
+     */
+    private void checkParameters() throws IllegalArgumentException{
+        File directory = rootLocation.toFile();
+        File thumbnails = cacheLocation.toFile();
+        if (directory.exists() && (!directory.canRead() || !directory.canWrite())){
+            throw new IllegalArgumentException("Cannot access library.upload location");
+        }
+
+        if (thumbnails.exists() && (!thumbnails.canRead() || !thumbnails.canWrite())){
+            throw new IllegalArgumentException("Cannot access cache-location directory");
+        }
+
+
+    }
+
 
     /**
      * creates new library locations if they don't already exist

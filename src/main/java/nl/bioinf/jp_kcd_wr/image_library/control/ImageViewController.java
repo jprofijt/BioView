@@ -59,7 +59,6 @@ public class ImageViewController {
             imageRequest.setThumbnail(this.imageDataSource.getThumbnailPathFromImagePath(image.toString()));
             imageRequest.setActual(
                     Paths.get(image.toString().replace(storageService.getRootLocation().toString() + "/", "")));
-            System.out.println("image = " + imageRequest.getActual());
 
             cacheLocations.add(imageRequest);
         }
