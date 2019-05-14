@@ -6,10 +6,15 @@
 </head>
 <body>
 <div class="append-option-box" style="visibility: hidden">
-<div class="inner-contenxt-box">
+<div class="inner-context-box">
     <div data-function="new-folder">New Folder</div>
-    <div class="" data-function="new-date-folder" th:text="${'New Folder ('+date+')'}">New Folder(date)</div>
+    <div data-function="new-date-folder" th:text="${'New Folder ('+date+')'}" onclick="createDateFolder()">New Folder(date)</div>
     <div data-function="folder-properties">Properties</div>
+    <div class="date-folder-creation">
+        <form th:action="@{/createdatefolder}" method="post" class="date-folder-container">
+            <input name="currentPath" type="hidden" th:value="${currentPath}">
+        </form>
+    </div>
 </div>
 </div>
 </body>
