@@ -1,3 +1,9 @@
+drop table if exists image_annotation;
+drop table if exists image_values;
+drop table if exists image_roi;
+drop table if exists image_tags;
+
+
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS cache;
 drop table if exists image_tags;
