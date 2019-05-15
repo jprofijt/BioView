@@ -76,11 +76,9 @@ class FileSystemStorageServiceTest {
         storageService.store(getImageFromUrl("https://image.shutterstock.com/z/stock-photo--d-illustration-of-t-cells-or-cancer-cells-433526728.jpg"));
         Path testimage = Paths.get(environment.getProperty("library.upload") + "/test-img.png");
 
-       assertTrue(testimage.toFile().isFile());
+        assertTrue(testimage.toFile().isFile());
 
-       testimage.toFile().delete();
-
-
+        testimage.toFile().delete();
     }
 
     /**

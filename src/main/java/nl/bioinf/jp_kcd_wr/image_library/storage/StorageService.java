@@ -14,30 +14,43 @@ import java.util.stream.Stream;
  */
 public interface StorageService {
 
+    //weg
     void init();
 
+    //houd
     void store(MultipartFile file);
 
+    //rename
     String getNewName(String origFilename);
 
+    //split and rename
     Image createImageData(String origFilename, String hash, Path filePath);
 
 //    Stream<Path> loadAll();
 
+
+    //rename
     Stream<Path> loadAll(String currentFolder);
 
+    //rename
     Stream<Path> loadAbsolute(String currentFolder);
 
+    //rename
     Path loadImage(String filename);
 
+    //hoort dit hier? naam is onduidelijk
     Resource loadAsResource(String filename, String directory);
 
+    //weg?
     void deleteAll();
 
+    //rename and split to other class?
     void processExistingImageLibrary(File Directory);
 
+    //
     Resource loadThumbnailAsResource(String filename);
 
+    //?
     Path getRootLocation();
 
 }
