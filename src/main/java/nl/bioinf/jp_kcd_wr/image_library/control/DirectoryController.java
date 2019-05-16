@@ -63,7 +63,7 @@ public class DirectoryController {
         model.addAttribute("folders", folderHandler.getNextFolders(currentPath));
         model.addAttribute("currentPath", new File(currentPath.replace("\\", "/")));
         logger.log(Level.INFO, "Folders were created successfully!");
-        return "redirect:/nextfolder?folder=" + currentPath.replace("\\", "/");
+        return "redirect:/imageview?folder=" + currentPath.replace("\\", "/");
     }
 
     /**
@@ -86,7 +86,7 @@ public class DirectoryController {
         model.addAttribute("folders", folderHandler.getNextFolders(currentPath));
         model.addAttribute("currentPath", new File(currentPath.replace("\\", "/")));
         logger.log(Level.INFO, "Successfully created {0}", new Object[]{currentPath});
-        return "redirect:/nextfolder?folder=" + currentPath.replace("\\", "/");
+        return "redirect:/imageview?folder=" + currentPath.replace("\\", "/");
     }
 
     /**
