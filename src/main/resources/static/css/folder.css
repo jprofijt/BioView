@@ -35,6 +35,13 @@
     padding: 10px 4px;
 }
 
+/*---folder creation input box---*/
+#dirInput {
+    font-weight:bold;
+    background-color: transparent;
+    width: 94px;
+}
+
 .folder-manager ul > li > b:active , .created-folder:active{
     transform: scale(0.95);
 }
