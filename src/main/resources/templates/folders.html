@@ -40,9 +40,9 @@
             </form><br/>
 
         </li>
-        <li data-file-icon="folder" class="popup-folder-creation">
+        <li data-file-icon="folder" class="popup-folder-creation" style="visibility: hidden">
             <form th:action="@{/createfolder}" method="post" class="popup-folder-container">
-                <b class="created-folder"><input id="dirInput" name="directoryName" type="text" th:required="true" default="New Folder"></b>
+                <b class="created-folder"><input id="dirInput" name="directoryName" type="text" th:required="true" value="New Folder"></b>
                 <input name="currentPath" type="hidden" th:value="${currentPath}" th:default="testdata">
                 <!--<input type="submit" value="Create Folder here">-->
             </form>
@@ -54,7 +54,7 @@
 <!--<div>-->
     <!--<form th:action="@{/createfolder}" method="post">-->
         <!--<label for="dirInput">Name for new subdirectory:</label>-->
-        <!--<input id="dirInput" name="directoryName" type="text" th:required="true">-->
+        <!--<input id="dirInput3" name="directoryName" type="text" th:required="true">-->
         <!--<input name="currentPath" type="hidden" th:value="${currentPath}" th:default="testdata">-->
         <!--<input type="submit" value="Create Folder here">-->
     <!--</form>-->

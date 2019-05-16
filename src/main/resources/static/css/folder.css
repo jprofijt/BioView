@@ -24,12 +24,18 @@
 }
 .folder-manager ul > li > b , .created-folder{
     display: block;
+    white-space: nowrap;
+    -webkit-user-select: none; /* Safari 3.1+ */
+    -moz-user-select: none; /* Firefox 2+ */
+    -ms-user-select: none; /* IE 10+ */
     user-select:none;
     text-align: center;
     transform: scale(1);
     transition: transform 0.1s linear;
     width: 94px;
-    overflow: hidden;
+    /*height: 84px;*/
+    overflow-x: hidden;
+    overflow-y: visible;
     text-overflow: ellipsis;
     font-size: 12px;
     padding: 10px 4px;
@@ -39,7 +45,11 @@
 #dirInput {
     font-weight:bold;
     background-color: transparent;
-    width: 94px;
+    text-align: center;
+    width: 84px;
+    line-height: 1em;
+    /*border: none transparent;*/
+
 }
 
 .folder-manager ul > li > b:active , .created-folder:active{
@@ -49,9 +59,8 @@
 
 .folder-manager ul > li > b svg , .created-folder svg{
     display: block;
-    margin: 0 auto;
     font-size: 50px;
-    margin-bottom: 5px;
+    margin: 0 auto 5px;
 }
 .folder-manager ul li[data-file-icon="folder"] > b > svg , .created-folder > svg{
     color: #F7D774;
