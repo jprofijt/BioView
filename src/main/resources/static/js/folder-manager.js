@@ -6,6 +6,7 @@ $(document).ready(function() {
             $(this)
                 .children("b")
                 .prepend('<i class="fas fa-folder"></i>');
+            $(this).find("form").children("b").prepend('<i class="fas fa-folder"></i>');
         }
     });
 

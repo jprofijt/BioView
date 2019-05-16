@@ -22,7 +22,7 @@
     cursor: pointer;
     vertical-align: top;
 }
-.folder-manager ul > li > b {
+.folder-manager ul > li > b , .created-folder{
     display: block;
     user-select:none;
     text-align: center;
@@ -35,26 +35,26 @@
     padding: 10px 4px;
 }
 
-.folder-manager ul > li > b:active {
+.folder-manager ul > li > b:active , .created-folder:active{
     transform: scale(0.95);
 }
 /*---icon size---*/
 
-.folder-manager ul > li > b svg {
+.folder-manager ul > li > b svg , .created-folder svg{
     display: block;
     margin: 0 auto;
     font-size: 50px;
     margin-bottom: 5px;
 }
-.folder-manager ul li[data-file-icon="folder"] > b > svg {
+.folder-manager ul li[data-file-icon="folder"] > b > svg , .created-folder > svg{
     color: #F7D774;
 }
 
-.folder-manager ul > li > b:hover {
+.folder-manager ul > li > b:hover , .created-folder:hover{
     background: #343a4026;
 }
 
-.folder-manager ul > li.select > b{
+.folder-manager ul > li.select > b, li.select > form > .created-folder{
     background: #03a9f42e;
     outline: 1px solid #03A9F4;
 }
@@ -85,22 +85,22 @@
     color: #fff;
 }
 
-.popup-folder-creation {
-    width: auto;
-    visibility : hidden;
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    border: 3px solid #f1f1f1;
-    z-index: 9;
-}
+/*.popup-folder-creation {*/
+    /*width: auto;*/
+    /*visibility : hidden;*/
+    /*position: absolute;*/
+    /*top: 40%;*/
+    /*left: 50%;*/
+    /*border: 3px solid #f1f1f1;*/
+    /*z-index: 9;*/
+/*}*/
 
-.popup-folder-container {
-    /*max-width: 300px;*/
-    background-color: white;
-    text-align: center;
-    font-size: 12px;
-}
+/*.popup-folder-container {*/
+    /*!*max-width: 300px;*!*/
+    /*background-color: white;*/
+    /*text-align: center;*/
+    /*font-size: 12px;*/
+/*}*/
 
 
 
