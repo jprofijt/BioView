@@ -9,5 +9,19 @@
 .modal-content{
     height: auto;
     min-height: 100%;
+    min-width: 100%;
+    max-width: 100%;
+
     border-radius: 0;
+
+}
+.img-div{
+    width: 90%;
+    height: 700px;
+    overflow: scroll;
+    cursor: grab;
+    cursor: -o-grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+
 }
