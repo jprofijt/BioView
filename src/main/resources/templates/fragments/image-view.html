@@ -13,7 +13,7 @@
                         <li class="col-sm-12 col-md-6 col-lg-4" th:each="image, iterStat : ${Images}">
 
                             <a th:ondblclick="openDynamicModal([[${iterStat.count}]])" th:class="modallink" th:id="'link'+${iterStat.count}">
-                                <img class="img-thumbnail img-fluid" th:src="${'files/' + image.getThumbnail() + '?directory=' + cache_path}" />
+                                <img class="img-thumbnail img-fluid" th:src="@{'/cache/' + ${image.getThumbnail()}}" />
                             </a>
 
                             <!-- Modal -->

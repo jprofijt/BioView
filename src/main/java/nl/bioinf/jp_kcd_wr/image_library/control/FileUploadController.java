@@ -1,5 +1,6 @@
 package nl.bioinf.jp_kcd_wr.image_library.control;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -13,12 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -64,13 +60,13 @@ public class FileUploadController {
      * @return
      */
     @PostMapping("/upload")
-    public String handleFileUpload(@RequestParam("file") MultipartFile file,
+    public String handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam(name="directory", required=false, defaultValue="") File directory,
                                    RedirectAttributes redirectAttributes) {
         String filename = file.getOriginalFilename();
         String fileContentType = file.getContentType();
         if(contentTypes.contains(fileContentType)){
-            storageService.store(file);
-            logger.log(Level.INFO, "Succesfully uploaded {0}", new Object[]{filename});
+            storageService.store(file, directory);
+            logger.log(Level.INFO, "Succesfully uploaded {0} in {1}", new Object[]{filename, directory.toString()});
             redirectAttributes.addFlashAttribute("upload_message",
                     "You successfully uploaded " + file.getOriginalFilename() + "!");
         } else {

@@ -118,9 +118,18 @@ public class DirectoryController {
      *
      * @author Kim Chau Duong
      */
+    /*@GetMapping("/files/{directory}/{filename:.+}")
+    @ResponseBody
+    public ResponseEntity<Resource> serveFile(@PathVariable String directory, @PathVariable String filename) {
+
+        Resource file = storageService.loadAsResource(filename, directory);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                "inline; filename=\"" + file.getFilename() + "\"").body(file);
+    }
+
     @GetMapping("/files/{filename:.+}")
     @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename, String directory) {
+    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
 
         Resource file = storageService.loadAsResource(filename, directory);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
@@ -135,7 +144,7 @@ public class DirectoryController {
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "inline; filename=\"" + thumbnail.getFilename() + "\"").body(thumbnail);
 
-    }
+    }*/
 
 }
 
