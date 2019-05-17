@@ -22,7 +22,7 @@
     cursor: pointer;
     vertical-align: top;
 }
-.folder-manager ul > li > b , .created-folder{
+.folder-manager ul > li > div , .created-folder{
     display: block;
     white-space: nowrap;
     -webkit-user-select: none; /* Safari 3.1+ */
@@ -52,25 +52,25 @@
 
 }
 
-.folder-manager ul > li > b:active , .created-folder:active{
+.folder-manager ul > li >div:active , .created-folder:active{
     transform: scale(0.95);
 }
 /*---icon size---*/
 
-.folder-manager ul > li > b svg , .created-folder svg{
+.folder-manager ul > li > div svg , .created-folder svg{
     display: block;
     font-size: 50px;
     margin: 0 auto 5px;
 }
-.folder-manager ul li[data-file-icon="folder"] > b > svg , .created-folder > svg{
+.folder-manager ul li[data-file-icon="folder"] > div > svg , .created-folder > svg{
     color: #F7D774;
 }
 
-.folder-manager ul > li > b:hover , .created-folder:hover{
+.folder-manager ul > li > div:hover , .created-folder:hover{
     background: #343a4026;
 }
 
-.folder-manager ul > li.select > b, li.select > form > .created-folder{
+.folder-manager ul > li.select > div, li.select > form > .created-folder{
     background: #03a9f42e;
     outline: 1px solid #03A9F4;
 }

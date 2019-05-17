@@ -1,16 +1,9 @@
-// Adds icon to folder titles
-$(document).ready(function() {
-    $("#folders li").each(function() {
-        var getType = $(this).attr("data-file-icon");
-        if (getType == "folder") {
-            $(this)
-                .children("b")
-                .prepend('<i class="fas fa-folder"></i>');
-            $(this).find("form").children("b").prepend('<i class="fas fa-folder"></i>');
-        }
-    });
-
-});
+/**
+ * Scripts that manage the basic folder manager actions
+ *
+ * @author Kim Chau Duong
+ * @version 1.0
+ */
 
 // Submits on double click
 $(document).on('dblclick', '.folder-manager ul li', function(e) {

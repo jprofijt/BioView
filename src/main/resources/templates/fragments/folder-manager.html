@@ -9,8 +9,11 @@
     <ul id="folders">
         <li data-file-icon="folder" th:each="folder: ${folders}">
 
+            <div>
+                <i class="fas fa-folder"></i>
+                <b th:text="${folder.getName()}"></b>
+            </div>
 
-            <b th:text="${folder.getName()}"></b>
             <form th:action="@{/imageview}" method="get">
                 <input name="location" type="hidden" th:default="testdata" th:value="${folder.getPath()}">
             </form><br/>
@@ -18,7 +21,10 @@
         </li>
         <li data-file-icon="folder" class="popup-folder-creation" style="visibility: hidden">
             <form th:action="@{/createfolder}" method="post" class="popup-folder-container">
-                <b class="created-folder"><input id="dirInput" name="directoryName" type="text" th:required="true" value="New Folder"></b>
+                <div class="created-folder">
+                    <i class="fas fa-folder"></i>
+                    <b><input id="dirInput" name="directoryName" type="text" th:required="true" value="New Folder"></b>
+                </div>
                 <input name="currentPath" type="hidden" th:value="${currentPath}" th:default="testdata">
                 <!--<input type="submit" value="Create Folder here">-->
             </form>
