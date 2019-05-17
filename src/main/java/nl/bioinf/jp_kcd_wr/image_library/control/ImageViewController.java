@@ -37,7 +37,7 @@ public class ImageViewController {
     }
 
     @GetMapping("/imageview")
-    public String getImages(@RequestParam(name="directory", required = false, defaultValue = "") String location, Model model) {
+    public String getImages(@RequestParam(name="directory", required = false, defaultValue = "root") String location, Model model) {
         logger.log(Level.INFO, "Creating Image view for images in {0}", location);
         List<Path> list = storageService.loadAbsolute(location).collect(Collectors.toList());
         model.addAttribute("Images", loadCaches(list));

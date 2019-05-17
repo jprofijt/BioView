@@ -56,14 +56,10 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-md-2 border rounded" id="options">
-                <nav class="nav flex-column">
-                    <a class="nav-link" th:href="@{/upload}"><i class="fas fa-file-upload"></i> Upload New Image</a>
-                    <a class="nav-link" th:href="@{/nextfolder}"><i class="fas fa-folder-plus"></i> Create new sub-directory</a>
-                </nav>
-            </div>
-
         </div>
+    </div>
+
+    <div th:replace="fragments/upload-form" class="modal fade" id="UploadModal" tabindex="-2" role="dialog" aria-labelledby="UploadModalLable" aria-hidden="true">
     </div>
 </main>
 </body>

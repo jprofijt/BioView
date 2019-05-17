@@ -16,7 +16,7 @@
                 <a class="nav-link" href="#">Images<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <button type="button" class="nav-link" data-toggle="modal" data-target="#UploadModal">Upload</button>
+                <button type="button" class="btn nav-link" data-toggle="modal" data-target="#UploadModal">Upload <i class="fas fa-file-upload"></i></button>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="myaccount" role="button" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false">My Account</a>
@@ -41,8 +41,7 @@
 
 
 <!-- The Modal -->
-        <div th:replace="fragments/upload-form" class="modal fade" id="UploadModal" tabindex="-1" role="dialog" aria-labelledby="UploadModalLable" aria-hidden="true">
-        </div>
+
 
 </body>
 </html>

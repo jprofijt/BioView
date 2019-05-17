@@ -75,12 +75,18 @@ public class FileUploadController {
         return "redirect:/upload";*/
     //}
 
+    /**
+     * handles multiple file uploads
+     * @param directory directory where uploads are taking place
+     * @param uploadForm uploaded form data list
+     *
+     * @return redirect to main page
+     */
     @PostMapping("/multiFileUpload")
-    public String save(@RequestParam(name = "directory", required = false, defaultValue = "") File directory, @ModelAttribute("uploadForm") fileUploadForm uploadForm, Model map) {
-        List<MultipartFile> files = uploadForm.getFiles();
+    public String save(@RequestParam(name = "directory", required = false, defaultValue = "") File directory, @RequestParam("file") List<MultipartFile> uploadForm) {
 
-        if (null != files && files.size() > 0) {
-            for (MultipartFile multipartFile : files) {
+        if (null != uploadForm && uploadForm.size() > 0) {
+            for (MultipartFile multipartFile : uploadForm) {
                 String filename = multipartFile.getOriginalFilename();
                 String fileContentType = multipartFile.getContentType();
                 if (contentTypes.contains(fileContentType)) {
@@ -92,7 +98,7 @@ public class FileUploadController {
 
             }
         }
-        return "redirect:/imageview";
+        return "redirect:/imageview?directory=" + directory.toString();
     }
 
 

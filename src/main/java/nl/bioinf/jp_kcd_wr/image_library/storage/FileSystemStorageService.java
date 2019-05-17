@@ -57,6 +57,11 @@ public class FileSystemStorageService implements StorageService {
         rootLocation = Paths.get("upload/upload");
         this.cacheLocation = Paths.get("upload/thumbnails");
 
+        File rootDirectory = new File(rootLocation.toString()+"/root/");
+        if (!rootDirectory.exists()){
+            rootDirectory.mkdirs();
+        }
+
         logger.log(Level.INFO, "Starting FileSystemStorage service using {0} as imageDataSource, and {1} as root location", new Object[] {this.imageDataSource, this.rootLocation});
 
         checkParameters();
