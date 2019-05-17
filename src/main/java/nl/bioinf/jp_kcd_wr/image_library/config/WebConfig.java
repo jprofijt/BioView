@@ -8,6 +8,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistra
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,15 +25,15 @@ import java.nio.file.Paths;
 public class WebConfig extends WebMvcConfigurerAdapter {
     private Path rootLocation;
     private Path thumbnailLocation;
-    private Path rootSymbolicLink;
-    private Path thumbnailSymbolicLink;
+    private File rootSymbolicLink;
+    private File thumbnailSymbolicLink;
 
     @Autowired
     public WebConfig(Environment environment) {
         this.rootLocation = Paths.get(environment.getProperty("library.upload"));
         this.thumbnailLocation = Paths.get(environment.getProperty("cache-location"));
-        this.rootSymbolicLink = Paths.get("src/main/resources/static/upload/upload");
-        this.thumbnailSymbolicLink = Paths.get("src/main/resources/static/upload/thumbnails");
+        this.rootSymbolicLink = new File("upload/upload/");
+        this.thumbnailSymbolicLink = new File("upload/thumbnails");
     }
 
     @Override
@@ -57,16 +58,16 @@ public class WebConfig extends WebMvcConfigurerAdapter {
                         "classpath:/static/js/");
 
 
-        registry.addResourceHandler("/cache/**").addResourceLocations("classpath:/static/upload/thumbnails/");
-        registry.addResourceHandler("/files/**").addResourceLocations("classpath:/static/upload/upload/");
+        registry.addResourceHandler("/cache/*", "/cache/**").addResourceLocations("file:upload/thumbnails/");
+        registry.addResourceHandler("/files/**", "/files/*").addResourceLocations("file:upload/upload/");
 
     }
 
 
     private void createSymbolicLinks() throws IOException {
-        rootSymbolicLink.toFile().delete();
-        thumbnailSymbolicLink.toFile().delete();
-        Files.createSymbolicLink(rootSymbolicLink, rootLocation);
-        Files.createSymbolicLink(thumbnailSymbolicLink, thumbnailLocation);
+        rootSymbolicLink.delete();
+        thumbnailSymbolicLink.delete();
+        Files.createSymbolicLink(rootSymbolicLink.toPath(), rootLocation);
+        Files.createSymbolicLink(thumbnailSymbolicLink.toPath(), thumbnailLocation);
     }
 }

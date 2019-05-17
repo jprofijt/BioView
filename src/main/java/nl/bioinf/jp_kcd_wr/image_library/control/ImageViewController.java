@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class ImageViewController {
     }
 
     @GetMapping("/imageview")
-    public String getImages(@RequestParam(name="location", required = false, defaultValue = "") String location, Model model) {
+    public String getImages(@RequestParam(name="directory", required = false, defaultValue = "") String location, Model model) {
         logger.log(Level.INFO, "Creating Image view for images in {0}", location);
         List<Path> list = storageService.loadAbsolute(location).collect(Collectors.toList());
         model.addAttribute("Images", loadCaches(list));
@@ -50,6 +51,7 @@ public class ImageViewController {
      * Creates imageRequest object list for displaying images in directory
      * @param image_paths
      * @return List of ImageRequest Objects
+     *
      */
     private List<ImageRequest> loadCaches(List<Path> image_paths){
         ArrayList<ImageRequest> cacheLocations = new ArrayList<>();

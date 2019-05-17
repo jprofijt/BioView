@@ -54,8 +54,8 @@ public class FileSystemStorageService implements StorageService {
     @Autowired
     public FileSystemStorageService(ImageDataSource imageDataSource) {
         this.imageDataSource = imageDataSource;
-        rootLocation = Paths.get("src/main/resources/static/upload/upload");
-        this.cacheLocation = Paths.get("src/main/resources/static/upload/thumbnails");
+        rootLocation = Paths.get("upload/upload");
+        this.cacheLocation = Paths.get("upload/thumbnails");
 
         logger.log(Level.INFO, "Starting FileSystemStorage service using {0} as imageDataSource, and {1} as root location", new Object[] {this.imageDataSource, this.rootLocation});
 
