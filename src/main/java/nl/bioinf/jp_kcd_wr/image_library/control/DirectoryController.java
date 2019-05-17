@@ -63,7 +63,7 @@ public class DirectoryController {
         model.addAttribute("folders", folderHandler.getNextFolders(currentPath));
         model.addAttribute("currentPath", new File(currentPath.replace("\\", "/")));
         logger.log(Level.INFO, "Folders were created successfully!");
-        return "redirect:/imageview?folder=" + currentPath.replace("\\", "/");
+        return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
     }
 
     /**
@@ -86,7 +86,7 @@ public class DirectoryController {
         model.addAttribute("folders", folderHandler.getNextFolders(currentPath));
         model.addAttribute("currentPath", new File(currentPath.replace("\\", "/")));
         logger.log(Level.INFO, "Successfully created {0}", new Object[]{currentPath});
-        return "redirect:/imageview?folder=" + currentPath.replace("\\", "/");
+        return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
     }
 
     /**
@@ -105,7 +105,7 @@ public class DirectoryController {
 
         model.addAttribute("files", storageService.loadAll(folder).map(
                 path -> MvcUriComponentsBuilder.fromMethodName(DirectoryController.class,
-                        "serveFile", path.getFileName().toString(), folder).build().toString())
+                        "serveFile", path.getFileName().toString(), folder.replace("\\", "/")).build().toString())
                 .collect(Collectors.toList()));
         model.addAttribute("breadcrumbs", breadcrumbBuilder.getBreadcrumbs(folder));
         return "folders";
