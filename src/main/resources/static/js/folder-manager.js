@@ -65,7 +65,7 @@ $(document).on("click contextmenu", "[data-file-icon]", function(e) {
 
 /*---Creates folder with current date as its name---*/
 function createDateFolder() {
-    $('.date-folder-container').submit();
+    $('.date-folder-form').submit();
 }
 $(document).on("click", '[data-function="new-date-folder"]',function() {
     createDateFolder();
@@ -74,8 +74,8 @@ $(document).on("click", '[data-function="new-date-folder"]',function() {
 /*---Creates new folder that you can name---*/
 function createNewFolder(){
     $(".creating").removeClass("creating");
-    $(".popup-folder-creation").css("visibility", "visible");
-    $(".popup-folder-creation").addClass("creating");
+    $(".folder-creation-container").css("visibility", "visible");
+    $(".folder-creation-container").addClass("creating");
     $("#dirInput").select().focus();
 
 }
@@ -83,9 +83,3 @@ function createNewFolder(){
 $(document).on("click", '[data-function="new-folder"]',function() {
     createNewFolder();
 });
-
-
-
-// function showPopupFolder() {
-//     $('.popup-folder-creation').css("visibility", "visible");
-// }

@@ -1,76 +1,76 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!--<!DOCTYPE HTML>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+    <!--<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />-->
 
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>home</title>
-    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="../static/css/bootstrap.min.css">
-    <link rel="stylesheet" th:href="@{/css/custom.css}">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
-    <script th:src="@{/js/popper.min.js}" src="../static/js/popper.min.js"></script>
-    <script th:src="@{/js/bootstrap.bundle.min.js}" src="../static/js/bootstrap.bundle.min.js"></script>
-    <script src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-    <script th:src="@{/js/jquery-ui.js}"></script>
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
+    <!--<title>home</title>-->
+    <!--<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="../static/css/bootstrap.min.css">-->
+    <!--<link rel="stylesheet" th:href="@{/css/custom.css}">-->
+    <!--<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">-->
+    <!--<script th:src="@{/js/jquery-3.3.1.min.js}"></script>-->
+    <!--<script th:src="@{/js/popper.min.js}" src="../static/js/popper.min.js"></script>-->
+    <!--<script th:src="@{/js/bootstrap.bundle.min.js}" src="../static/js/bootstrap.bundle.min.js"></script>-->
+    <!--<script src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>-->
+    <!--<script th:src="@{/js/jquery-ui.js}"></script>-->
 
-    <link th:href="@{/css/folder.css}" rel="stylesheet">
-    <script th:src="@{/js/folder-manager.js}"></script>
+    <!--<link th:href="@{/css/folder.css}" rel="stylesheet">-->
+    <!--<script th:src="@{/js/folder-manager.js}"></script>-->
 
-    <title th:text="${currentPath.getName()}">File Browser</title>
+    <!--<title th:text="${currentPath.getName()}">File Browser</title>-->
 
-</head>
-<body>
-<div id="breadcrumb" class="breadcrumb">
-    <th:block th:each="breadcrumb : ${breadcrumbs}">
-        <a th:href="${breadcrumb.getUrl()}" th:text="${breadcrumb.getName()}"></a>
-        <li class="separator">&gt;</li>
-    </th:block>
-</div>
+<!--</head>-->
+<!--<body>-->
+<!--<div id="breadcrumb" class="breadcrumb">-->
+    <!--<th:block th:each="breadcrumb : ${breadcrumbs}">-->
+        <!--<a th:href="${breadcrumb.getUrl()}" th:text="${breadcrumb.getName()}"></a>-->
+        <!--<li class="separator">&gt;</li>-->
+    <!--</th:block>-->
+<!--</div>-->
 
 
-<div class="folder-manager">
-    <ul id="folders">
-        <li data-file-icon="folder" th:each="folder: ${folders}">
+<!--<div class="folder-manager">-->
+    <!--<ul id="folders">-->
+        <!--<li data-file-icon="folder" th:each="folder: ${folders}">-->
 
-            <div>
-                <i class="fas fa-folder"></i>
-                <b th:text="${folder.getName()}"></b>
-            </div>
+            <!--<div>-->
+                <!--<i class="fas fa-folder"></i>-->
+                <!--<b th:text="${folder.getName()}"></b>-->
+            <!--</div>-->
 
-            <form th:action="@{/nextfolder}" method="get">
-                <input name="folder" type="hidden" th:default="testdata" th:value="${folder.getPath()}">
-            </form><br/>
+            <!--<form th:action="@{/nextfolder}" method="get">-->
+                <!--<input name="folder" type="hidden" th:default="testdata" th:value="${folder.getPath()}">-->
+            <!--</form><br/>-->
 
-        </li>
-        <li data-file-icon="folder" class="popup-folder-creation" style="visibility: hidden">
-            <form th:action="@{/createfolder}" method="post" class="popup-folder-container">
-                <div class="created-folder">
-                    <i class="fas fa-folder"></i>
-                    <b><input id="dirInput" name="directoryName" type="text" th:required="true" value="New Folder"></b>
-                </div>
-                <input name="currentPath" type="hidden" th:value="${currentPath}" th:default="testdata">
-                <!--<input type="submit" value="Create Folder here">-->
-            </form>
-        </li>
-        <div th:replace="fragments/context-menu-unselected"></div>
-    </ul>
+        <!--</li>-->
+        <!--<li data-file-icon="folder" class="popup-folder-creation" style="visibility: hidden">-->
+            <!--<form th:action="@{/createfolder}" method="post" class="popup-folder-container">-->
+                <!--<div class="created-folder">-->
+                    <!--<i class="fas fa-folder"></i>-->
+                    <!--<b><input id="dirInput" name="directoryName" type="text" th:required="true" value="New Folder"></b>-->
+                <!--</div>-->
+                <!--<input name="currentPath" type="hidden" th:value="${currentPath}" th:default="testdata">-->
+                <!--&lt;!&ndash;<input type="submit" value="Create Folder here">&ndash;&gt;-->
+            <!--</form>-->
+        <!--</li>-->
+        <!--<div th:replace="fragments/context-menu-unselected"></div>-->
+    <!--</ul>-->
 
-</div>
+<!--</div>-->
 
-<div>
-    <form th:action="@{/createdatefolder}" method="post">
-        <input name="currentPath" type="hidden" th:value="${currentPath}">
-        <input type="submit" th:value="${'Create a directory '+date+' in '+currentPath.getName()}">
-    </form>
-</div>
-<div>
-    <ul>
-        <!--displays every file currently uploaded-->
-        <li th:each="file : ${files}">
-            <a th:href="${file}" th:text="${file}" ></a>
-        </li>
-    </ul>
-</div>
-</body>
-</html>
+<!--<div>-->
+    <!--<form th:action="@{/createdatefolder}" method="post">-->
+        <!--<input name="currentPath" type="hidden" th:value="${currentPath}">-->
+        <!--<input type="submit" th:value="${'Create a directory '+date+' in '+currentPath.getName()}">-->
+    <!--</form>-->
+<!--</div>-->
+<!--<div>-->
+    <!--<ul>-->
+        <!--&lt;!&ndash;displays every file currently uploaded&ndash;&gt;-->
+        <!--<li th:each="file : ${files}">-->
+            <!--<a th:href="${file}" th:text="${file}" ></a>-->
+        <!--</li>-->
+    <!--</ul>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
