@@ -187,4 +187,6 @@ public class ImageDataSourceJdbc implements ImageDataSource {
         String result = namedJdbcTemplate.queryForObject(query, parameterSource, String.class);
         return Paths.get(result).getFileName();
     }
+
+
 }
