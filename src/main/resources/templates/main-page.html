@@ -26,7 +26,6 @@
 </head>
 <body>
 <nav th:replace="fragments/header"></nav>
-<div th:replace="fragments/folder-manager"></div>
 <main th:replace="fragments/image-view"></main>
 <footer th:replace="fragments/footer :: ${#authorization.expression('hasRole(''ROLE_ADMIN'')')} ? 'footer-admin' : 'footer'">
     &copy; placeholder

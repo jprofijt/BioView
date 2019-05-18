@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Folder Manager</title>
 </head>
 <body>
-<div class="folder-manager">
+<div class="folder-manager col-md-6" th:fragment="folder-manager">
     <ul id="folders">
         <li data-file-icon="folder" th:each="folder: ${folders}">
             <div>
