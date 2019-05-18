@@ -5,15 +5,20 @@
     <title>BreadCrumbs</title>
 </head>
 <body>
-<div class="col-md-2 " th:fragment="breadcrumbs">
-    <div class="row">
-        <div class="container-fluid">
-            <a href="#">dummyfolder/</a><a href="#">dummy2/</a><a href="#">currentdir/</a>
-        </div>
-    </div>
-    <div class="row">
-        <div id="tree" class="container-fluid"></div>
-    </div>
+<div th:fragment="breadcrumbs">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li th:each="breadcrumb, breadcrumbStat : ${breadcrumbs}"
+                th:class="${breadcrumbStat.last}? 'breadcrumb-item active' : 'breadcrumb-item'" th:aria-current="${breadcrumbStat.last}? 'page'">
+                <div th:if="${!breadcrumbStat.last}" th:remove="tag">
+                    <a th:href="${breadcrumb.getUrl()}" th:text="${breadcrumb.getName()}"></a>
+                </div>
+                <div th:if="${breadcrumbStat.last}" th:remove="tag">
+                    <div th:text="${breadcrumb.getName()}" th:remove="tag"></div>
+                </div>
+            </li>
+        </ol>
+    </nav>
 </div>
 </body>
 </html>

@@ -55,6 +55,8 @@ public class ImageViewController {
         model.addAttribute("cache_path", "../cache/");
         model.addAttribute("location", location);
 
+        model.addAttribute("breadcrumbs", breadcrumbBuilder.getBreadcrumbs(location));
+
         return "main-page";
     }
 
