@@ -71,7 +71,7 @@ public class DirectoryBreadcrumbBuilder implements BreadcrumbBuilder{
      */
     @Override
     public Breadcrumb getFolderBreadCrumb(StringBuilder crumbPath){
-        final String directoryURL = "/nextfolder?folder=" + crumbPath;
+        final String directoryURL = "/imageview?location=" + crumbPath;
         File folder = new File(String.valueOf(crumbPath));
         return new Breadcrumb(folder.getName(), directoryURL);
     }
