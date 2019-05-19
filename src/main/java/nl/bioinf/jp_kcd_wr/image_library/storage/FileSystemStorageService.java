@@ -57,7 +57,7 @@ public class FileSystemStorageService implements StorageService {
         rootLocation = Paths.get("upload/upload");
         this.cacheLocation = Paths.get("upload/thumbnails");
 
-        File rootDirectory = new File(rootLocation.toString()+"/root/");
+        File rootDirectory = new File(rootLocation.toString()+"/HeadDirectory/");
         if (!rootDirectory.exists()){
             rootDirectory.mkdirs();
         }
