@@ -73,7 +73,7 @@ class FileSystemStorageServiceTest {
      */
     @Test
     void storejpg() {
-        storageService.store(getImageFromUrl("https://image.shutterstock.com/z/stock-photo--d-illustration-of-t-cells-or-cancer-cells-433526728.jpg"));
+        storageService.store(getImageFromUrl("https://image.shutterstock.com/z/stock-photo--d-illustration-of-t-cells-or-cancer-cells-433526728.jpg"), new File(""));
         Path testimage = Paths.get(environment.getProperty("library.upload") + "/test-img.png");
 
         assertTrue(testimage.toFile().isFile());

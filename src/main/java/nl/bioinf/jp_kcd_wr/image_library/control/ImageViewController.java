@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
+import java.nio.file.Files;
+
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -44,7 +46,8 @@ public class ImageViewController {
     }
 
     @GetMapping("/imageview")
-    public String getImages(@RequestParam(name="location", required = false, defaultValue = "") String location, Model model) {
+
+    public String getImages(@RequestParam(name="location", required = false, defaultValue = "HeadDirectory") String location, Model model) {
         model.addAttribute("folders", folderHandler.getNextFolders(location));
         model.addAttribute("currentPath", new File(location.replace("\\", "/")));
         model.addAttribute("date", LocalDate.now().toString());
@@ -64,6 +67,7 @@ public class ImageViewController {
      * Creates imageRequest object list for displaying images in directory
      * @param image_paths
      * @return List of ImageRequest Objects
+     *
      */
     private List<ImageRequest> loadCaches(List<Path> image_paths){
         ArrayList<ImageRequest> cacheLocations = new ArrayList<>();

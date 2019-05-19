@@ -1,27 +1,19 @@
 package nl.bioinf.jp_kcd_wr.image_library.control;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 import java.util.logging.Logger;
 
+import nl.bioinf.jp_kcd_wr.image_library.model.fileUploadForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import nl.bioinf.jp_kcd_wr.image_library.storage.StorageFileNotFoundException;
 import nl.bioinf.jp_kcd_wr.image_library.storage.StorageService;
@@ -43,6 +35,7 @@ public class FileUploadController {
         this.storageService = storageService;
     }
 
+
     /**
      * Get request that loads the initial page
      *
@@ -56,21 +49,21 @@ public class FileUploadController {
         return "upload-form";
     }
 
-    /**
+    /*
      * Post request that handles file uploads
      *
      * @param file the file to be uploaded
      * @param redirectAttributes
      * @return
      */
-    @PostMapping("/upload")
-    public String handleFileUpload(@RequestParam("file") MultipartFile file,
+    /*@PostMapping("/upload")
+    public String handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam(name="directory", required=false, defaultValue="") File directory,
                                    RedirectAttributes redirectAttributes) {
         String filename = file.getOriginalFilename();
         String fileContentType = file.getContentType();
         if(contentTypes.contains(fileContentType)){
-            storageService.store(file);
-            logger.log(Level.INFO, "Succesfully uploaded {0}", new Object[]{filename});
+            storageService.store(file, directory);
+            logger.log(Level.INFO, "Succesfully uploaded {0} in {1}", new Object[]{filename, directory.toString()});
             redirectAttributes.addFlashAttribute("upload_message",
                     "You successfully uploaded " + file.getOriginalFilename() + "!");
         } else {
@@ -79,8 +72,36 @@ public class FileUploadController {
                     file.getOriginalFilename() +
                             " is of an incorrect file type. Please provide an image file with a .png, .jpeg or .tiff extension!");
         }
-        return "redirect:/upload";
+        return "redirect:/upload";*/
+    //}
+
+    /**
+     * handles multiple file uploads
+     * @param directory directory where uploads are taking place
+     * @param uploadForm uploaded form data list
+     *
+     * @return redirect to main page
+     */
+    @PostMapping("/multiFileUpload")
+    public String save(@RequestParam(name = "directory", required = false, defaultValue = "") File directory, @RequestParam("file") List<MultipartFile> uploadForm) {
+
+        if (null != uploadForm && uploadForm.size() > 0) {
+            for (MultipartFile multipartFile : uploadForm) {
+                String filename = multipartFile.getOriginalFilename();
+                String fileContentType = multipartFile.getContentType();
+                if (contentTypes.contains(fileContentType)) {
+                    storageService.store(multipartFile, directory);
+                    logger.log(Level.INFO, "Succesfully uploaded {0} in {1}", new Object[]{filename, directory.toString()});
+                } else {
+                    logger.log(Level.WARNING, "Incompatible fileupload, file = {0}", new Object[]{filename});
+                }
+
+            }
+        }
+        return "redirect:/imageview?location=" + directory.toString();
     }
+
+
 
     /**
      * Handles file not found error
@@ -93,3 +114,4 @@ public class FileUploadController {
     }
 
 }
+

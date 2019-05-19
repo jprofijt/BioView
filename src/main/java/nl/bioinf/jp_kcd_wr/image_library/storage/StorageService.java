@@ -17,8 +17,7 @@ public interface StorageService {
     //weg
     void init();
 
-    //houd
-    void store(MultipartFile file);
+    void store(MultipartFile file, File directory);
 
     //rename
     String getNewName(String origFilename);
