@@ -1,7 +1,3 @@
-.breadcrumb {
-    font-size: 15px;
-}
-
 .folder-manager {
     width: 50%;
     height: 70vh;
@@ -59,7 +55,7 @@
 
 .folder-manager ul > li > div svg , .created-folder svg{
     display: block;
-    font-size: 50px;
+    font-size: 80px;
     margin: 0 auto 5px;
 }
 .folder-manager ul li[data-file-icon="folder"] > div > svg , .created-folder > svg{

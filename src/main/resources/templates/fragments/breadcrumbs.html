@@ -3,19 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>BreadCrumbs</title>
+
+    <link th:href="@{/css/breadcrumb.css}" rel="stylesheet">
 </head>
 <body>
 <div th:fragment="breadcrumbs">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
+            <i class="fas fa-folder breadcrumb-icon"></i>
             <li th:each="breadcrumb, breadcrumbStat : ${breadcrumbs}"
                 th:class="${breadcrumbStat.last}? 'breadcrumb-item active' : 'breadcrumb-item'" th:aria-current="${breadcrumbStat.last}? 'page'">
-                <div th:if="${!breadcrumbStat.last}" th:remove="tag">
+                <span th:if="${!breadcrumbStat.last}" th:remove="tag">
                     <a th:href="${breadcrumb.getUrl()}" th:text="${breadcrumb.getName()}"></a>
-                </div>
-                <div th:if="${breadcrumbStat.last}" th:remove="tag">
-                    <div th:text="${breadcrumb.getName()}" th:remove="tag"></div>
-                </div>
+                </span>
+                <span th:if="${breadcrumbStat.last}" th:remove="tag">
+                    <span class="active-crumb" th:text="${breadcrumb.getName()}"></span>
+                </span>
             </li>
         </ol>
     </nav>
