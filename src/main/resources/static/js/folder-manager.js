@@ -1,15 +1,9 @@
-// Adds icon to folder titles
-$(document).ready(function() {
-    $("#folders li").each(function() {
-        var getType = $(this).attr("data-file-icon");
-        if (getType == "folder") {
-            $(this)
-                .children("b")
-                .prepend('<i class="fas fa-folder"></i>');
-        }
-    });
-
-});
+/**
+ * Scripts that manage the basic folder manager actions
+ *
+ * @author Kim Chau Duong
+ * @version 1.0
+ */
 
 // Submits on double click
 $(document).on('dblclick', '.folder-manager ul li', function(e) {
@@ -36,6 +30,7 @@ $(document).on("click", "[data-file-icon]", function(e) {
 $(document).on("click dblclick", function() {
     $("[data-file-icon]")
         .removeClass("select");
+    $(".creating").find("form").submit();
 });
 
 $(document).on("click", "[data-file-icon]", function(e) {
@@ -48,16 +43,6 @@ $(document).on("click", "[data-file-icon]", function(e) {
 $(document).on("contextmenu", ".folder-manager", function(e) {
     var top = e.pageY;
     var left = e.pageX;
-    // $(".append-option-box").remove();
-    // $(this).append('<div class="append-option-box" id="append-option-box">\n' +
-    //     '    <div class="inner-context-box">\n' +
-    //     '        <div data-function="new-folder">New Folder</div>\n' +
-    //     '        <div class="" data-function="new-date-folder">New Folder (Date)</div>\n' +
-    //     '        <div data-function="folder-properties">Properties</div>\n' +
-    //     '    </div>\n' +
-    //     '</div>'
-    //     );
-    // $('.append-option-box').css("visibility", "hidden");
 
     $('.append-option-box').css({"visibility" : "visible", "top": top + "px", "left": left+"px"});
     return false;
@@ -65,7 +50,7 @@ $(document).on("contextmenu", ".folder-manager", function(e) {
 
 $(document).on("click contextmenu dblclick", function() {
     $("[data-file-icon]")
-        .removeClass("select renaming");
+        .removeClass("select");
     $('.append-option-box').css("visibility", "hidden");
 });
 $(document).on("click contextmenu", ".append-option-box", function(e) {
@@ -78,10 +63,23 @@ $(document).on("click contextmenu", "[data-file-icon]", function(e) {
     e.stopPropagation();
 });
 
+/*---Creates folder with current date as its name---*/
 function createDateFolder() {
-    $('.date-folder-container').submit();
+    $('.date-folder-form').submit();
+}
+$(document).on("click", '[data-function="new-date-folder"]',function() {
+    createDateFolder();
+});
+
+/*---Creates new folder that you can name---*/
+function createNewFolder(){
+    $(".creating").removeClass("creating");
+    $(".folder-creation-container").css("visibility", "visible");
+    $(".folder-creation-container").addClass("creating");
+    $("#dirInput").select().focus();
+
 }
 
-// function showPopupFolder() {
-//     $('.popup-folder-creation').css("visibility", "visible");
-// }
+$(document).on("click", '[data-function="new-folder"]',function() {
+    createNewFolder();
+});
