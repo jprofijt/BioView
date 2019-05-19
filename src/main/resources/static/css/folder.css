@@ -1,6 +1,8 @@
 .folder-manager {
-    width: 50%;
-    height: 70vh;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    border: 1px solid #b1b1b1;
     background: #f7f7f7;
     overflow:auto;
     padding: 10px 10px;
@@ -13,10 +15,13 @@
 }
 .folder-manager ul li {
     padding: 0;
+    display: inline-block;
+    margin: 0 auto;
 }
 .folder-manager ul > li {
     cursor: pointer;
     vertical-align: top;
+    float: left;
 }
 .folder-manager ul > li > div , .created-folder{
     display: block;
@@ -52,7 +57,6 @@
     transform: scale(0.95);
 }
 /*---icon size---*/
-
 .folder-manager ul > li > div svg , .created-folder svg{
     display: block;
     font-size: 80px;
@@ -69,10 +73,6 @@
 .folder-manager ul > li.select > div, li.select > form > .created-folder{
     background: #03a9f42e;
     outline: 1px solid #03A9F4;
-}
-
-.folder-manager ul li {
-    display: inline-block;
 }
 
 /*---Folder Context Menu---*/
