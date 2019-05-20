@@ -1,5 +1,6 @@
 package nl.bioinf.jp_kcd_wr.image_library.config;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
 
 /**
  *This webconfig sets all the paths for the resources so the webapp can get the necessary items from it.
@@ -65,9 +67,16 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
 
     private void createSymbolicLinks() throws IOException {
-        rootSymbolicLink.delete();
-        thumbnailSymbolicLink.delete();
+        deleteDirectoryStream(rootSymbolicLink.toPath());
+        deleteDirectoryStream(thumbnailSymbolicLink.toPath());
         Files.createSymbolicLink(rootSymbolicLink.toPath(), rootLocation);
         Files.createSymbolicLink(thumbnailSymbolicLink.toPath(), thumbnailLocation);
+    }
+
+    private void deleteDirectoryStream(Path path) throws IOException {
+        Files.walk(path)
+                .sorted(Comparator.reverseOrder())
+                .map(Path::toFile)
+                .forEach(File::delete);
     }
 }
