@@ -74,7 +74,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     private void deleteDirectoryStream(Path path) throws IOException {
-        Files.walk(path)
+        Files.walk(Paths.get(path.toString().replace("\\", "/")))
                 .sorted(Comparator.reverseOrder())
                 .map(Path::toFile)
                 .forEach(File::delete);
