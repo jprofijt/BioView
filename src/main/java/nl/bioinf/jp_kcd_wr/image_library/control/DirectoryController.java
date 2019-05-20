@@ -57,7 +57,7 @@ public class DirectoryController {
             folderHandler.createNewFolder(directoryName, currentPath);
         } catch (DirectoryExistsException e) {
             model.addAttribute("error", e.getMessage());
-            logger.log(Level.WARNING, "{0} already exist", new Object[]{directoryName});
+            logger.log(Level.WARNING, "Folder in {0} already exist", new Object[]{directoryName});
             return "directory-error";
         }
         model.addAttribute("folders", folderHandler.getNextFolders(currentPath));
@@ -80,12 +80,12 @@ public class DirectoryController {
             folderHandler.createDateDirectory(currentPath);
         } catch (DirectoryExistsException e){
             model.addAttribute("error", e.getMessage());
-            logger.log(Level.WARNING, "{0} already exists", new Object[]{currentPath});
+            logger.log(Level.WARNING, "Current date folder in {0} already exists", new Object[]{currentPath});
             return "directory-error";
         }
         model.addAttribute("folders", folderHandler.getNextFolders(currentPath));
         model.addAttribute("currentPath", new File(currentPath.replace("\\", "/")));
-        logger.log(Level.INFO, "Successfully created {0}", new Object[]{currentPath});
+        logger.log(Level.INFO, "Successfully created folder in {0}", new Object[]{currentPath});
         return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
     }
 

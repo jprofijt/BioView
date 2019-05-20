@@ -98,7 +98,7 @@ public class FileUploadController {
 
             }
         }
-        return "redirect:/imageview?location=" + directory.toString();
+        return "redirect:/imageview?location=" + directory.toString().replace("\\", "/");
     }
 
 
