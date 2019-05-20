@@ -168,7 +168,7 @@ public class ImageDataSourceJdbc implements ImageDataSource {
     public Path getThumbnailPath(int ImageId) {
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("image_id", ImageId);
-        String query = "SELECT path FROM cache WHERE image_id = :image_id";
+        String query = "SELECT cache_path FROM cache WHERE image_id = :image_id";
 
         return namedJdbcTemplate.queryForObject(query, parameterSource, Path.class);
     }
