@@ -117,15 +117,23 @@ public class FileSystemStorageService implements StorageService {
     private void makeLibraryLocations(){
         File Root = this.rootLocation.toFile();
         File Thumbnails = this.cacheLocation.toFile();
+
+        File HeadDirectory = new File(rootLocation.toString() + "/HeadDirectory/");
         if (!Root.exists()){
             Root.mkdirs();
             logger.log(Level.WARNING, "Given library location doesn't exist, creating new library location");
+        }
+        if (!HeadDirectory.exists()){
+            HeadDirectory.mkdirs();
+            logger.log(Level.INFO, "New Library creating head directory");
         }
 
         if (!Thumbnails.exists()){
             Thumbnails.mkdirs();
             logger.log(Level.WARNING, "Given Thumbnail location doesn't exist, creating new thumbnail location");
         }
+
+
     }
 
     /**

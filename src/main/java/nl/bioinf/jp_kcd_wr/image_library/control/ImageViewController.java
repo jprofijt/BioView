@@ -5,6 +5,7 @@ import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageDataSource;
 import nl.bioinf.jp_kcd_wr.image_library.filebrowser.FolderHandler;
 import nl.bioinf.jp_kcd_wr.image_library.model.ImageRequest;
 import nl.bioinf.jp_kcd_wr.image_library.storage.StorageService;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -76,7 +77,7 @@ public class ImageViewController {
 
             imageRequest.setThumbnail(this.imageDataSource.getThumbnailPathFromImagePath(image.toString()));
             imageRequest.setActual(
-                    Paths.get(image.toString().replace(storageService.getRootLocation().toString() + "/", "")));
+                    Paths.get(FilenameUtils.separatorsToUnix(image.toString()).replace(FilenameUtils.separatorsToUnix(storageService.getRootLocation().toString()) + "/", "")));
 
             cacheLocations.add(imageRequest);
         }
