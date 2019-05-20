@@ -2,23 +2,31 @@
     height: 100%;
     width: 100%;
     max-width: 100%;
+    max-height: 100%;
     margin: 0;
     padding: 0;
 }
+.modal-image {
+    height: 1012px;
+    width: 1012px;
+}
+
 
 .modal-content{
     height: auto;
     min-height: 100%;
     min-width: 100%;
     max-width: 100%;
-
     border-radius: 0;
 
 }
 .img-div{
-    width: 90%;
-    height: 700px;
-    overflow: scroll;
+    width: 70%;
+    height: 60%;
+    max-height: 900px;
+    min-width: 600px;
+    min-height: 600px;
+    overflow: auto;
     cursor: grab;
     cursor: -o-grab;
     cursor: -moz-grab;

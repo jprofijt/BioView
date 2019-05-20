@@ -30,11 +30,11 @@
                                                 <div class="row">
                                                     <div class="col">
                                                         <div class="navi-bar">
-                                                            <button type="button" onclick="zoomin()"> Zoom</button>
-                                                            <button type="button" onclick="zoomout()">Ex Zoom</button>
+                                                            <button type="button" th:onclick="zoomin([[${iterStat.count}]])">Zoom In</button>
+                                                            <button type="button" th:onclick="zoomout([[${iterStat.count}]])">Zoom Out</button>
                                                         </div>
                                                         <div class="img-div dragscroll">
-                                                            <img class="modal-image" id="image-to-zoom" th:src="${'files/' + image.getActual()}"/>
+                                                            <img class="modal-image" th:id="'image-to-zoom' + ${iterStat.count}" th:src="${'files/' + image.getActual()}"/>
                                                         </div>
                                                     </div>
                                                     <div class="col">

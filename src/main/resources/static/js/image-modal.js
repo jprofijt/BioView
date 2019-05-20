@@ -2,20 +2,24 @@ function openDynamicModal(id){
     $("#myModal"+ id).modal({backdrop: 'static', keyboard: false});
 }
 
-function zoomin() {
-    var myImg = document.getElementById("image-to-zoom");
+function zoomin(id) {
+    var myImg = document.getElementById("image-to-zoom" + id);
     var currWidth = myImg.clientWidth;
-    if (currWidth == 250000) return false;
+    if (currWidth >= 2500) return false;
     else {
         myImg.style.width = (currWidth + 250) + "px";
+        myImg.style.height = (currWidth + 250) + "px";
     }
 }
 
-function zoomout() {
-    var myImg = document.getElementById("image-to-zoom");
+function zoomout(id) {
+    var myImg = document.getElementById("image-to-zoom" + id);
     var currWidth = myImg.clientWidth;
-    if (currWidth == 100000) return false;
+    // alert(currWidth);
+    if (currWidth <= 512 ) return false;
     else {
         myImg.style.width = (currWidth - 250) + "px";
+        myImg.style.height = (currWidth - 250) + "px";
+
     }
 }
