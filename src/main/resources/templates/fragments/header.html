@@ -6,7 +6,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark" th:fragment="header">
-    <a class="navbar-brand" href="#">BioView</a>
+    <a class="navbar-brand" href="/">BioView</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -16,7 +16,7 @@
                 <a class="nav-link" href="#">Images<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">My images</a>
+                <button type="button" class="btn nav-link" data-toggle="modal" data-target="#UploadModal">Upload <i class="fas fa-file-upload"></i></button>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="myaccount" role="button" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false">My Account</a>
@@ -38,6 +38,10 @@
     </div>
 
 </nav>
+
+
+<!-- The Modal -->
+
 
 </body>
 </html>

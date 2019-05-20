@@ -57,13 +57,13 @@ public class DirectoryController {
             folderHandler.createNewFolder(directoryName, currentPath);
         } catch (DirectoryExistsException e) {
             model.addAttribute("error", e.getMessage());
-            logger.log(Level.WARNING, "{0} already exist", new Object[]{directoryName});
+            logger.log(Level.WARNING, "Folder in {0} already exist", new Object[]{directoryName});
             return "directory-error";
         }
         model.addAttribute("folders", folderHandler.getNextFolders(currentPath));
         model.addAttribute("currentPath", new File(currentPath.replace("\\", "/")));
         logger.log(Level.INFO, "Folders were created successfully!");
-        return "redirect:/nextfolder?folder=" + currentPath.replace("\\", "/");
+        return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
     }
 
     /**
@@ -80,13 +80,13 @@ public class DirectoryController {
             folderHandler.createDateDirectory(currentPath);
         } catch (DirectoryExistsException e){
             model.addAttribute("error", e.getMessage());
-            logger.log(Level.WARNING, "{0} already exists", new Object[]{currentPath});
+            logger.log(Level.WARNING, "Current date folder in {0} already exists", new Object[]{currentPath});
             return "directory-error";
         }
         model.addAttribute("folders", folderHandler.getNextFolders(currentPath));
         model.addAttribute("currentPath", new File(currentPath.replace("\\", "/")));
-        logger.log(Level.INFO, "Successfully created {0}", new Object[]{currentPath});
-        return "redirect:/nextfolder?folder=" + currentPath.replace("\\", "/");
+        logger.log(Level.INFO, "Successfully created folder in {0}", new Object[]{currentPath});
+        return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
     }
 
     /**
@@ -105,7 +105,7 @@ public class DirectoryController {
 
         model.addAttribute("files", storageService.loadAll(folder).map(
                 path -> MvcUriComponentsBuilder.fromMethodName(DirectoryController.class,
-                        "serveFile", path.getFileName().toString(), folder).build().toString())
+                        "serveFile", path.getFileName().toString(), folder.replace("\\", "/")).build().toString())
                 .collect(Collectors.toList()));
         model.addAttribute("breadcrumbs", breadcrumbBuilder.getBreadcrumbs(folder));
         return "folders";
@@ -118,9 +118,18 @@ public class DirectoryController {
      *
      * @author Kim Chau Duong
      */
+    /*@GetMapping("/files/{directory}/{filename:.+}")
+    @ResponseBody
+    public ResponseEntity<Resource> serveFile(@PathVariable String directory, @PathVariable String filename) {
+
+        Resource file = storageService.loadAsResource(filename, directory);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                "inline; filename=\"" + file.getFilename() + "\"").body(file);
+    }
+
     @GetMapping("/files/{filename:.+}")
     @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename, String directory) {
+    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
 
         Resource file = storageService.loadAsResource(filename, directory);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
@@ -135,7 +144,7 @@ public class DirectoryController {
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "inline; filename=\"" + thumbnail.getFilename() + "\"").body(thumbnail);
 
-    }
+    }*/
 
 }
 

@@ -52,10 +52,15 @@ public class FileSystemStorageService implements StorageService {
      * Contructor
      */
     @Autowired
-    public FileSystemStorageService(ImageDataSource imageDataSource, Environment environment) {
+    public FileSystemStorageService(ImageDataSource imageDataSource) {
         this.imageDataSource = imageDataSource;
-        rootLocation = getVerifiedRootLocation(environment);
-        this.cacheLocation = getVerifiedThumbnailLocation(environment);
+        rootLocation = Paths.get("upload/upload");
+        this.cacheLocation = Paths.get("upload/thumbnails");
+
+        File rootDirectory = new File(rootLocation.toString()+"/HeadDirectory/");
+        if (!rootDirectory.exists()){
+            rootDirectory.mkdirs();
+        }
 
         logger.log(Level.INFO, "Starting FileSystemStorage service using {0} as imageDataSource, and {1} as root location", new Object[] {this.imageDataSource, this.rootLocation});
 
@@ -112,15 +117,23 @@ public class FileSystemStorageService implements StorageService {
     private void makeLibraryLocations(){
         File Root = this.rootLocation.toFile();
         File Thumbnails = this.cacheLocation.toFile();
+
+        File HeadDirectory = new File(rootLocation.toString() + "/HeadDirectory/");
         if (!Root.exists()){
             Root.mkdirs();
             logger.log(Level.WARNING, "Given library location doesn't exist, creating new library location");
+        }
+        if (!HeadDirectory.exists()){
+            HeadDirectory.mkdirs();
+            logger.log(Level.INFO, "New Library creating head directory");
         }
 
         if (!Thumbnails.exists()){
             Thumbnails.mkdirs();
             logger.log(Level.WARNING, "Given Thumbnail location doesn't exist, creating new thumbnail location");
         }
+
+
     }
 
     /**
@@ -130,7 +143,7 @@ public class FileSystemStorageService implements StorageService {
      * @author Kim Chau Duong, Jouke Profijt
      */
     @Override
-    public void store(MultipartFile file) {
+    public void store(MultipartFile file, File directory) {
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
         try {
             if (file.isEmpty()) {
@@ -144,13 +157,15 @@ public class FileSystemStorageService implements StorageService {
             }
             try (InputStream inputStream = file.getInputStream()) {
                 String newFilename = getNewName(filename);
-                Path filePath = this.rootLocation.resolve(newFilename);
+                String directoryPath = this.getRootLocation().toString()+"/" + directory +"/";
+                Path filePath = Paths.get(directoryPath + newFilename);
                 Files.copy(inputStream, filePath, // 'copies' file to upload-dir using the rootLocation and filename
                         StandardCopyOption.REPLACE_EXISTING);                // file of same name in upload-dir will be overwritten
 
                 Image image = createImageData(filename, newFilename, filePath);
 
                 imageDataSource.insertImage(image);
+                createThumbnails(new File(directoryPath));
 
             }
         }

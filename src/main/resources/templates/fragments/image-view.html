@@ -3,17 +3,16 @@
 <body>
 <main th:fragment="images-window">
     <div class="container-fluid mt-4 mb-4">
+        <div th:replace="fragments/breadcrumbs"></div>
         <div class="row justify-content-around">
-            <div class="col-md-2" th:replace="fragments/breadcrumbs">
-
-            </div>
-            <div class="col-md-8">
+            <div th:replace="fragments/folder-manager"></div>
+            <div class="col-md-6">
                 <div class="docs-galleSry col-12" >
                     <ul class="pictures clearfix" style="height:800px; overflow: scroll">
                         <li class="col-sm-12 col-md-6 col-lg-4" th:each="image, iterStat : ${Images}">
 
                             <a th:ondblclick="openDynamicModal([[${iterStat.count}]])" th:class="modallink" th:id="'link'+${iterStat.count}">
-                                <img class="img-thumbnail img-fluid" th:src="${'files/' + image.getThumbnail() + '?directory=' + cache_path}" />
+                                <img class="img-thumbnail img-fluid" th:src="@{'/cache/' + ${image.getThumbnail()}}" />
                             </a>
                             <!-- Modal -->
                             <div th:id="'myModal'+ ${iterStat.count}" class="modal fade image-modal" role="dialog">
@@ -62,14 +61,10 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-md-2 border rounded" id="options">
-                <nav class="nav flex-column">
-                    <a class="nav-link" th:href="@{/upload}"><i class="fas fa-file-upload"></i> Upload New Image</a>
-                    <a class="nav-link" th:href="@{/nextfolder}"><i class="fas fa-folder-plus"></i> Create new sub-directory</a>
-                </nav>
-            </div>
-
         </div>
+    </div>
+
+    <div th:replace="fragments/upload-form" class="modal fade" id="UploadModal" tabindex="-2" role="dialog" aria-labelledby="UploadModalLable" aria-hidden="true">
     </div>
 </main>
 </body>
