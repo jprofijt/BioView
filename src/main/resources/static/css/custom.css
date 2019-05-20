@@ -1,9 +1,13 @@
+/*
+Custom Css for BioView Image Library
+
+Author: Jouke Profijt.
+ */
 html {
     position: relative;
     min-height: 100%;
 }
 body {
-    /* Margin bottom by footer height */
     margin-bottom: 60px;
 }
 

@@ -1,6 +1,17 @@
+/*
+ database scheme
+ Authors: Jouke Profijt, Wietse Reitsema, Kim Chau Duong
+ */
+drop table if exists image_annotation;
+drop table if exists image_values;
+drop table if exists image_roi;
+drop table if exists image_tags;
+
+
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS cache;
 drop table if exists image_tags;
+DROP table if exists tags;
 drop table if exists roi;
 drop table if exists meta_data;
 DROP TABLE IF EXISTS images;
@@ -8,12 +19,13 @@ DROP TABLE IF EXISTS file_structure;
 DROP TABLE IF EXISTS directories;
 
 
+
 CREATE TABLE users(
   id                 INT(100)     NOT NULL AUTO_INCREMENT,
   name               VARCHAR(40)  NOT NULL,
   email              VARCHAR(254) NOT NULL,
   password           VARCHAR(128) NOT NULL,
-  role               VARCHAR(6)   NOT NULL,
+  role               enum('ADMIN', 'USER')   NOT NULL,
   enabled            TINYINT,
   created_date       DATETIME,
   password_token     VARCHAR(200),
@@ -23,12 +35,10 @@ CREATE TABLE users(
 );
 
 CREATE TABLE images(
-  id          INT(100)      NOT NULL    AUTO_INCREMENT,
-  orig_name   VARCHAR(50)   NOT NULL,
-  new_name    VARCHAR(50)   NOT NULL,
+  id          INT           NOT NULL    AUTO_INCREMENT,
+  orig_name   VARCHAR(500)  NOT NULL,
+  new_name    VARCHAR(500)  NOT NULL,
   path        VARCHAR(260)  NOT NULL    UNIQUE,
-
-
   PRIMARY KEY (id)
 );
 
@@ -50,4 +60,16 @@ create table file_structure(
   subdirectory_id   int,
   FOREIGN KEY (directory_id) REFERENCES directories(id),
   FOREIGN KEY (subdirectory_id) REFERENCES directories(id)
+);
+
+create table tags(
+    tag             varchar(50)     UNIQUE,
+    primary key (tag)
+);
+
+create table image_tags(
+    image_id        int,
+    tag             varchar(50),
+    FOREIGN KEY (image_id) REFERENCES images(id),
+    FOREIGN KEY (tag) REFERENCES tags(tag)
 );

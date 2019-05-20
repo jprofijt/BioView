@@ -3,6 +3,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,22 +27,28 @@ import java.util.logging.Logger;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     private static final Logger logger = Logger.getLogger(WebSecurityConfig.class.getName());
+    private final Environment environment;
 
     @Autowired
     private DataSource dataSource;
 
-    @Value("${remember.me}")
-    private static int rememberMe;
+//    @Value("${remember.me}")
+//    private static int rememberMe;
+
+    @Autowired
+    public WebSecurityConfig(Environment environment) {
+        this.environment = environment;
+    }
 
     /**
      * secures pages from being accessed without a login, except for the home and login page
      * @param httpSecurity
      * @throws Exception
      */
-
-
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
+        int rememberMe;
+        rememberMe = Integer.parseInt(Objects.requireNonNull(environment.getProperty("remember.me")));
         httpSecurity
                 .authorizeRequests()
 //                .antMatchers("/upload")      /* this is to test roles */
@@ -53,7 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .and()
                 .logout().permitAll()
                 .and()
-                .rememberMe().key("uniqueAndSecret").tokenValiditySeconds(86400);
+                .rememberMe().key("uniqueAndSecret").tokenValiditySeconds(rememberMe);
 
 
     }
