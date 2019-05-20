@@ -155,6 +155,9 @@ public class FileSystemStorageService implements StorageService {
                         StandardCopyOption.REPLACE_EXISTING);                // file of same name in upload-dir will be overwritten
 
                 Image image = createImageData(filename, newFilename, filePath);
+                filePath.toFile().setExecutable(true, false);
+                filePath.toFile().setReadable(true, false);
+                filePath.toFile().setWritable(true, false);
 
                 imageDataSource.insertImage(image);
                 createThumbnails(new File(directoryPath));
