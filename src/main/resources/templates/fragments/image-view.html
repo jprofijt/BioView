@@ -16,7 +16,7 @@
                             </a>
                             <!-- Modal -->
                             <div th:id="'myModal'+ ${iterStat.count}" class="modal fade image-modal" role="dialog">
-                                <div class="modal-dialog modal-dialog-bioview">
+                                <div class="modal-dialog modal-dialog-bioview modal-dialog-scrollable">
 
                                     <!-- Modal content-->
                                     <div class="modal-content">
@@ -28,7 +28,13 @@
                                             <div class="container-fluid">
                                                 <div class="row">
                                                     <div class="col">
-                                                        <img class="modal-image" th:src="${'files/' + image.getActual()}"/>
+                                                        <div class="navi-bar">
+                                                            <button type="button" th:onclick="zoomin([[${iterStat.count}]])">Zoom In</button>
+                                                            <button type="button" th:onclick="zoomout([[${iterStat.count}]])">Zoom Out</button>
+                                                        </div>
+                                                        <div class="img-div dragscroll">
+                                                            <img class="modal-image" th:id="'image-to-zoom' + ${iterStat.count}" th:src="${'files/' + image.getActual()}"/>
+                                                        </div>
                                                     </div>
                                                     <div class="col">
                                                         <p>ROI's</p>

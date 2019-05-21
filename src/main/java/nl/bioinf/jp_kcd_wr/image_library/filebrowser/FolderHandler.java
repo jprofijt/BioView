@@ -88,7 +88,12 @@ public class FolderHandler implements FolderStructureProvider {
         File newDir = new File(path);
         try {
             Files.createDirectory(newDir.toPath());
+            newDir.setWritable(true, false);
+            newDir.setReadable(true, false);
+            newDir.setExecutable(true, false);
+
         } catch (IOException e){
+            e.printStackTrace();
             throw new DirectoryExistsException("Directory " + directoryName + " already exists");
         }
 
