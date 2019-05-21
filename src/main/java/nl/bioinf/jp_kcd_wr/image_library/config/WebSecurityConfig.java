@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,8 +32,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     @Autowired
     private DataSource dataSource;
 
-    @Value("${remember.me}")
-    private static int rememberMe;
+//    @Value("${remember.me}")
+//    private static int rememberMe;
 
     @Autowired
     public WebSecurityConfig(Environment environment) {
@@ -46,6 +47,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
      */
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
+        int rememberMe;
+        rememberMe = Integer.parseInt(Objects.requireNonNull(environment.getProperty("remember.me")));
         httpSecurity
                 .authorizeRequests()
 //                .antMatchers("/upload")      /* this is to test roles */
@@ -58,7 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .and()
                 .logout().permitAll()
                 .and()
-                .rememberMe().key("uniqueAndSecret").tokenValiditySeconds(86400);
+                .rememberMe().key("uniqueAndSecret").tokenValiditySeconds(rememberMe);
 
 
     }
