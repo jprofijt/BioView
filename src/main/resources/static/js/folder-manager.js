@@ -41,8 +41,11 @@ $(document).on("click", "[data-file-icon]", function(e) {
 /*---Context Menu ---*/
 
 $(document).on("contextmenu", ".folder-manager", function(e) {
-    var top = e.pageY;
-    var left = e.pageX;
+    var offset = $(".folder-container").offset();
+    var top = e.pageY - offset.top;
+    var left = e.pageX - offset.left;
+    console.log(top);
+    console.log(left);
 
     $('.append-option-box').css({"visibility" : "visible", "top": top + "px", "left": left+"px"});
     return false;
