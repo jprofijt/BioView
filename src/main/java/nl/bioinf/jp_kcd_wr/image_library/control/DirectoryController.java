@@ -57,7 +57,7 @@ public class DirectoryController {
             folderHandler.createNewFolder(directoryName, currentPath);
         } catch (DirectoryExistsException e) {
             model.addAttribute("error", e.getMessage());
-            logger.log(Level.WARNING, "Folder in {0} already exist", new Object[]{directoryName});
+            logger.log(Level.WARNING, "Folder {0} in {1} already exist", new Object[]{directoryName, currentPath});
             return "directory-error";
         }
         model.addAttribute("folders", folderHandler.getNextFolders(currentPath));

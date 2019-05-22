@@ -20,7 +20,7 @@ public interface StorageService {
     void store(MultipartFile file, File directory);
 
     //rename
-    String getNewName(String origFilename);
+//    String getNewName(String origFilename);
 
     //split and rename
     Image createImageData(String origFilename, String hash, Path filePath);
