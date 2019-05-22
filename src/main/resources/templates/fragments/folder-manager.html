@@ -5,13 +5,13 @@
     <title>Folder Manager</title>
 </head>
 <body>
-<div class="container col-md-6">
+<div class="folder-container container col-md-6">
     <div class="folder-manager" th:fragment="folder-manager">
         <ul id="folders">
             <li data-file-icon="folder" th:each="folder: ${folders}">
                 <div>
                     <i class="fas fa-folder"></i>
-                    <b th:text="${folder.getName()}"></b>
+                    <b class="folder-name" th:text="${folder.getName()}"></b>
                 </div>
                 <form th:action="@{/imageview}" method="get">
                     <input name="location" type="hidden" th:default="testdata" th:value="${folder.getPath()}">
