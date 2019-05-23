@@ -9,6 +9,7 @@ import java.nio.file.Path;
 public class ImageRequest {
     private Path Thumbnail;
     private Path Actual;
+    private int id;
 
     public Path getThumbnail() {
         return Thumbnail;
@@ -24,5 +25,14 @@ public class ImageRequest {
 
     public void setActual(Path actual) {
         Actual = actual;
+    }
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
