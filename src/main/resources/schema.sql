@@ -7,6 +7,13 @@ drop table if exists image_values;
 drop table if exists image_roi;
 drop table if exists image_tags;
 
+drop table if exists image_annotation;
+drop table if exists image_values;
+drop table if exists image_tags;
+drop table if exists image_roi;
+DROP TABLE IF EXISTS tags;
+drop table if exists images_meta;
+
 
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS cache;
@@ -17,6 +24,7 @@ drop table if exists meta_data;
 DROP TABLE IF EXISTS images;
 DROP TABLE IF EXISTS file_structure;
 DROP TABLE IF EXISTS directories;
+
 
 
 
@@ -42,6 +50,16 @@ CREATE TABLE images(
   PRIMARY KEY (id)
 );
 
+create table images_meta(
+    id          INT                 not null    unique,
+    path        varchar(200)        not null    unique,
+    date        datetime            not null,
+    size        long,
+    type    enum('TIFF', 'PNG', 'JPEG'),
+    primary key (id)
+);
+
+
 CREATE TABLE cache(
   image_id    INT(100)      NOT NULL,
   cache_path  VARCHAR(260)  NOT NULL    UNIQUE,
@@ -63,13 +81,37 @@ create table file_structure(
 );
 
 create table tags(
-    tag             varchar(50)     UNIQUE,
+    tag         varchar(100)        not null    unique,
     primary key (tag)
 );
 
 create table image_tags(
-    image_id        int,
-    tag             varchar(50),
-    FOREIGN KEY (image_id) REFERENCES images(id),
-    FOREIGN KEY (tag) REFERENCES tags(tag)
+   image_id    int             not null,
+   image_tag   varchar(100)    not null,
+   foreign key (image_id)  references images_meta(id),
+   foreign key (image_tag) references tags(tag)
+);
+
+create table image_annotation(
+    image_id    int             not null,
+    annotation        varchar(500)    not null,
+    foreign key (image_id)  references images_meta(id)
+);
+
+create table image_roi(
+  image_id    int     not null,
+  x1          int     not null,
+  y1          int     not null,
+  x2          int     not null,
+  y2          int     not null,
+  foreign key (image_id) references images_meta(id)
+);
+
+create table image_values(
+ image_id    int     not null,
+ ph          double,
+ T           int,
+ o2          int,
+ co2         int,
+ foreign key (image_id) references images_meta(id)
 );
