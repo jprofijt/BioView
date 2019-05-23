@@ -11,7 +11,7 @@
                     <ul class="pictures clearfix" style="height:800px; overflow: scroll">
                         <li class="col-sm-12 col-md-6 col-lg-4" th:each="image, iterStat : ${Images}">
 
-                            <a th:ondblclick="openDynamicModal([[${iterStat.count}]])" th:class="modallink" th:id="'link'+${iterStat.count}">
+                            <a th:ondblclick="loadDynamicModal([[${iterStat.count}]], [[${''+ image.getActual()}]])" th:class="modallink" th:id="'link'+${iterStat.count}">
                                 <img class="img-thumbnail img-fluid" th:src="@{'/cache/' + ${image.getThumbnail()}}" />
                             </a>
                             <!-- Modal -->
@@ -32,8 +32,9 @@
                                                             <button type="button" th:onclick="zoomin([[${iterStat.count}]])">Zoom In</button>
                                                             <button type="button" th:onclick="zoomout([[${iterStat.count}]])">Zoom Out</button>
                                                         </div>
-                                                        <div class="img-div dragscroll">
-                                                            <img class="modal-image" th:id="'image-to-zoom' + ${iterStat.count}" th:src="${'files/' + image.getActual()}"/>
+                                                        <div class="img-div scene">
+                                                            <canvas class="image-view-canvas" th:id="'canvas' + ${iterStat.count}"></canvas>
+                                                            <!--<img class="modal-image" th:id="'image-canvas' + ${iterStat.count}" th:src="${'files/' + image.getActual()}"/>-->
                                                         </div>
                                                     </div>
                                                     <div class="col">

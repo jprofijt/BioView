@@ -1,25 +1,15 @@
-function openDynamicModal(id){
+function loadDynamicModal(id, path){
     $("#myModal"+ id).modal({backdrop: 'static', keyboard: false});
+    loadImageIntoCanvas(id, path)
 }
 
-function zoomin(id) {
-    var myImg = document.getElementById("image-to-zoom" + id);
-    var currWidth = myImg.clientWidth;
-    if (currWidth >= 2500) return false;
-    else {
-        myImg.style.width = (currWidth + 250) + "px";
-        myImg.style.height = (currWidth + 250) + "px";
-    }
-}
 
-function zoomout(id) {
-    var myImg = document.getElementById("image-to-zoom" + id);
-    var currWidth = myImg.clientWidth;
-    // alert(currWidth);
-    if (currWidth <= 512 ) return false;
-    else {
-        myImg.style.width = (currWidth - 250) + "px";
-        myImg.style.height = (currWidth - 250) + "px";
-
-    }
+function loadImageIntoCanvas(id, path){
+    var canvas = document.getElementById("canvas"+ id);
+    var context = canvas.getContext("2d");
+    var image = new Image();
+    image.src = 'files/' + path;
+    alert(image.src);
+    image.onload = () => {
+    context.drawImage(image, 0, 0, image.width, image.height, 0, 0, canvas.width, canvas.height);}
 }
