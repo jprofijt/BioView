@@ -8,8 +8,9 @@
     padding: 10px 10px;
 }
 .folder-manager ul {
+    width: 97%;
     padding: 0;
-    margin: 0;
+    margin: 0 auto;
     list-style: none;
     user-select:none;
 }
@@ -19,11 +20,11 @@
     margin: 0 auto;
 }
 .folder-manager ul > li {
-    cursor: pointer;
     vertical-align: top;
     float: left;
 }
 .folder-manager ul > li > div , .created-folder{
+    cursor: pointer;
     display: block;
     white-space: nowrap;
     -webkit-user-select: none; /* Safari 3.1+ */
@@ -70,7 +71,7 @@
     background: #343a4026;
 }
 
-.folder-manager ul > li.select > div, li.select > form > .created-folder{
+.folder-manager ul > li> div.select, li > form > .created-folder.select{
     background: #03a9f42e;
     outline: 1px solid #03A9F4;
 }
