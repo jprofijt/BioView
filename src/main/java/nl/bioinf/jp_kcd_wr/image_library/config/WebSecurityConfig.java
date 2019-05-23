@@ -29,15 +29,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     private static final Logger logger = Logger.getLogger(WebSecurityConfig.class.getName());
     private final Environment environment;
 
-    @Autowired
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
 //    @Value("${remember.me}")
 //    private static int rememberMe;
 
     @Autowired
-    public WebSecurityConfig(Environment environment) {
+    public WebSecurityConfig(Environment environment, DataSource dataSource) {
         this.environment = environment;
+        this.dataSource = dataSource;
     }
 
     /**

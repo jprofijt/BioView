@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
 <main th:fragment="images-window">
+    <script th:src="@{/js/TableLoader.js}"></script>
     <div class="container-fluid mt-4 mb-4">
         <div th:replace="fragments/breadcrumbs"></div>
         <div class="row justify-content-around">
@@ -45,7 +46,15 @@
                                                         <p>Description</p>
                                                     </div>
                                                     <div class="col">
-                                                        <p>Tags</p>
+                                                        <table class="table tag-table" th:id="${'ImageTags-' + image.getId()}">
+                                                            <thead>
+                                                            <tr>
+                                                                <th scope="col">Tags</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            </tbody>
+                                                        </table>
 
                                                     </div>
                                                 </div>
