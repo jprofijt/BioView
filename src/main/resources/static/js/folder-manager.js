@@ -77,7 +77,7 @@ $(document).on("click", '[data-function="new-date-folder"]',function() {
 /*---Creates new folder that you can name---*/
 function createNewFolder(){
     $(".creating").removeClass("creating");
-    $(".folder-creation-container").css("visibility", "visible");
+    $(".folder-creation-container").css("display", "inline-block");
     $(".folder-creation-container").addClass("creating");
     $("#dirInput").select().focus();
 
@@ -89,5 +89,5 @@ $(document).on("click", '[data-function="new-folder"]',function() {
 
 /*---Sort by buttons---*/
 $(document).on("click", '[data-sort="name"]', function () {
-
+    tinysort('ul#folders > li.existing-folder',{selector:'b', order:(this.isAsc=!this.isAsc)?'asc':'desc'})
 });
