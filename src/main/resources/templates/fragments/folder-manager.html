@@ -5,11 +5,11 @@
     <title>Folder Manager</title>
 </head>
 <body>
-<div class="folder-container container col-md-6" th:fragment="folder-manager">
+<div class="folder-container container col-md-4" th:fragment="folder-manager">
     <nav class="folder-navbar navbar navbar-expand-md navbar-light bg-dark">
         <a class="navbar-brand">Menu</a>
     </nav>
-    <div class="folder-manager">
+    <div class="folder-manager rounded-bottom">
         <ul id="folders">
             <li data-file-icon="folder" th:each="folder: ${folders}">
                 <div>

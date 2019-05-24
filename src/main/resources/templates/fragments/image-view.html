@@ -7,10 +7,13 @@
         <div th:replace="fragments/breadcrumbs"></div>
         <div class="row justify-content-around">
             <div th:replace="fragments/folder-manager"></div>
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <div class="docs-gallery col-12" >
-                    <ul class="pictures clearfix" style="height:800px; overflow: scroll">
-                        <li class="col-sm-12 col-md-6 col-lg-4" th:each="image, iterStat : ${Images}">
+                    <nav class="folder-navbar navbar navbar-expand-md navbar-light bg-dark">
+                        <a class="navbar-brand">Menu</a>
+                    </nav>
+                    <ul class="pictures clearfix">
+                        <li class="col-xs-12 col-sm-6 col-md-4 col-lg-3" th:each="image, iterStat : ${Images}">
 
                             <a th:ondblclick="openDynamicModal([[${iterStat.count}]])" th:class="modallink" th:id="'link'+${iterStat.count}">
                                 <img class="img-thumbnail img-fluid" th:src="@{'/cache/' + ${image.getThumbnail()}}" />
