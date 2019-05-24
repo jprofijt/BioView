@@ -156,9 +156,9 @@ public class FileSystemStorageService implements StorageService {
                                 + filename);
             }
             try (InputStream inputStream = file.getInputStream()) {
-                String newFilename = getNewName(filename);
-                String directoryPath = this.getRootLocation().toString()+"/" + directory +"/";
-                Path filePath = Paths.get(directoryPath + newFilename);
+                Path directoryPath = this.rootLocation.resolve(directory.toPath());
+                String newFilename = getNewName(filename, directoryPath);
+                Path filePath = directoryPath.resolve(newFilename);
                 Files.copy(inputStream, filePath, // 'copies' file to upload-dir using the rootLocation and filename
                         StandardCopyOption.REPLACE_EXISTING);                // file of same name in upload-dir will be overwritten
 
@@ -168,7 +168,7 @@ public class FileSystemStorageService implements StorageService {
                 filePath.toFile().setWritable(true, false);
 
                 imageDataSource.insertImage(image);
-                createThumbnails(new File(directoryPath));
+                createThumbnails(directoryPath.toFile());
 
             }
         }
@@ -185,9 +185,8 @@ public class FileSystemStorageService implements StorageService {
      *
      * @author Kim Chau Duong
      */
-    @Override
-    public String getNewName(String filename) {
-        if (Files.exists(this.rootLocation.resolve(filename))){
+    private String getNewName(String filename, Path directoryPath) {
+        if (Files.exists(directoryPath.resolve(filename))){
             Matcher m = PATTERN.matcher(filename);
             if (m.matches()){
                 String prefix = m.group(1);
@@ -201,7 +200,7 @@ public class FileSystemStorageService implements StorageService {
                 do {
                     count++;
                     filename = prefix + "(" + count + ")" + suffix;
-                } while (Files.exists(this.rootLocation.resolve(filename)));
+                } while (Files.exists(directoryPath.resolve(filename)));
             }
         }
         return filename;

@@ -6,34 +6,36 @@
  */
 
 // Submits on double click
-$(document).on('dblclick', '.folder-manager ul li', function(e) {
+$(document).on('dblclick', '.folder-manager ul li div', function(e) {
     $(this).addClass('folder-active');
-    $(this).children('form').submit();
+    $(this).siblings('form').submit();
 });
 
 
 // Adds select class to selected folder(s)
-$(document).on("click", "[data-file-icon]", function(e) {
+$(document).on("click", "[data-file-icon] div", function(e) {
     if (e.ctrlKey) {
         $(this).addClass("select");
     } else {
         $(".select").removeClass("select");
         $(this)
-            .addClass("select")
-            .siblings()
-            .removeClass("select");
+            .addClass("select");
         $('.append-option-box').css("visibility", "hidden");
     }
 });
 
 // Deselects when clicking elsewhere
 $(document).on("click dblclick", function() {
-    $("[data-file-icon]")
+    $("[data-file-icon] div")
         .removeClass("select");
     $(".creating").find("form").submit();
 });
 
-$(document).on("click", "[data-file-icon]", function(e) {
+$(document).on("click", "[data-file-icon]", function() {
+    $(".select").removeClass("select");
+});
+
+$(document).on("click", "[data-file-icon] div", function(e) {
     e.stopPropagation();
 });
 
@@ -44,8 +46,6 @@ $(document).on("contextmenu", ".folder-manager", function(e) {
     var offset = $(".folder-container").offset();
     var top = e.pageY - offset.top;
     var left = e.pageX - offset.left;
-    console.log(top);
-    console.log(left);
 
     $('.append-option-box').css({"visibility" : "visible", "top": top + "px", "left": left+"px"});
     return false;
