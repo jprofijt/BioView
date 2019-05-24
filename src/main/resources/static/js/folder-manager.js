@@ -6,14 +6,14 @@
  */
 
 // Submits on double click
-$(document).on('dblclick', '.folder-manager ul li div', function(e) {
+$(document).on('dblclick', '.folder-manager ul li form div', function(e) {
     $(this).addClass('folder-active');
-    $(this).siblings('form').submit();
+    $(this).parents('form').submit();
 });
 
 
 // Adds select class to selected folder(s)
-$(document).on("click", "[data-file-icon] div", function(e) {
+$(document).on("click", "[data-file-icon] form div", function(e) {
     if (e.ctrlKey) {
         $(this).addClass("select");
     } else {
@@ -35,7 +35,7 @@ $(document).on("click", "[data-file-icon]", function() {
     $(".select").removeClass("select");
 });
 
-$(document).on("click", "[data-file-icon] div", function(e) {
+$(document).on("click", "[data-file-icon] form div", function(e) {
     e.stopPropagation();
 });
 
@@ -85,4 +85,9 @@ function createNewFolder(){
 
 $(document).on("click", '[data-function="new-folder"]',function() {
     createNewFolder();
+});
+
+/*---Sort by buttons---*/
+$(document).on("click", '[data-sort="name"]', function () {
+
 });

@@ -12,11 +12,11 @@
     <div class="folder-manager rounded-bottom">
         <ul id="folders">
             <li data-file-icon="folder" th:each="folder: ${folders}">
-                <div>
-                    <i class="fas fa-folder"></i>
-                    <b class="folder-name" th:text="${folder.getName()}"></b>
-                </div>
                 <form th:action="@{/imageview}" method="get">
+                    <div>
+                        <i class="fas fa-folder"></i>
+                        <b class="folder-name" th:text="${folder.getName()}"></b>
+                    </div>
                     <input name="location" type="hidden" th:default="testdata" th:value="${folder.getPath()}">
                 </form><br/>
 
