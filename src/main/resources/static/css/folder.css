@@ -132,5 +132,10 @@
     opacity: 0.5;
 }
 
+.folder-navbar > li > .dropdown-menu > div:hover {
+    background: #343a4026;
+    cursor:pointer;
+}
+
 
 

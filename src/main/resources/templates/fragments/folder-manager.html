@@ -6,9 +6,7 @@
 </head>
 <body>
 <div class="folder-container container col-md-4" th:fragment="folder-manager">
-    <nav class="folder-navbar navbar navbar-expand-md navbar-light bg-dark">
-        <a class="navbar-brand">Menu</a>
-    </nav>
+    <div th:replace="fragments/folder-manager-navbar"></div>
     <div class="folder-manager rounded-bottom">
         <ul id="folders">
             <li data-file-icon="folder" class="existing-folder" th:each="folder: ${folders}">
