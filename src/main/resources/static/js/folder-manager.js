@@ -89,5 +89,5 @@ $(document).on("click", '[data-function="new-folder"]',function() {
 
 /*---Sort by buttons---*/
 $(document).on("click", '[data-sort="name"]', function () {
-    tinysort('ul#folders > li.existing-folder',{selector:'b', order:(this.isAsc=!this.isAsc)?'asc':'desc'})
+    tinysort('ul#folders > li',{selector:'b:not(.created-title)', order:(this.isAsc=!this.isAsc)?'asc':'desc'})
 });
