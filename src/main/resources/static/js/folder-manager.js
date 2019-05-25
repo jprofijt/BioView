@@ -88,6 +88,23 @@ $(document).on("click", '[data-function="new-folder"]',function() {
 });
 
 /*---Sort by buttons---*/
-$(document).on("click", '[data-sort="name"]', function () {
-    tinysort('ul#folders > li',{selector:'b:not(.created-title)', order:(this.isAsc=!this.isAsc)?'asc':'desc'})
+var nameOrder = 'asc';
+$(document).on("click", '[data-sort="folder-name"]', function () {
+    tinysort('ul#folders > li',{selector : 'b:not(.created-title)', order : nameOrder});
+    if (nameOrder === 'asc') {
+        nameOrder = 'desc'
+    }
+    else {
+        nameOrder = 'asc'
+    }
+});
+var dateOrder = 'asc';
+$(document).on("click", '[data-sort="folder-date"]', function () {
+    tinysort('ul#folders > li',{selector : '.last-modified-date', attr:'value', order : dateOrder});
+    if (dateOrder === 'asc') {
+        dateOrder = 'desc'
+    }
+    else {
+        dateOrder = 'asc'
+    }
 });
