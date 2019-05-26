@@ -24,8 +24,8 @@ $(document).on("click", "[data-file-icon] form div", function(e) {
     }
 });
 
-// Deselects when clicking elsewhere
-$(document).on("click dblclick", function() {
+// Deselects (and submits new folder) when clicking elsewhere
+$(document).on("click dblclick", ".folder-manager", function() {
     $("[data-file-icon] div")
         .removeClass("select");
     $(".creating").find("form").submit();
