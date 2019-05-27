@@ -4,19 +4,12 @@
 <div class="append-option-box">
 <div class="inner-context-box">
     <div data-function="new-folder">New Folder</div>
-    <div data-function="new-date-folder" th:text="${'New Folder ('+date+')'}">New Folder(date)</div>
     <div data-function="sort-folders"><span>Sort by</span>
         <div class="sub-menu">
             <div data-sort="folder-name">Name</div>
             <div data-sort="folder-date">Date</div>
         </div>
         <i class="fas fa-chevron-right"></i>
-    </div>
-    <!--<div data-function="folder-properties">Properties</div>-->
-    <div class="date-folder-container">
-        <form th:action="@{/createdatefolder}" method="post" class="date-folder-form">
-            <input name="currentPath" type="hidden" th:value="${currentPath}">
-        </form>
     </div>
 </div>
 </div>
