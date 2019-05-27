@@ -49,16 +49,7 @@
                                                         <p>Description</p>
                                                     </div>
                                                     <div class="col">
-                                                        <table class="table tag-table" th:id="${'ImageTags-' + image.getId()}">
-                                                            <thead>
-                                                            <tr>
-                                                                <th scope="col">Tags</th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            </tbody>
-                                                        </table>
-
+                                                        <table class="table tag-table" th:id="${'ImageTags-' + image.getId()}" th:replace="fragments/tag-table">
                                                     </div>
                                                 </div>
                                             </div>
