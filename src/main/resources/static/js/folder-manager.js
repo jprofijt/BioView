@@ -28,7 +28,6 @@ $(document).on("click", "[data-file-icon] form div", function(e) {
 $(document).on("click dblclick", ".folder-manager", function() {
     $("[data-file-icon] div")
         .removeClass("select");
-    $(".creating").find("form").submit();
 });
 
 $(document).on("click", "[data-file-icon]", function() {
@@ -80,8 +79,11 @@ function createNewFolder(){
     $(".folder-creation-container").css("display", "inline-block");
     $(".folder-creation-container").addClass("creating");
     $("#dirInput").select().focus();
-
 }
+/*---Creates folder when clicking away from input---*/
+$(document).on('blur', "#dirInput", function () {
+    $(".creating").find("form").submit();
+});
 
 $(document).on("click", '[data-function="new-folder"]',function() {
     createNewFolder();
