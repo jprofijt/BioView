@@ -24,6 +24,10 @@ body {
     margin: 0;
     padding: 0;
     list-style: none;
+    height: 800px;
+    overflow-y: scroll;
+    background: #f7f7f7;
+    border: 1px solid #b1b1b1;
 }
 
 .pictures > li {
@@ -39,3 +43,6 @@ body {
     cursor: zoom-in;
 }
 
+.docs-gallery {
+    padding: 0 0;
+}

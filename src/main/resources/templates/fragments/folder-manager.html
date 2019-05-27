@@ -5,27 +5,26 @@
     <title>Folder Manager</title>
 </head>
 <body>
-<div class="folder-container container col-md-6" th:fragment="folder-manager">
-    <nav class="folder-navbar navbar navbar-expand-md navbar-light bg-dark">
-        <a class="navbar-brand">Menu</a>
-    </nav>
-    <div class="folder-manager">
+<div class="folder-container container col-md-4" th:fragment="folder-manager">
+    <div th:replace="fragments/folder-manager-navbar"></div>
+    <div class="folder-manager rounded-bottom">
         <ul id="folders">
-            <li data-file-icon="folder" th:each="folder: ${folders}">
-                <div>
-                    <i class="fas fa-folder"></i>
-                    <b class="folder-name" th:text="${folder.getName()}"></b>
-                </div>
+            <li data-file-icon="folder" class="existing-folder" th:each="folder: ${folders}">
                 <form th:action="@{/imageview}" method="get">
+                    <div>
+                        <i class="fas fa-folder"></i>
+                        <b class="folder-name" th:text="${folder.getName()}"></b>
+                    </div>
                     <input name="location" type="hidden" th:default="testdata" th:value="${folder.getPath()}">
+                    <input class="last-modified-date" type="hidden" th:value="${ folder.getDateModified()}">
                 </form><br/>
 
             </li>
-            <li data-file-icon="folder" class="folder-creation-container" style="visibility: hidden">
+            <li data-file-icon="folder" class="folder-creation-container" style="display:none">
                 <form th:action="@{/createfolder}" method="post" class="folder-creation-form">
                     <div class="created-folder">
                         <i class="fas fa-folder"></i>
-                        <b><input id="dirInput" name="directoryName" type="text" th:required="true" value="New Folder"></b>
+                        <b class="created-title"><input id="dirInput" name="directoryName" type="text" th:required="true" value="New Folder"></b>
                     </div>
                     <input name="currentPath" type="hidden" th:value="${currentPath}" th:default="testdata">
                     <!--<input type="submit" value="Create Folder here">-->
