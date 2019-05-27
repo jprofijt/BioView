@@ -7,8 +7,8 @@
 <body>
 <div class="folder-container container col-md-4" th:fragment="folder-manager">
     <div th:replace="fragments/folder-manager-navbar"></div>
-    <div class="folder-manager rounded-bottom">
-        <ul id="folders">
+    <div class="folder-manager rounded-bottom context-menu-folder-unselected">
+        <ul id="folders" class="context-menu-two">
             <li data-file-icon="folder" class="existing-folder" th:each="folder: ${folders}">
                 <form th:action="@{/imageview}" method="get">
                     <div>
@@ -30,7 +30,7 @@
                     <!--<input type="submit" value="Create Folder here">-->
                 </form>
             </li>
-            <div th:replace="fragments/context-menu-unselected"></div>
+            <!--<div th:replace="fragments/context-menu-unselected"></div>-->
         </ul>
     </div>
 </div>

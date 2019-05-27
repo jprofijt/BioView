@@ -20,7 +20,7 @@ $(document).on("click", "[data-file-icon] form div", function(e) {
         $(".select").removeClass("select");
         $(this)
             .addClass("select");
-        $('.append-option-box').css("visibility", "hidden");
+        // $('.append-option-box').css("visibility", "hidden");
     }
 });
 
@@ -41,28 +41,24 @@ $(document).on("click", "[data-file-icon] form div", function(e) {
 
 /*---Context Menu ---*/
 
-$(document).on("contextmenu", ".folder-manager", function(e) {
-    var offset = $(".folder-container").offset();
-    var top = e.pageY - offset.top;
-    var left = e.pageX - offset.left;
 
-    $('.append-option-box').css({"visibility" : "visible", "top": top + "px", "left": left+"px"});
-    return false;
-});
+$(function() {
+    $.contextMenu({
+        selector: '.context-menu-folder-unselected',
+        callback: function(key, options) {
+            if (key == "New Folder"){
+                createNewFolder();
+            }
+        },
+        items: {
+            "New Folder": {name: "New Folder", icon: "fas fa-folder-plus"},
+            "move": {name: "move", icon: "fas fa-cut"},
+            copy: {name: "Copy", icon: "fas fa-copy"},
+            "paste": {name: "Paste", icon: "fas fa-paste"},
+            "delete": {name: "Delete", icon: "fas fa-trash-alt"}
+        }
+    });
 
-$(document).on("click contextmenu dblclick", function() {
-    $("[data-file-icon]")
-        .removeClass("select");
-    $('.append-option-box').css("visibility", "hidden");
-});
-$(document).on("click contextmenu", ".append-option-box", function(e) {
-    e.stopPropagation();
-    $("[data-file-icon]")
-        .removeClass("select");
-    $('.append-option-box').css("visibility", "hidden");
-});
-$(document).on("click contextmenu", "[data-file-icon]", function(e) {
-    e.stopPropagation();
 });
 
 
