@@ -65,13 +65,6 @@ $(document).on("click contextmenu", "[data-file-icon]", function(e) {
     e.stopPropagation();
 });
 
-/*---Creates folder with current date as its name---*/
-function createDateFolder() {
-    $('.date-folder-form').submit();
-}
-$(document).on("click", '[data-function="new-date-folder"]',function() {
-    createDateFolder();
-});
 
 /*---Creates new folder that you can name---*/
 function createNewFolder(){
@@ -87,6 +80,10 @@ $(document).on('blur', "#dirInput", function () {
 
 $(document).on("click", '[data-function="new-folder"]',function() {
     createNewFolder();
+    var position = $(".creating").position().top + $('.folder-manager').scrollTop()
+    $('.folder-manager').animate({
+        scrollTop: position
+    }, 1000);
 });
 
 /*---Sort by buttons---*/
