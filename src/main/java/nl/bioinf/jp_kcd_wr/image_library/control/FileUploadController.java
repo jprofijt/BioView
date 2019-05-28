@@ -21,7 +21,7 @@ import nl.bioinf.jp_kcd_wr.image_library.storage.StorageService;
 /**
  * Controller class that handles file upload requests from the upload page
  *
- * @author Kim Chau Duong
+ * @author Kim Chau Duong, Jouke Profijt
  * @version 1.0
  */
 @Controller

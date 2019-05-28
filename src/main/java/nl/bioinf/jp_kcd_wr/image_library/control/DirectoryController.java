@@ -47,7 +47,7 @@ public class DirectoryController {
      * @author Jouke Profijt, Kim Chau Duong
      */
     @PostMapping("/createfolder")
-    public String CreateFolder(@RequestParam(name="directoryName", required=true) String directoryName, @RequestParam(name="currentPath", required=true) String currentPath, Model model) {
+    public String createFolder(@RequestParam(name="directoryName", required=true) String directoryName, @RequestParam(name="currentPath", required=true) String currentPath, Model model) {
         try {
             folderHandler.createNewFolder(directoryName, currentPath);
         } catch (DirectoryExistsException e) {
@@ -61,6 +61,11 @@ public class DirectoryController {
         return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
     }
 
+    @PostMapping("/deletefolder")
+    public String deleteFolder(@RequestParam(name="directory") String directory, Model model) {
+        folderHandler.removeFolder(directory);
+        return "redirect:/imageview?location=" + new File(directory).getParent().replace("\\", "/");
+    }
 
 
 

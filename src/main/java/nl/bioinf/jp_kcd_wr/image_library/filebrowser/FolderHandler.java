@@ -2,6 +2,7 @@ package nl.bioinf.jp_kcd_wr.image_library.filebrowser;
 
 import nl.bioinf.jp_kcd_wr.image_library.model.Directory;
 import nl.bioinf.jp_kcd_wr.image_library.storage.FileSystemStorageService;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -118,27 +119,25 @@ public class FolderHandler implements FolderStructureProvider {
         }
 
 
-
-    @Override
-    public void removeFolder(File directory) {
-       return;
-    }
-
     /**
-     * Creates a directory wht the current date as name
-     * @param currentPath path where directory should be located
-     * @throws DirectoryExistsException when directory exists
-     *
-     * @author Jouke Profijt
+     * Removes selected folder
+     * @param directory the to-be deleted directory
      */
-    public void createDateDirectory(String currentPath) throws DirectoryExistsException{
-        String date = LocalDate.now().toString();
+    @Override
+    public void removeFolder(String directory) {
+        Path path = this.rootLocation.resolve(directory);
         try {
-            this.createNewFolder(date, currentPath);
-        } catch (DirectoryExistsException e){
-            throw new DirectoryExistsException(date + " already has a directory in " + currentPath);
+            logger.log(Level.INFO, "Deleting directory: {0}...", path);
+            FileUtils.deleteDirectory(path.toFile());
+            logger.log(Level.INFO, "Successfully deleted directory!");
+        } catch (IOException e) {
+            logger.log(Level.WARNING, "Directory {0} could not be deleted", path);
         }
+
+
     }
+
+
 
 
 }
