@@ -1,6 +1,7 @@
 package nl.bioinf.jp_kcd_wr.image_library.data_access.jdbc;
 
 import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageDataSource;
+import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageFileType;
 import nl.bioinf.jp_kcd_wr.image_library.model.Image;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -186,6 +187,31 @@ public class ImageDataSourceJdbc implements ImageDataSource {
         String query = "SELECT cache.cache_path from cache INNER JOIN images i on cache.image_id = i.id WHERE i.path = :image_path";
         String result = namedJdbcTemplate.queryForObject(query, parameterSource, String.class);
         return Paths.get(result).getFileName();
+    }
+
+    /**
+     * Inserts new image metadata
+     *
+     * @param id    image id
+     * @param path  image path
+     * @param date  creation date
+     * @param size  image size
+     * @param fileType  image file type
+     *
+     * @author Jouke Profijt
+     */
+    @Override
+    public void insertImageMetaData(int id, String path, String date, long size, ImageFileType fileType) {
+        SqlParameterSource parameterSource = new MapSqlParameterSource()
+                .addValue("id", id)
+                .addValue("path", path)
+                .addValue("date", date)
+                .addValue("size", size)
+                .addValue("fileType", fileType.toString());
+        String query = "insert into images_meta (id, path, date, size, type) values (:id, :path, :date, :size, :fileType)";
+
+        namedJdbcTemplate.update(query, parameterSource);
+
     }
 
 

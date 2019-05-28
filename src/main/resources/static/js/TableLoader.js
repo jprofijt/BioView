@@ -37,10 +37,16 @@ function LoadTagTable(id) {
         crossDomain: true,
         success: function (data) {
             $.each(data.tags, function (tag) {
-                $('#ImageTags-' + id).append("<tr><td>" + data.tags[tag] + "</td></tr>")
+                //$('#ImageTags-' + id).append("<tr><td>" + data.tags[tag] + "</td></tr>")
+                AppendNewTagToTable(id, data.tags[tag]);
             })
         }
     })
+
+}
+
+function AppendNewTagToTable(id, tag) {
+    $('#ImageTags-' + id).append("<tr><td>" + tag + "</td></tr>")
 
 }
 
@@ -55,22 +61,31 @@ function LoadTagTable(id) {
 function AddTag(element, user, id) {
     //const url = 'http://'+document.location.hostname + ':8081/api/tags/';
     const tag = $('#tag-input-' + id).val();
+    console.log(tag);
     const data = {
         id: id,
         tag: tag,
         user: user
     };
+    const TagTable = '#ImageTags-' + id + ' tr > td:contains(' + tag + ')';
 
-    $.ajax({
-        type: "POST",
-        url: url,
-        data: data,
-        success: function () {
-            $('#ImageTags-' + id).append("<tr><td>" + $('#tag-input-' + id).val() + "</td></tr>")
-        },
-        dataType: 'application/json'
-    })
+    if (!$(TagTable).length >= 1) {
+        $('#tag-input-div-' + id).removeClass("has-error");
+        $.ajax({
 
-
+            type: "POST",
+            url: "http://" + document.location.hostname + ":8081/api/tags/image/",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function () {
+                //$('#ImageTags-' + id).append("<tr><td>" + $('#tag-input-' + id).val() + "</td></tr>")
+                AppendNewTagToTable(id, tag)
+            }
+        })
+    } else {
+        $('#tag-input-div-' + id).addClass("has-error");
+    }
 
 }

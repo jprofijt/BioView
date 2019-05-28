@@ -49,7 +49,11 @@
                                                         <p>Description</p>
                                                     </div>
                                                     <div class="col">
-                                                        <table class="table tag-table" th:id="${'ImageTags-' + image.getId()}" th:replace="fragments/tag-table">
+                                                        <table class="table tag-table" th:id="${'ImageTags-' + image.getId()}" th:replace="fragments/tag-table"></table>
+                                                        <div th:id="${'tag-input-div-' + image.getId()}">
+                                                            <input class="newTag col-8" th:id="${'tag-input-' + image.getId()}" type="text">
+                                                            <button class="btn btn-primary col-4" th:onclick="AddTag(this, [[${#httpServletRequest.remoteUser}]], [[${image.getId()}]])">Submit</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

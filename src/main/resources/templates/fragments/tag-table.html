@@ -14,13 +14,10 @@
     </thead>
     <tbody>
     <tr>
-        <td>
-            <label for="newTag"></label>
-            <input class="newTag" th:id="${'tag-input-' + image.getId()}" type="text">
-            <button class="btn btn-primary" th:onclick="AddTag(this, [[${#httpServletRequest.remoteUser}]], [[${image.getId()}]])">Submit</button>
-        </td>
+
     </tr>
     </tbody>
+
 </table>
 
 </body>
