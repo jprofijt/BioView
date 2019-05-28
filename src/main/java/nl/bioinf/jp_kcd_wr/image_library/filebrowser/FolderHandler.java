@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -57,12 +56,17 @@ public class FolderHandler implements FolderStructureProvider {
     private Directory createDirectoryObject(File directory){
         Path relativeDirectory = getRelativePath(directory.getPath());
         String directoryName = directory.getName();
-        String dateModified = getCreationDate(directory);
+        String dateModified = getDateModified(directory);
 
         return new Directory(relativeDirectory, directoryName, dateModified);
     }
 
-    private String getCreationDate(File directory) {
+    /**
+     * Gets the 'last modified' date of a directory'
+     * @param directory
+     * @return date String in yyyy-MM-dd HH:mm:ss
+     */
+    private String getDateModified(File directory) {
         long lastModified = directory.lastModified();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(lastModified);
