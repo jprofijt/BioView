@@ -81,7 +81,8 @@ $(function() {
             "cut": {name: "Cut", icon: "fas fa-cut"},
             copy: {name: "Copy", icon: "fas fa-copy"},
             "paste": {name: "Paste", icon: "fas fa-paste"},
-            "delete": {name: "Delete", icon: "fas fa-trash-alt"}
+            "delete": {name: "Delete", icon: "fas fa-trash-alt"},
+            "properties": {name: "Properties"}
         }
     });
 });

@@ -132,6 +132,13 @@
     /*opacity: 0.5;*/
 /*}*/
 
+.folder-manager-icon {
+    color: #F7D774;
+    font-size: 20px;
+    display: block;
+    vertical-align: middle;
+    margin-right: 5px;
+}
 .folder-navbar > li > .dropdown-menu > div:hover {
     background: #343a4026;
     cursor:pointer;
