@@ -8,10 +8,10 @@
 <div class="folder-container container col-md-4" th:fragment="folder-manager">
     <div th:replace="fragments/folder-manager-navbar"></div>
     <div class="folder-manager rounded-bottom context-menu-folder-unselected">
-        <ul id="folders" class="context-menu-two">
+        <ul id="folders" class="">
             <li data-file-icon="folder" class="existing-folder" th:each="folder: ${folders}">
                 <form th:action="@{/imageview}" method="get">
-                    <div>
+                    <div class="context-menu-folder-selected">
                         <i class="fas fa-folder"></i>
                         <b class="folder-name" th:text="${folder.getName()}"></b>
                     </div>
@@ -22,7 +22,7 @@
             </li>
             <li data-file-icon="folder" class="folder-creation-container" style="display:none">
                 <form th:action="@{/createfolder}" method="post" class="folder-creation-form">
-                    <div class="created-folder">
+                    <div class="created-folder context-menu-folder-selected">
                         <i class="fas fa-folder"></i>
                         <b class="created-title"><input id="dirInput" name="directoryName" type="text" th:required="true" th:value="${date}"></b>
                     </div>
