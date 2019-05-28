@@ -55,14 +55,15 @@ public class DirectoryController {
             logger.log(Level.WARNING, "Folder {0} in {1} already exist", new Object[]{directoryName, currentPath});
             return "directory-error";
         }
-        model.addAttribute("folders", folderHandler.getNextFolders(currentPath));
-        model.addAttribute("currentPath", new File(currentPath.replace("\\", "/")));
+//        model.addAttribute("folders", folderHandler.getNextFolders(currentPath));
+//        model.addAttribute("currentPath", new File(currentPath.replace("\\", "/")));
         logger.log(Level.INFO, "Folders were created successfully!");
         return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
     }
 
-    @PostMapping("/deletefolder")
+    @PostMapping(path = "/deletefolder", consumes = "application/json")
     public String deleteFolder(@RequestParam(name="directory") String directory, Model model) {
+        System.out.println("testing");
         folderHandler.removeFolder(directory);
         return "redirect:/imageview?location=" + new File(directory).getParent().replace("\\", "/");
     }

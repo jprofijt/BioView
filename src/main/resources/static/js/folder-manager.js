@@ -20,7 +20,6 @@ $(document).on("click contextmenu", "[data-file-icon] form div", function(e) {
         $(".select").removeClass("select");
         $(this)
             .addClass("select");
-        // $('.append-option-box').css("visibility", "hidden");
     }
 });
 
@@ -40,8 +39,6 @@ $(document).on("click", "[data-file-icon] form div", function(e) {
 
 
 /*---Context Menu ---*/
-
-
 function pickContextCommand(key) {
     if (key == "new-folder"){
         createNewFolder();
@@ -51,6 +48,9 @@ function pickContextCommand(key) {
     }
     else if (key == "sort-by-date"){
         sortByDate('ul#folders > li', '.last-modified-date')
+    }
+    else if (key == "delete"){
+        deleteSelected()
     }
 }
 
@@ -74,7 +74,7 @@ $(function() {
     $.contextMenu({
         selector: '.context-menu-folder-selected',
         callback: function(key, options) {
-
+            pickContextCommand(key)
         },
         items: {
             "open": {name: "Open", icon: "fas fa-folder-open"},
@@ -136,3 +136,19 @@ function sortByDate(list, element){
 $(document).on("click", '[data-sort="folder-date"]', function () {
     sortByDate('ul#folders > li', '.last-modified-date')
 });
+
+/*--- Delete command---*/
+function deleteSelected() {
+    $('.select').each(function (index) {
+        var directory = $(this).siblings('[name = "location"]').val();
+        $.ajax({
+            type: "POST",
+            url: "/deletefolder",
+            data: {'directory' : directory},
+            success: function(data) {
+                location.reload();
+            }
+        });
+
+    })
+}
