@@ -28,7 +28,7 @@
                                             <div class="container-fluid">
                                                 <div class="row">
                                                     <div class="col">
-                                                        <div class="img-div scene">
+                                                        <div class="img-div scene", th:id="'image-canvas-holder'+${iterStat.count}">
                                                             <canvas class="image-view-canvas" th:id="'canvas' + ${iterStat.count}"></canvas>
                                                             <!--<img class="modal-image" th:id="'image-canvas' + ${iterStat.count}" th:src="${'files/' + image.getActual()}"/>-->
                                                         </div>
