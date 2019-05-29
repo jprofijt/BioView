@@ -6,80 +6,132 @@
  */
 
 // Submits on double click
-$(document).on('dblclick', '.folder-manager ul li', function(e) {
+$(document).on('dblclick', '.folder-manager ul li form div', function(e) {
     $(this).addClass('folder-active');
-    $(this).children('form').submit();
+    $(this).parents('form').submit();
 });
 
 
 // Adds select class to selected folder(s)
-$(document).on("click", "[data-file-icon]", function(e) {
+$(document).on("click contextmenu", "[data-file-icon] form div", function(e) {
     if (e.ctrlKey) {
         $(this).addClass("select");
     } else {
         $(".select").removeClass("select");
         $(this)
-            .addClass("select")
-            .siblings()
-            .removeClass("select");
-        $('.append-option-box').css("visibility", "hidden");
+            .addClass("select");
+        // $('.append-option-box').css("visibility", "hidden");
     }
 });
 
-// Deselects when clicking elsewhere
-$(document).on("click dblclick", function() {
-    $("[data-file-icon]")
+// Deselects (and submits new folder) when clicking elsewhere
+$(document).on("click dblclick", ".folder-manager", function() {
+    $("[data-file-icon] div")
         .removeClass("select");
-    $(".creating").find("form").submit();
 });
 
-$(document).on("click", "[data-file-icon]", function(e) {
+$(document).on("click", "[data-file-icon]", function() {
+    $(".select").removeClass("select");
+});
+
+$(document).on("click", "[data-file-icon] form div", function(e) {
     e.stopPropagation();
 });
 
 
 /*---Context Menu ---*/
 
-$(document).on("contextmenu", ".folder-manager", function(e) {
-    var top = e.pageY;
-    var left = e.pageX;
 
-    $('.append-option-box').css({"visibility" : "visible", "top": top + "px", "left": left+"px"});
-    return false;
-});
-
-$(document).on("click contextmenu dblclick", function() {
-    $("[data-file-icon]")
-        .removeClass("select");
-    $('.append-option-box').css("visibility", "hidden");
-});
-$(document).on("click contextmenu", ".append-option-box", function(e) {
-    e.stopPropagation();
-    $("[data-file-icon]")
-        .removeClass("select");
-    $('.append-option-box').css("visibility", "hidden");
-});
-$(document).on("click contextmenu", "[data-file-icon]", function(e) {
-    e.stopPropagation();
-});
-
-/*---Creates folder with current date as its name---*/
-function createDateFolder() {
-    $('.date-folder-form').submit();
+function pickContextCommand(key) {
+    if (key == "new-folder"){
+        createNewFolder();
+    }
+    else if (key == "sort-by-name"){
+        sortbyName('ul#folders > li', 'b:not(.created-title)')
+    }
+    else if (key == "sort-by-date"){
+        sortByDate('ul#folders > li', '.last-modified-date')
+    }
 }
-$(document).on("click", '[data-function="new-date-folder"]',function() {
-    createDateFolder();
+
+$(function() {
+    $.contextMenu({
+        selector: '.context-menu-folder-unselected',
+        callback: function(key, options) {
+            pickContextCommand(key)
+        },
+        items: {
+            "new-folder": {name: "New Folder", icon: "fas fa-folder-plus"},
+            "sort-by": {name: "Sort By", icon: "fas fa-sort",
+                items: {
+                "sort-by-name": {name: "Name"},
+                "sort-by-date": {name: "Date"}
+                }
+            },
+            "paste": {name: "Paste", icon: "fas fa-paste"}
+        }
+    });
+    $.contextMenu({
+        selector: '.context-menu-folder-selected',
+        callback: function(key, options) {
+
+        },
+        items: {
+            "open": {name: "Open", icon: "fas fa-folder-open"},
+            "cut": {name: "Cut", icon: "fas fa-cut"},
+            copy: {name: "Copy", icon: "fas fa-copy"},
+            "paste": {name: "Paste", icon: "fas fa-paste"},
+            "delete": {name: "Delete", icon: "fas fa-trash-alt"}
+        }
+    });
 });
+
 
 /*---Creates new folder that you can name---*/
 function createNewFolder(){
     $(".creating").removeClass("creating");
-    $(".folder-creation-container").css("visibility", "visible");
+    $(".folder-creation-container").css("display", "inline-block");
     $(".folder-creation-container").addClass("creating");
     $("#dirInput").select().focus();
-
+    var position = $(".creating").position().top + $('.folder-manager').scrollTop()
+    $('.folder-manager').animate({
+        scrollTop: position
+    }, 1000);
 }
+/*---Creates folder when clicking away from input---*/
+$(document).on('blur', "#dirInput", function () {
+    $(".creating").find("form").submit();
+});
 
 $(document).on("click", '[data-function="new-folder"]',function() {
     createNewFolder();
+});
+
+/*---Sort by buttons---*/
+var nameOrder = 'asc';
+function sortbyName(list, element){
+    tinysort(list,{selector : element, order : nameOrder});
+    if (nameOrder === 'asc') {
+        nameOrder = 'desc'
+    }
+    else {
+        nameOrder = 'asc'
+    }
+}
+$(document).on("click", '[data-sort="folder-name"]', function () {
+    sortbyName('ul#folders > li', 'b:not(.created-title)')
+});
+
+var dateOrder = 'asc';
+function sortByDate(list, element){
+    tinysort(list,{selector : element, attr:'value', order : dateOrder});
+    if (dateOrder === 'asc') {
+        dateOrder = 'desc'
+    }
+    else {
+        dateOrder = 'asc'
+    }
+}
+$(document).on("click", '[data-sort="folder-date"]', function () {
+    sortByDate('ul#folders > li', '.last-modified-date')
 });

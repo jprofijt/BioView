@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav class="folder-navbar navbar navbar-expand-md navbar-dark bg-dark">
+    <a class="navbar-brand">Menu</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#folder-manager-navbar-collapse"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="folder-manager-navbar-collapse">
+        <ul class="navbar-nav mr-auto folder-navbar">
+            <li class="nav-item">
+                <button class="btn nav-link"  data-function="new-folder">New Folder</button>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="folder-sort-nav" data-function="sort-folders" role="button"
+                   data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false">Sort by</a>
+                <div class="dropdown-menu" aria-labelledby="myaccount">
+                    <div class="dropdown-item" data-sort="folder-name">Name</div>
+                    <div class="dropdown-item" data-sort="folder-date">Date</div>
+                </div>
+                <div class="dropdown-menu"></div>
+            </li>
+        </ul>
+    </div>
+</nav>
+</body>
+</html>

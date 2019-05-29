@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
 <main th:fragment="images-window">
+    <script th:src="@{/js/TableLoader.js}"></script>
     <div class="container-fluid mt-4 mb-4">
         <div th:replace="fragments/breadcrumbs"></div>
         <div class="row justify-content-around">
@@ -27,11 +28,18 @@
                                         <div class="modal-body">
                                             <div class="container-fluid">
                                                 <div class="row">
-                                                    <div class="col">
+                                                    <div class="col-6">
                                                         <!--<input type="button" value="reset zoom" th:onclick="resetZoom([[${iterStat.count}]])">-->
                                                         <div class="img-div scene", th:id="'image-canvas-holder'+${iterStat.count}">
                                                             <canvas class="image-view-canvas" th:id="'canvas' + ${iterStat.count}"></canvas>
                                                             <!--<img class="modal-image" th:id="'image-canvas' + ${iterStat.count}" th:src="${'files/' + image.getActual()}"/>-->
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <table class="table tag-table" th:id="${'ImageTags-' + image.getId()}" th:replace="fragments/tag-table"></table>
+                                                        <div class="new-tag-input" th:id="${'tag-input-div-' + image.getId()}">
+                                                            <input class="newTag" th:id="${'tag-input-' + image.getId()}" type="text">
+                                                            <button class="btn-sm btn-primary" th:onclick="AddTag(this, [[${#httpServletRequest.remoteUser}]], [[${image.getId()}]])">Add new tag</button>
                                                         </div>
                                                     </div>
                                                     <div class="col">
@@ -42,10 +50,7 @@
                                                     <div class="col">
                                                         <p>Description</p>
                                                     </div>
-                                                    <div class="col">
-                                                        <p>Tags</p>
 
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

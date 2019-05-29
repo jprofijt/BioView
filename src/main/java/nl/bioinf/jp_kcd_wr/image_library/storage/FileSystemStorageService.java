@@ -9,8 +9,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,7 +22,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageDataSource;
+import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageFileType;
 import nl.bioinf.jp_kcd_wr.image_library.model.Image;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
@@ -156,16 +161,21 @@ public class FileSystemStorageService implements StorageService {
                                 + filename);
             }
             try (InputStream inputStream = file.getInputStream()) {
-                String newFilename = getNewName(filename);
-                String directoryPath = this.getRootLocation().toString()+"/" + directory +"/";
-                Path filePath = Paths.get(directoryPath + newFilename);
+                Path directoryPath = this.rootLocation.resolve(directory.toPath());
+                String newFilename = getNewName(filename, directoryPath);
+                Path filePath = directoryPath.resolve(newFilename);
                 Files.copy(inputStream, filePath, // 'copies' file to upload-dir using the rootLocation and filename
                         StandardCopyOption.REPLACE_EXISTING);                // file of same name in upload-dir will be overwritten
 
                 Image image = createImageData(filename, newFilename, filePath);
+                filePath.toFile().setExecutable(true, false);
+                filePath.toFile().setReadable(true, false);
+                filePath.toFile().setWritable(true, false);
 
                 imageDataSource.insertImage(image);
-                createThumbnails(new File(directoryPath));
+                createThumbnails(directoryPath.toFile());
+                String sqlDate = "yyyy-MM-dd HH:mm:ss";
+                createMetaData(image, LocalDateTime.now().format(DateTimeFormatter.ofPattern(sqlDate)));
 
             }
         }
@@ -175,6 +185,29 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 
+    private ImageFileType getFileTypeEnum(String extention){
+        if (extention.toLowerCase() == ".jpg"){
+            return ImageFileType.JPG;
+        }
+        if (extention.toLowerCase() == ".tiff"){
+            return ImageFileType.TIFF;
+        }
+        else {
+            return ImageFileType.PNG;
+        }
+    }
+    private void createMetaData(Image image, String date) {
+
+        String path = image.getPath();
+        int id = imageDataSource.getImageIdFromPath(path);
+        File ImageFile = new File(path);
+        long size = ImageFile.length();
+        ImageFileType fileType = getFileTypeEnum(FilenameUtils.getExtension(path));
+
+
+        imageDataSource.insertImageMetaData(id, path, date, size, fileType);
+    }
+
     /**
      * Gives the file a new name with a number attached in case it already exists
      * @param filename name of the uploaded file
@@ -182,9 +215,8 @@ public class FileSystemStorageService implements StorageService {
      *
      * @author Kim Chau Duong
      */
-    @Override
-    public String getNewName(String filename) {
-        if (Files.exists(this.rootLocation.resolve(filename))){
+    private String getNewName(String filename, Path directoryPath) {
+        if (Files.exists(directoryPath.resolve(filename))){
             Matcher m = PATTERN.matcher(filename);
             if (m.matches()){
                 String prefix = m.group(1);
@@ -198,7 +230,7 @@ public class FileSystemStorageService implements StorageService {
                 do {
                     count++;
                     filename = prefix + "(" + count + ")" + suffix;
-                } while (Files.exists(this.rootLocation.resolve(filename)));
+                } while (Files.exists(directoryPath.resolve(filename)));
             }
         }
         return filename;
@@ -410,11 +442,14 @@ public class FileSystemStorageService implements StorageService {
     private void IndexImages(File directory){
 
         for (File image : directory.listFiles(File::isFile)) {
+
             Image anotatedImage = new Image();
             anotatedImage.setPath(image.getPath());
             anotatedImage.setOrigName(image.getName());
             anotatedImage.setNewFilename(image.getName());
             imageDataSource.insertImage(anotatedImage);
+
+
         }
     }
 

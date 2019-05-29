@@ -1,6 +1,7 @@
 package nl.bioinf.jp_kcd_wr.image_library.filebrowser;
 
 import nl.bioinf.jp_kcd_wr.image_library.model.Directory;
+import nl.bioinf.jp_kcd_wr.image_library.storage.FileSystemStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -10,8 +11,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Class that implements folderStructureProvider
@@ -22,10 +27,13 @@ import java.util.ArrayList;
 @Service
 public class FolderHandler implements FolderStructureProvider {
     private final Path rootLocation;
+    private static final Logger logger = Logger.getLogger(FileSystemStorageService.class.getName());
+
 
     @Autowired
     public FolderHandler(Environment environment){
         this.rootLocation = Paths.get(environment.getProperty("library.upload"));
+        logger.log(Level.INFO, "Starting FileSystemStorage service using {0} as root location", new Object[] {this.rootLocation});
     }
 
     /**
@@ -47,11 +55,17 @@ public class FolderHandler implements FolderStructureProvider {
      * @author Kim Chau Duong
      */
     private Directory createDirectoryObject(File directory){
-        Directory newDirectory = new Directory();
-        newDirectory.setName(directory.getName());
         Path relativeDirectory = getRelativePath(directory.getPath());
-        newDirectory.setPath(relativeDirectory);
-        return newDirectory;
+        String directoryName = directory.getName();
+        String dateModified = getCreationDate(directory);
+
+        return new Directory(relativeDirectory, directoryName, dateModified);
+    }
+
+    private String getCreationDate(File directory) {
+        long lastModified = directory.lastModified();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(lastModified);
     }
 
     /**
@@ -88,7 +102,12 @@ public class FolderHandler implements FolderStructureProvider {
         File newDir = new File(path);
         try {
             Files.createDirectory(newDir.toPath());
+            newDir.setWritable(true, false);
+            newDir.setReadable(true, false);
+            newDir.setExecutable(true, false);
+
         } catch (IOException e){
+            e.printStackTrace();
             throw new DirectoryExistsException("Directory " + directoryName + " already exists");
         }
 

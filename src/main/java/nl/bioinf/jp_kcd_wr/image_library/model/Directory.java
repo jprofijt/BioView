@@ -13,6 +13,7 @@ import java.nio.file.Path;
 public class Directory {
     private Path path;
     private String name;
+    private String dateModified;
 
     public Path getPath() {
         return path;
@@ -30,9 +31,18 @@ public class Directory {
         this.name = name;
     }
 
-    public Directory(Path path, String name) {
+    public String getDateModified() {
+        return dateModified;
+    }
+
+    public void setDateModified(String dateModified) {
+        this.dateModified = dateModified;
+    }
+
+    public Directory(Path path, String name, String dateModified) {
         this.path = path;
         this.name = name;
+        this.dateModified = dateModified;
     }
 
     public Directory() {
