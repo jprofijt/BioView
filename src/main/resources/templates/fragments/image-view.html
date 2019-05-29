@@ -28,6 +28,7 @@
                                             <div class="container-fluid">
                                                 <div class="row">
                                                     <div class="col">
+                                                        <!--<input type="button" value="reset zoom" th:onclick="resetZoom([[${iterStat.count}]])">-->
                                                         <div class="img-div scene", th:id="'image-canvas-holder'+${iterStat.count}">
                                                             <canvas class="image-view-canvas" th:id="'canvas' + ${iterStat.count}"></canvas>
                                                             <!--<img class="modal-image" th:id="'image-canvas' + ${iterStat.count}" th:src="${'files/' + image.getActual()}"/>-->
@@ -55,54 +56,54 @@
                                 </div>
                             </div>
                         </li>
-                        <!-- Modal -->
-                        <div id='myModal' class="modal fade image-modal" role="dialog">
-                            <div class="modal-dialog modal-dialog-bioview modal-dialog-scrollable">
+                        <!--&lt;!&ndash; Modal &ndash;&gt;-->
+                        <!--<div id='myModal' class="modal fade image-modal" role="dialog">-->
+                            <!--<div class="modal-dialog modal-dialog-bioview modal-dialog-scrollable">-->
 
-                                <!-- Modal content-->
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Image editor</h4>
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="container-fluid">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <div class="navi-bar">
-                                                    </div>
-                                                    <div class="img-div scene">
-                                                        <canvas class="image-view-canvas" th:id="'canvas'"></canvas>
-                                                        <!--<img class="modal-image" th:id="'image-canvas' + ${iterStat.count}" th:src="${'files/' + image.getActual()}"/>-->
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <p>ROI's</p>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col">
-                                                    <p>Description</p>
-                                                </div>
-                                                <div class="col">
-                                                    <p>Tags</p>
+                                <!--&lt;!&ndash; Modal content&ndash;&gt;-->
+                                <!--<div class="modal-content">-->
+                                    <!--<div class="modal-header">-->
+                                        <!--<h4 class="modal-title">Image editor</h4>-->
+                                        <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
+                                    <!--</div>-->
+                                    <!--<div class="modal-body">-->
+                                        <!--<div class="container-fluid">-->
+                                            <!--<div class="row">-->
+                                                <!--<div class="col">-->
+                                                    <!--<div class="navi-bar">-->
+                                                    <!--</div>-->
+                                                    <!--<div class="img-div scene">-->
+                                                        <!--&lt;!&ndash;<canvas class="image-view-canvas" th:id="'canvas'"></canvas>&ndash;&gt;-->
+                                                        <!--&lt;!&ndash;<img class="modal-image" th:id="'image-canvas' + ${iterStat.count}" th:src="${'files/' + image.getActual()}"/>&ndash;&gt;-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                                <!--<div class="col">-->
+                                                    <!--<p>ROI's</p>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                            <!--<div class="row">-->
+                                                <!--<div class="col">-->
+                                                    <!--<p>Description</p>-->
+                                                <!--</div>-->
+                                                <!--<div class="col">-->
+                                                    <!--<p>Tags</p>-->
 
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-                        </div>
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="modal-footer">-->
+                                    <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
 
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+                    <!--</ul>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
 
     <div th:replace="fragments/upload-form" class="modal fade" id="UploadModal" tabindex="-2" role="dialog" aria-labelledby="UploadModalLable" aria-hidden="true">
     </div>
