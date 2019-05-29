@@ -9,13 +9,8 @@
     </button>
     <div class="collapse navbar-collapse" id="folder-manager-navbar-collapse">
         <ul class="navbar-nav mr-auto folder-navbar">
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="folder-create-nav" data-function="sort-folders" role="button"
-                   data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false">New</a>
-                <div class="dropdown-menu" aria-labelledby="folder-create-nav">
-                    <div class="dropdown-item" data-function="new-folder">Folder</div>
-                    <div class="dropdown-item" data-function="new-date-folder" th:text="${'Folder ('+date+')'}">Folder(date)</div>
-                </div>
+            <li class="nav-item">
+                <button class="btn nav-link"  data-function="new-folder">New Folder</button>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="folder-sort-nav" data-function="sort-folders" role="button"
