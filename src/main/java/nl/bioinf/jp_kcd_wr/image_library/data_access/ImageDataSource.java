@@ -3,7 +3,6 @@ package nl.bioinf.jp_kcd_wr.image_library.data_access;
 import nl.bioinf.jp_kcd_wr.image_library.model.Image;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,4 +29,6 @@ public interface ImageDataSource {
     Path getThumbnailPath(int ImageId);
 
     Path getThumbnailPathFromImagePath(String PathToImage);
+
+    void insertImageMetaData(int id, String path, String date, long size, ImageFileType fileType);
 }

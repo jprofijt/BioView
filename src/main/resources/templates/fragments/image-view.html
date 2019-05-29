@@ -31,13 +31,20 @@
                                         <div class="modal-body">
                                             <div class="container-fluid">
                                                 <div class="row">
-                                                    <div class="col">
+                                                    <div class="col-6">
                                                         <div class="navi-bar">
                                                             <button type="button" th:onclick="zoomin([[${iterStat.count}]])">Zoom In</button>
                                                             <button type="button" th:onclick="zoomout([[${iterStat.count}]])">Zoom Out</button>
                                                         </div>
                                                         <div class="img-div dragscroll">
                                                             <img class="modal-image" th:id="'image-to-zoom' + ${iterStat.count}" th:src="${'files/' + image.getActual()}"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <table class="table tag-table" th:id="${'ImageTags-' + image.getId()}" th:replace="fragments/tag-table"></table>
+                                                        <div class="new-tag-input" th:id="${'tag-input-div-' + image.getId()}">
+                                                            <input class="newTag" th:id="${'tag-input-' + image.getId()}" type="text">
+                                                            <button class="btn-sm btn-primary" th:onclick="AddTag(this, [[${#httpServletRequest.remoteUser}]], [[${image.getId()}]])">Add new tag</button>
                                                         </div>
                                                     </div>
                                                     <div class="col">
@@ -48,18 +55,7 @@
                                                     <div class="col">
                                                         <p>Description</p>
                                                     </div>
-                                                    <div class="col">
-                                                        <table class="table tag-table" th:id="${'ImageTags-' + image.getId()}">
-                                                            <thead>
-                                                            <tr>
-                                                                <th scope="col">Tags</th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            </tbody>
-                                                        </table>
 
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
