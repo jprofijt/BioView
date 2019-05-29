@@ -138,17 +138,31 @@ $(document).on("click", '[data-sort="folder-date"]', function () {
 });
 
 /*--- Delete command---*/
+// Spring csrf token
+$(function () {
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+    $(document).ajaxSend(function(e, xhr, options) {
+        xhr.setRequestHeader(header, token);
+    });
+});
+
 function deleteSelected() {
-    $('.select').each(function (index) {
+    $.when( $('.select').each(function (index) {
         var directory = $(this).siblings('[name = "location"]').val();
+        console.log(directory);
         $.ajax({
             type: "POST",
             url: "/deletefolder",
-            data: {'directory' : directory},
-            success: function(data) {
-                location.reload();
-            }
+            dataType: "text",
+            data: {'directory' : directory}
         });
 
     })
+    ).then( function() {
+        location.reload();
+    })
+
+
+
 }

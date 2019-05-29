@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Folder Manager</title>
+    <head>
+        <meta name="_csrf" th:content="${_csrf.token}"/>
+        <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    </head>
 </head>
 <body>
 <div class="folder-container container col-md-4" th:fragment="folder-manager">

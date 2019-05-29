@@ -61,11 +61,11 @@ public class DirectoryController {
         return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
     }
 
-    @PostMapping(path = "/deletefolder", consumes = "application/json")
-    public String deleteFolder(@RequestParam(name="directory") String directory, Model model) {
-        System.out.println("testing");
+    @PostMapping("/deletefolder")
+    @ResponseBody
+    public String deleteFolder(@RequestParam String directory) {
         folderHandler.removeFolder(directory);
-        return "redirect:/imageview?location=" + new File(directory).getParent().replace("\\", "/");
+        return "success";
     }
 
 
