@@ -8,7 +8,7 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="folder-manager-navbar-collapse">
-        <ul class="navbar-nav mr-auto folder-navbar">
+        <ul class="navbar-nav mr-auto folder-navbar-unselected">
             <li class="nav-item">
                 <button class="btn nav-link"  data-function="new-folder">New Folder</button>
             </li>
@@ -20,6 +20,11 @@
                     <div class="dropdown-item" data-sort="folder-date">Date</div>
                 </div>
                 <div class="dropdown-menu"></div>
+            </li>
+        </ul>
+        <ul class="navbar-nav mr-auto folder-navbar-selected">
+            <li class="nav-item">
+                <button class="btn nav-link"  data-function="delete-folder"><i class="fas fa-trash-alt"></i> Delete</button>
             </li>
         </ul>
     </div>
