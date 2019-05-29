@@ -88,14 +88,14 @@ create table tags(
 create table image_tags(
    image_id    int             not null,
    image_tag   varchar(100)    not null,
-   foreign key (image_id)  references images_meta(id),
+   foreign key (image_id)  references images(id),
    foreign key (image_tag) references tags(tag)
 );
 
 create table image_annotation(
     image_id    int             not null,
     annotation        varchar(500)    not null,
-    foreign key (image_id)  references images_meta(id)
+    foreign key (image_id)  references images(id)
 );
 
 create table image_roi(
@@ -104,7 +104,7 @@ create table image_roi(
   y1          int     not null,
   x2          int     not null,
   y2          int     not null,
-  foreign key (image_id) references images_meta(id)
+  foreign key (image_id) references images(id)
 );
 
 create table image_values(
@@ -113,5 +113,5 @@ create table image_values(
  T           int,
  o2          int,
  co2         int,
- foreign key (image_id) references images_meta(id)
+ foreign key (image_id) references images(id)
 );

@@ -1,9 +1,14 @@
 /**
- * For every image table, load image tags from API
+ * Handles all user tag interaction with api
+ *
+ * @author Jouke Profijt
  */
+
+
 $(document).ready(function () {
+
         $('.tag-table').each(function () {
-            let id = $(this).attr('id').slice(-1);
+            let id = $(this).attr('id').replace("ImageTags-", "");
             new LoadTagTable(id);
             console.log(id);
         });
@@ -31,6 +36,7 @@ $(document).ready(function () {
  */
 function LoadTagTable(id) {
     const url = "http://"+document.location.hostname + ":8081/api/tags/image/?image=" + id.toString();
+
     $.ajax({
         url: url,
         type: "GET",
@@ -38,13 +44,21 @@ function LoadTagTable(id) {
         success: function (data) {
             $.each(data.tags, function (tag) {
                 //$('#ImageTags-' + id).append("<tr><td>" + data.tags[tag] + "</td></tr>")
+                console.log("appending new " + data.tags);
                 AppendNewTagToTable(id, data.tags[tag]);
+
             })
         }
     })
 
 }
 
+/**
+ * Appends a new tag to the existing tag table for user only
+ * @param id image id
+ * @param tag tag to be added
+ * @constructor
+ */
 function AppendNewTagToTable(id, tag) {
     $('#ImageTags-' + id).append("<tr><td>" + tag + "</td></tr>")
 
@@ -81,7 +95,8 @@ function AddTag(element, user, id) {
             async: true,
             success: function () {
                 //$('#ImageTags-' + id).append("<tr><td>" + $('#tag-input-' + id).val() + "</td></tr>")
-                AppendNewTagToTable(id, tag)
+                new AppendNewTagToTable(id, tag);
+                $('#tag-input-' + id).val("")
             }
         })
     } else {
