@@ -101,7 +101,6 @@ function resetZoom(id){
 //this code should compensate for the bug for now
 //
 //
-// //TODO: viewport veranderen zodat hij niet overal heen schiet als je img aanklikt.
 // // this.viewportTransform[4] += e.clientX - this.lastPosX;
 // // this.viewportTransform[5] += e.clientY - this.lastPosY;
 // // this.requestRenderAll();

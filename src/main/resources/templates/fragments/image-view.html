@@ -29,6 +29,8 @@
                                             <div class="container-fluid">
                                                 <div class="row">
                                                     <div class="col-6">
+                                                        <button id="poly" title="Draw Polygon">Draw Polygon </button>
+                                                        <label style="color:blue"><b>Double click to close shape and stop</b></label>
                                                         <!--<input type="button" value="reset zoom" th:onclick="resetZoom([[${iterStat.count}]])">-->
                                                         <div class="img-div scene", th:id="'image-canvas-holder'+${iterStat.count}">
                                                             <canvas class="image-view-canvas" th:id="'canvas' + ${iterStat.count}"></canvas>
