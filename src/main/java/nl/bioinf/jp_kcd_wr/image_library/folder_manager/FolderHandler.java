@@ -54,7 +54,7 @@ public class FolderHandler implements FolderStructureProvider {
      * @author Kim Chau Duong
      */
     private Directory createDirectoryObject(File directory){
-        Path relativeDirectory = getRelativePath(directory.getPath());
+        String relativeDirectory = getRelativePath(directory.getPath()).toString();
         String directoryName = directory.getName();
         String dateModified = getDateModified(directory);
 

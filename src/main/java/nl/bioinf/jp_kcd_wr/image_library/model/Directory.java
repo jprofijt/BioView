@@ -11,15 +11,15 @@ import java.nio.file.Path;
  * All rights reserved
  */
 public class Directory {
-    private Path path;
+    private String path;
     private String name;
     private String dateModified;
 
-    public Path getPath() {
+    public String getPath() {
         return path;
     }
 
-    public void setPath(Path path) {
+    public void setPath(String path) {
         this.path = path;
     }
 
@@ -39,7 +39,7 @@ public class Directory {
         this.dateModified = dateModified;
     }
 
-    public Directory(Path path, String name, String dateModified) {
+    public Directory(String path, String name, String dateModified) {
         this.path = path;
         this.name = name;
         this.dateModified = dateModified;
