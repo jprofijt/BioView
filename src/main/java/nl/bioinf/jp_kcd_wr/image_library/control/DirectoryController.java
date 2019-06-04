@@ -1,23 +1,15 @@
 package nl.bioinf.jp_kcd_wr.image_library.control;
 
-import nl.bioinf.jp_kcd_wr.image_library.breadcrumbs.BreadcrumbBuilder;
-import nl.bioinf.jp_kcd_wr.image_library.filebrowser.DirectoryExistsException;
-import nl.bioinf.jp_kcd_wr.image_library.filebrowser.FolderHandler;
-import nl.bioinf.jp_kcd_wr.image_library.storage.StorageService;
+import nl.bioinf.jp_kcd_wr.image_library.folder_manager.DirectoryExistsException;
+import nl.bioinf.jp_kcd_wr.image_library.folder_manager.FolderHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
-import java.io.File;
-import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
+
 
 /**
  * Controller that handles storage interaction by users
