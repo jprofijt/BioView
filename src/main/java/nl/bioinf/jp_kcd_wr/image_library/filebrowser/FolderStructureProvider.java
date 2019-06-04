@@ -30,7 +30,7 @@ public interface FolderStructureProvider {
      * Remove directory if the user has the permissions and if the directory is empty
      * @param pathToDirectory path to directory that needs to be removed
      */
-    void removeFolder(File pathToDirectory);
+    void removeFolder(String pathToDirectory);
 
 
 }
