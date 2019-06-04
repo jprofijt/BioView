@@ -2,6 +2,7 @@ package nl.bioinf.jp_kcd_wr.image_library.filebrowser;
 
 import nl.bioinf.jp_kcd_wr.image_library.model.Directory;
 import nl.bioinf.jp_kcd_wr.image_library.storage.FileSystemStorageService;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -57,12 +57,17 @@ public class FolderHandler implements FolderStructureProvider {
     private Directory createDirectoryObject(File directory){
         Path relativeDirectory = getRelativePath(directory.getPath());
         String directoryName = directory.getName();
-        String dateModified = getCreationDate(directory);
+        String dateModified = getDateModified(directory);
 
         return new Directory(relativeDirectory, directoryName, dateModified);
     }
 
-    private String getCreationDate(File directory) {
+    /**
+     * Gets the 'last modified' date of a directory'
+     * @param directory
+     * @return date String in yyyy-MM-dd HH:mm:ss
+     */
+    private String getDateModified(File directory) {
         long lastModified = directory.lastModified();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(lastModified);
@@ -114,27 +119,23 @@ public class FolderHandler implements FolderStructureProvider {
         }
 
 
-
-    @Override
-    public void removeFolder(File directory) {
-       return;
-    }
-
     /**
-     * Creates a directory wht the current date as name
-     * @param currentPath path where directory should be located
-     * @throws DirectoryExistsException when directory exists
+     * Removes selected folder
+     * @param directory the to-be deleted directory
      *
-     * @author Jouke Profijt
+     * @author Kim Chau Duong
      */
-    public void createDateDirectory(String currentPath) throws DirectoryExistsException{
-        String date = LocalDate.now().toString();
+    @Override
+    public void removeFolder(String directory) {
+        Path path = this.rootLocation.resolve(directory);
         try {
-            this.createNewFolder(date, currentPath);
-        } catch (DirectoryExistsException e){
-            throw new DirectoryExistsException(date + " already has a directory in " + currentPath);
+            logger.log(Level.INFO, "Deleting directory: {0}", directory);
+            FileUtils.deleteDirectory(path.toFile());
+            logger.log(Level.INFO, "Successfully deleted {0}!", directory);
+        } catch (IOException e) {
+            logger.log(Level.WARNING, "Directory {0} could not be deleted", directory);
         }
-    }
 
+    }
 
 }
