@@ -122,22 +122,20 @@ public class FolderHandler implements FolderStructureProvider {
     /**
      * Removes selected folder
      * @param directory the to-be deleted directory
+     *
+     * @author Kim Chau Duong
      */
     @Override
     public void removeFolder(String directory) {
         Path path = this.rootLocation.resolve(directory);
         try {
-            logger.log(Level.INFO, "Deleting directory: {0}...", path);
+            logger.log(Level.INFO, "Deleting directory: {0}", directory);
             FileUtils.deleteDirectory(path.toFile());
             logger.log(Level.INFO, "Successfully deleted directory!");
         } catch (IOException e) {
-            logger.log(Level.WARNING, "Directory {0} could not be deleted", path);
+            logger.log(Level.WARNING, "Directory {0} could not be deleted", directory);
         }
 
-
     }
-
-
-
 
 }

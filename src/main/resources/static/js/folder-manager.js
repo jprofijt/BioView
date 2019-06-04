@@ -12,7 +12,7 @@ $(document).on('dblclick', '.folder-manager ul li form div', function(e) {
 });
 
 
-// Adds select class to selected folder(s)
+// Adds select class to selected folder(s) and shows the select navbar
 $(document).on("click contextmenu", "[data-file-icon] form div", function(e) {
     if (e.ctrlKey) {
         $(this).addClass("select");
@@ -20,13 +20,17 @@ $(document).on("click contextmenu", "[data-file-icon] form div", function(e) {
         $(".select").removeClass("select");
         $(this)
             .addClass("select");
+        $('.folder-navbar-unselected').hide();
+        $('.folder-navbar-selected').show();
     }
 });
 
-// Deselects (and submits new folder) when clicking elsewhere
+// Deselects (and submits new folder) when clicking elsewhere and shows the default unselected navbar
 $(document).on("click dblclick", ".folder-manager", function() {
     $("[data-file-icon] div")
         .removeClass("select");
+    $('.folder-navbar-selected').hide();
+    $('.folder-navbar-unselected').show();
 });
 
 $(document).on("click", "[data-file-icon]", function() {
@@ -67,8 +71,7 @@ $(function() {
                 "sort-by-name": {name: "Name"},
                 "sort-by-date": {name: "Date"}
                 }
-            },
-            "paste": {name: "Paste", icon: "fas fa-paste"}
+            }
         }
     });
     $.contextMenu({
@@ -138,17 +141,35 @@ $(document).on("click", '[data-sort="folder-date"]', function () {
 });
 
 /*--- Delete command---*/
+// Spring csrf token
+$(function () {
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+    $(document).ajaxSend(function(e, xhr, options) {
+        xhr.setRequestHeader(header, token);
+    });
+});
+
 function deleteSelected() {
-    $('.select').each(function (index) {
+    $.when( $('.select').each(function (index) {
         var directory = $(this).siblings('[name = "location"]').val();
+        console.log(directory);
         $.ajax({
             type: "POST",
             url: "/deletefolder",
+            dataType: "text",
             data: {'directory' : directory},
-            success: function(data) {
-                location.reload();
-            }
+            success: function (data) {
+                console.log("success");
+            },
+            error: function(xhr, desc, err) {
+                console.log(xhr);
+                console.log("Details0: " + desc + "\nError:" + err);
+            },
         });
 
+        })
+    ).then( function() {
+        window.location = window.location
     })
 }

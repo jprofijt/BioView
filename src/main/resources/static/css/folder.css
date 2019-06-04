@@ -139,7 +139,19 @@
     vertical-align: middle;
     margin-right: 5px;
 }
-.folder-navbar > li > .dropdown-menu > div:hover {
+
+.folder-navbar-unselected > li > .dropdown-menu > div:hover {
+    background: #343a4026;
+    cursor:pointer;
+}
+
+.folder-navbar-selected{
+    display: none;
+}
+.folder-navbar-selected li{
+    display: inline;
+}
+.folder-navbar-selected > li > .dropdown-menu > .div:hover {
     background: #343a4026;
     cursor:pointer;
 }
