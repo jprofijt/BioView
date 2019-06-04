@@ -11,17 +11,28 @@ $(document).on('dblclick', '.folder-manager ul li form div', function(e) {
     $(this).parents('form').submit();
 });
 
+// Shows the folder select navbar
+function showFolderSelectNav() {
+    $('.folder-navbar-unselected').hide();
+    $('.folder-navbar-selected').show();
+}
+
+// Shows the folder unselect navbar
+function showFolderUnselectNav(){
+    $('.folder-navbar-selected').hide();
+    $('.folder-navbar-unselected').show();
+}
 
 // Adds select class to selected folder(s) and shows the select navbar
 $(document).on("click contextmenu", "[data-file-icon] form div", function(e) {
     if (e.ctrlKey) {
         $(this).addClass("select");
+        showFolderSelectNav();
     } else {
         $(".select").removeClass("select");
         $(this)
             .addClass("select");
-        $('.folder-navbar-unselected').hide();
-        $('.folder-navbar-selected').show();
+        showFolderSelectNav();
     }
 });
 
@@ -29,8 +40,7 @@ $(document).on("click contextmenu", "[data-file-icon] form div", function(e) {
 $(document).on("click dblclick", ".folder-manager", function() {
     $("[data-file-icon] div")
         .removeClass("select");
-    $('.folder-navbar-selected').hide();
-    $('.folder-navbar-unselected').show();
+    showFolderUnselectNav();
 });
 
 $(document).on("click", "[data-file-icon]", function() {
@@ -169,8 +179,7 @@ function deleteSelected() {
         })
     $('.select').parents('li').css("display", "none");
     $(".select").removeClass("select");
-    $('.folder-navbar-selected').hide();
-    $('.folder-navbar-unselected').show();
+    showFolderUnselectNav();
 }
 
 $(document).on("click", '[data-function="delete-folder"]', function () {
