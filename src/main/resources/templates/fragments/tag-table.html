@@ -5,16 +5,19 @@
     <title>Tag Table fragment</title>
 </head>
 <body>
-<table th:fragment="tag-table" class="table tag-table" th:id="${'ImageTags-' + image.getId()}">
+<table th:fragment="tag-table" class="table tag-table" th:id="${'ImageRois-' + image.getId()}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
     <thead class="thead-dark">
     <tr>
-        <th scope="col">Tags</th>
+        <th scope="col">#</th>
+        <th scope="col">Ph</th>
+        <th scope="col">T</th>
+        <th scope="col">O2</th>
+        <th scope="col">CO2</th>
     </tr>
     </thead>
     <tbody>
     <tr>
-
     </tr>
     </tbody>
 

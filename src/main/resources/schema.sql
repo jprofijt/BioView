@@ -4,6 +4,7 @@
  */
 drop table if exists image_annotation;
 drop table if exists image_values;
+drop table if exists ROI_STATE;
 drop table if exists image_roi;
 drop table if exists image_tags;
 
@@ -107,11 +108,13 @@ create table image_roi(
   foreign key (image_id) references images(id)
 );
 
-create table image_values(
+create table ROI_STATE(
  image_id    int     not null,
+ roi_id      int     not null,
  ph          double,
  T           int,
  o2          int,
  co2         int,
- foreign key (image_id) references images(id)
+ foreign key (image_id) references images(id),
+ constraint roi_of_image PRIMARY KEY (image_id, roi_id)
 );
