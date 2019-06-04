@@ -15,6 +15,7 @@ $(document).on('dblclick', '.folder-manager ul li form div', function(e) {
 function showFolderSelectNav() {
     $('.folder-navbar-unselected').hide();
     $('.folder-navbar-selected').show();
+    $('.folder-navbar-selected li').css("display", "inline-block");
 }
 
 // Shows the folder unselect navbar
@@ -27,13 +28,12 @@ function showFolderUnselectNav(){
 $(document).on("click contextmenu", "[data-file-icon] form div", function(e) {
     if (e.ctrlKey) {
         $(this).addClass("select");
-        showFolderSelectNav();
     } else {
         $(".select").removeClass("select");
         $(this)
             .addClass("select");
-        showFolderSelectNav();
     }
+    showFolderSelectNav();
 });
 
 // Deselects (and submits new folder) when clicking elsewhere and shows the default unselected navbar
