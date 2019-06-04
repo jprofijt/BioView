@@ -168,6 +168,9 @@ function deleteSelected() {
         });
         })
     $('.select').parents('li').css("display", "none");
+    $(".select").removeClass("select");
+    $('.folder-navbar-selected').hide();
+    $('.folder-navbar-unselected').show();
 }
 
 $(document).on("click", '[data-function="delete-folder"]', function () {
