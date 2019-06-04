@@ -151,7 +151,7 @@ $(function () {
 });
 
 function deleteSelected() {
-    $.when( $('.select').each(function (index) {
+    $('.select').each(function (index) {
         var directory = $(this).siblings('[name = "location"]').val();
         console.log(directory);
         $.ajax({
@@ -165,11 +165,9 @@ function deleteSelected() {
             error: function(xhr, desc, err) {
                 console.log(xhr);
                 console.log("Details0: " + desc + "\nError:" + err);
-            },
+            }
         });
 
         })
-    ).then( function() {
-        window.location = window.location
-    })
+
 }

@@ -64,7 +64,6 @@ public class DirectoryController {
     @PostMapping("/deletefolder")
     @ResponseBody
     public String deleteFolder(@RequestParam String directory) {
-        System.out.println("help");
         folderHandler.removeFolder(directory);
         return "success";
     }

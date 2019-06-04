@@ -131,7 +131,7 @@ public class FolderHandler implements FolderStructureProvider {
         try {
             logger.log(Level.INFO, "Deleting directory: {0}", directory);
             FileUtils.deleteDirectory(path.toFile());
-            logger.log(Level.INFO, "Successfully deleted directory!");
+            logger.log(Level.INFO, "Successfully deleted {0}!", directory);
         } catch (IOException e) {
             logger.log(Level.WARNING, "Directory {0} could not be deleted", directory);
         }
