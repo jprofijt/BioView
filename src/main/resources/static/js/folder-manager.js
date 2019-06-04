@@ -167,7 +167,10 @@ function deleteSelected() {
                 console.log("Details0: " + desc + "\nError:" + err);
             }
         });
-
         })
-
+    $('.select').parents('li').css("display", "none");
 }
+
+$(document).on("click", '[data-function="delete-folder"]', function () {
+    deleteSelected()
+});
