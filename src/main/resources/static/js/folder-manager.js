@@ -153,14 +153,13 @@ $(function () {
 function deleteSelected() {
     $('.select').each(function (index) {
         var directory = $(this).siblings('[name = "location"]').val();
-        console.log(directory);
         $.ajax({
             type: "POST",
             url: "/deletefolder",
             dataType: "text",
             data: {'directory' : directory},
             success: function (data) {
-                console.log("success");
+                console.log("successfully deleted", directory);
             },
             error: function(xhr, desc, err) {
                 console.log(xhr);
