@@ -19,7 +19,7 @@
                         <i class="fas fa-folder"></i>
                         <b class="folder-name" th:text="${folder.getName()}"></b>
                     </div>
-                    <input name="location" type="hidden" th:default="testdata" th:value="${folder.getPath()}">
+                    <input name="location" type="hidden" th:value="${folder.getPath()}">
                     <input class="last-modified-date" type="hidden" th:value="${ folder.getDateModified()}">
                 </form><br/>
 
@@ -30,7 +30,7 @@
                         <i class="fas fa-folder"></i>
                         <b class="created-title"><input id="dirInput" name="directoryName" type="text" th:required="true" th:value="${date}"></b>
                     </div>
-                    <input name="currentPath" type="hidden" th:value="${currentPath}" th:default="testdata">
+                    <input name="currentPath" type="hidden" th:value="${currentPath}">
                     <!--<input type="submit" value="Create Folder here">-->
                 </form>
             </li>
