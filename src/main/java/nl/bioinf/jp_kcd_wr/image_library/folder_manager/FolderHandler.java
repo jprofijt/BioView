@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -45,6 +46,13 @@ public class FolderHandler implements FolderStructureProvider {
     private Path getRelativePath(String directory){
         return rootLocation.relativize(Paths.get(directory));
     }
+
+    /**
+     * Retrieves the full path, that includes the rootlocation and the given directory string
+     * @param directory a relative path
+     * @return full directory path
+     */
+    private Path getFullPath(String directory) { return this.rootLocation.resolve(directory);}
 
     /**
      * Creates directory object
@@ -81,7 +89,7 @@ public class FolderHandler implements FolderStructureProvider {
      */
     @Override
     public ArrayList<Directory> getNextFolders(String nextFolders){
-        File[] directories = new File(String.valueOf(this.rootLocation.resolve(nextFolders))).listFiles(File::isDirectory);
+        File[] directories = new File(String.valueOf(getFullPath(nextFolders))).listFiles(File::isDirectory);
 
         ArrayList<Directory> directoryList = new ArrayList<>();
         if(directories != null){
@@ -102,7 +110,7 @@ public class FolderHandler implements FolderStructureProvider {
      */
     @Override
     public void createNewFolder(String directoryName, String currentPath) throws DirectoryExistsException {
-        String path = this.rootLocation.resolve(currentPath) + File.separator + directoryName;
+        String path = getFullPath(currentPath) + File.separator + directoryName;
         File newDir = new File(path);
         try {
             Files.createDirectory(newDir.toPath());
@@ -126,7 +134,7 @@ public class FolderHandler implements FolderStructureProvider {
      */
     @Override
     public void removeFolder(String directory) {
-        Path path = this.rootLocation.resolve(directory);
+        Path path = getFullPath(directory);
         try {
             logger.log(Level.INFO, "Deleting directory: {0}", directory);
             FileUtils.deleteDirectory(path.toFile());
@@ -135,6 +143,22 @@ public class FolderHandler implements FolderStructureProvider {
             logger.log(Level.WARNING, "Directory {0} could not be deleted", directory);
         }
 
+    }
+
+    /**
+     * Moves folder from current location to newly assigned destination
+     * @param directory
+     */
+    @Override
+    public void moveFolder(String directory, String destination) {
+        Path directoryFrom = getFullPath(directory);
+        Path directoryTo = getFullPath(destination).resolve(new File(directory).getName());
+        try{
+            logger.log(Level.INFO,"Moving directory from {0} to {1}", new Object[]{directory, destination});
+            Files.move(directoryFrom, directoryTo, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            logger.log(Level.WARNING, "File {0} could not be moved", directory);
+        }
     }
 
 }

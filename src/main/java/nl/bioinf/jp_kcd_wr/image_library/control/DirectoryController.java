@@ -67,9 +67,11 @@ public class DirectoryController {
     @PostMapping("/movefolder")
     public String moveFolder(@RequestParam String currentPath, @RequestParam(name = "movingFolders") List<String> folders, @RequestParam(name = "ft_1_active") String destination, RedirectAttributes redirectAttributes) {
         if(null != folders && folders.size() > 0) {
+            logger.log(Level.INFO, "Moving folder(s)...");
             for (String folder : folders) {
-                
+                folderHandler.moveFolder(folder, destination);
             }
+            logger.log(Level.INFO, "Finished moving folder(s)!");
         }
         return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
     }
