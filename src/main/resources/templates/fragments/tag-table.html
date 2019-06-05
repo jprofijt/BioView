@@ -7,6 +7,7 @@
 <body>
 <table th:fragment="tag-table" class="table tag-table" th:id="${'ImageRois-' + image.getId()}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
+
     <thead class="thead-dark">
     <tr>
         <th scope="col">#</th>
@@ -22,5 +23,7 @@
     </tbody>
 
 </table>
+
+<input class="TagInput" th:id="${'tag-input-roi-' + image.getId()}"  data-role="tagsinput" type="text" value="hello1,hello2">
 </body>
 </html>

@@ -40,13 +40,6 @@
                                                     </div>
                                                     <div class="col-6">
                                                         <table class="table tag-table" th:id="${'ImageTags-' + image.getId()}" th:replace="fragments/tag-table"></table>
-                                                        <div class="new-tag-input" th:id="${'tag-input-div-' + image.getId()}">
-                                                            <input class="newTag" th:id="${'tag-input-' + image.getId()}" type="text">
-                                                            <button class="btn-sm btn-primary" th:onclick="AddTag(this, [[${#httpServletRequest.remoteUser}]], [[${image.getId()}]])">Add new tag</button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <p>ROI's</p>
                                                     </div>
                                                 </div>
                                                 <div class="row">

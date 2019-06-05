@@ -21,7 +21,7 @@ $.getJSON(url, function (result) {
 
 
 $(document).ready(function () {
-    $('.newTag').typeahead({
+    $('.TagInput').typeahead({
         highlight: true,
         source: available
     });
@@ -105,7 +105,7 @@ function AddTag(element, user, id) {
 }
 
 function LoadRoiTable(id) {
-    const url = "http://"+document.location.hostname + ":8081/api/state/roi/?image=" + id.toString();
+    const url = "http://"+document.location.hostname + ":8081/api/roi/state/?image=" + id.toString();
 
     $.ajax({
         url: url,
@@ -133,9 +133,33 @@ function AppendNewRoiToTable(id, roi) {
         "</tr>");
 
     $('.image-roi-row').on("click", function () {
-        $('.image-roi-row').removeClass("bg-primary");
-        $(this).addClass("bg-primary")
+        $('.image-roi-row').removeClass("bg-primary selected");
+        $(this).addClass("bg-primary selected")
     })
 
 }
+
+$(document).ready(function () {
+    $('.TagInput').on('itemAdded', function(event) {
+            let id = $(this).attr('id').replace("tag-input-roi-", "");
+            let data = {
+                id: id,
+                tag: event.item
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "http://" + document.location.hostname + ":8081/api/roi/tags/",
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: true,
+                success: function () {
+                    //$('#ImageTags-' + id).append("<tr><td>" + $('#tag-input-' + id).val() + "</td></tr>")
+
+                    console.log('Adding tag success')
+                }
+            })
+        });
+    });
 
