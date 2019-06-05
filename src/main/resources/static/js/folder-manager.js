@@ -66,6 +66,12 @@ function pickContextCommand(key) {
     else if (key == "delete"){
         deleteSelected()
     }
+    else if( key == "move"){
+        $('#moveModal').modal('toggle');
+    }
+    else if (key == "copy"){
+        $('#copyModal').modal('toggle');
+    }
 }
 
 $(function() {
@@ -91,9 +97,8 @@ $(function() {
         },
         items: {
             "open": {name: "Open", icon: "fas fa-folder-open"},
-            "cut": {name: "Cut", icon: "fas fa-cut"},
+            "move": {name: "Move", icon: "fas fa-cut"},
             copy: {name: "Copy", icon: "fas fa-copy"},
-            "paste": {name: "Paste", icon: "fas fa-paste"},
             "delete": {name: "Delete", icon: "fas fa-trash-alt"},
             "properties": {name: "Properties"}
         }
