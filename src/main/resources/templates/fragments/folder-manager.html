@@ -31,12 +31,10 @@
                         <b class="created-title"><input id="dirInput" name="directoryName" type="text" th:required="true" th:value="${date}"></b>
                     </div>
                     <input name="currentPath" type="hidden" th:value="${currentPath}">
-                    <!--<input type="submit" value="Create Folder here">-->
+
                 </form>
             </li>
-            <!--<div th:replace="fragments/context-menu-unselected"></div>-->
         </ul>
-
     </div>
 </div>
 <div th:replace="fragments/move-tree">

@@ -104,7 +104,7 @@ public class DirectoryController {
      * @author Kim Chau Duong
      */
     @PostMapping("/copyfolder")
-    public String copyFolder(@RequestParam String currentPath, @RequestParam(name = "movingFolders") List<String> folders, @RequestParam(name = "ft_1_active") String destination, RedirectAttributes redirectAttributes) {
+    public String copyFolder(@RequestParam String currentPath, @RequestParam(name = "copiedFolders") List<String> folders, @RequestParam(name = "ft_2_active") String destination, RedirectAttributes redirectAttributes) {
         if(null != folders && folders.size() > 0) {
             logger.log(Level.INFO, "Copying folder(s)...");
             for (String folder : folders) {
