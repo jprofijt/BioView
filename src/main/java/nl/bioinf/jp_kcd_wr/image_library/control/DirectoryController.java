@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -58,6 +61,12 @@ public class DirectoryController {
     public String deleteFolder(@RequestParam String directory) {
         folderHandler.removeFolder(directory);
         return "success";
+    }
+
+    @PostMapping("/movefolder")
+    public String moveFolder(@RequestParam String currentPath, @RequestParam List<MultipartFile> folders, @RequestParam(name = "ft_1_active") String destination, RedirectAttributes redirectAttributes) {
+
+        return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
     }
 
 
