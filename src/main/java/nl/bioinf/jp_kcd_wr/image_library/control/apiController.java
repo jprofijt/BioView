@@ -31,12 +31,12 @@ public class apiController {
 
 
     @GetMapping("/folder/branch")
-    public ResponseEntity<ArrayList<Directory>> getFolderBranches(@RequestParam String key){
+    public ResponseEntity<ArrayList<Directory>> getFolderBranches(@RequestParam String parent){
         try {
-            if (key.contains("\\")){
+            if (parent.contains("\\")){
                 return new ResponseEntity("contained backslashes",HttpStatus.BAD_REQUEST);
             }
-            ArrayList<Directory> data = folderHandler.getNextFolders(key);
+            ArrayList<Directory> data = folderHandler.getNextFolders(parent);
             return new ResponseEntity(data, HttpStatus.OK);
         }
         catch (IllegalArgumentException e){
