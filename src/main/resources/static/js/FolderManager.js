@@ -11,6 +11,18 @@ $(document).on('dblclick', '.folder-manager ul li form div', function(e) {
     $(this).parents('form').submit();
 });
 
+// Shows the folder select navbar
+function showFolderSelectNav() {
+    $('.folder-navbar-unselected').hide();
+    $('.folder-navbar-selected').show();
+    $('.folder-navbar-selected li').css("display", "inline-block");
+}
+
+// Shows the folder unselect navbar
+function showFolderUnselectNav(){
+    $('.folder-navbar-selected').hide();
+    $('.folder-navbar-unselected').show();
+}
 
 // Adds select class to selected folder(s) and shows the select navbar
 $(document).on("click contextmenu", "[data-file-icon] form div", function(e) {
@@ -20,17 +32,15 @@ $(document).on("click contextmenu", "[data-file-icon] form div", function(e) {
         $(".select").removeClass("select");
         $(this)
             .addClass("select");
-        $('.folder-navbar-unselected').hide();
-        $('.folder-navbar-selected').show();
     }
+    showFolderSelectNav();
 });
 
 // Deselects (and submits new folder) when clicking elsewhere and shows the default unselected navbar
 $(document).on("click dblclick", ".folder-manager", function() {
     $("[data-file-icon] div")
         .removeClass("select");
-    $('.folder-navbar-selected').hide();
-    $('.folder-navbar-unselected').show();
+    showFolderUnselectNav();
 });
 
 $(document).on("click", "[data-file-icon]", function() {
@@ -55,6 +65,12 @@ function pickContextCommand(key) {
     }
     else if (key == "delete"){
         deleteSelected()
+    }
+    else if( key == "move"){
+        $('#moveModal').modal('toggle');
+    }
+    else if (key == "copy"){
+        $('#copyModal').modal('toggle');
     }
 }
 
@@ -81,9 +97,8 @@ $(function() {
         },
         items: {
             "open": {name: "Open", icon: "fas fa-folder-open"},
-            "cut": {name: "Cut", icon: "fas fa-cut"},
+            "move": {name: "Move", icon: "fas fa-cut"},
             copy: {name: "Copy", icon: "fas fa-copy"},
-            "paste": {name: "Paste", icon: "fas fa-paste"},
             "delete": {name: "Delete", icon: "fas fa-trash-alt"},
             "properties": {name: "Properties"}
         }
@@ -169,8 +184,7 @@ function deleteSelected() {
         })
     $('.select').parents('li').css("display", "none");
     $(".select").removeClass("select");
-    $('.folder-navbar-selected').hide();
-    $('.folder-navbar-unselected').show();
+    showFolderUnselectNav();
 }
 
 $(document).on("click", '[data-function="delete-folder"]', function () {

@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Folder Manager</title>
-    <head>
-        <meta name="_csrf" th:content="${_csrf.token}"/>
-        <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    </head>
+
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta name="_current_location" th:content="${currentPath}"/>
 </head>
 <body>
 <div class="folder-container container col-md-4" th:fragment="folder-manager">
@@ -19,7 +19,7 @@
                         <i class="fas fa-folder"></i>
                         <b class="folder-name" th:text="${folder.getName()}"></b>
                     </div>
-                    <input name="location" type="hidden" th:default="testdata" th:value="${folder.getPath()}">
+                    <input name="location" type="hidden" th:value="${folder.getPath()}">
                     <input class="last-modified-date" type="hidden" th:value="${ folder.getDateModified()}">
                 </form><br/>
 
@@ -30,14 +30,14 @@
                         <i class="fas fa-folder"></i>
                         <b class="created-title"><input id="dirInput" name="directoryName" type="text" th:required="true" th:value="${date}"></b>
                     </div>
-                    <input name="currentPath" type="hidden" th:value="${currentPath}" th:default="testdata">
-                    <!--<input type="submit" value="Create Folder here">-->
+                    <input name="currentPath" type="hidden" th:value="${currentPath}">
+
                 </form>
             </li>
-            <!--<div th:replace="fragments/context-menu-unselected"></div>-->
         </ul>
     </div>
 </div>
-
+<div th:replace="fragments/move-tree">
+</div>
 </body>
 </html>

@@ -1,4 +1,4 @@
-package nl.bioinf.jp_kcd_wr.image_library.filebrowser;
+package nl.bioinf.jp_kcd_wr.image_library.folder_manager;
 
 /**
  * If a directory already exists throw this exception

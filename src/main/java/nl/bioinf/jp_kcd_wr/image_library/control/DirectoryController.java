@@ -1,23 +1,19 @@
 package nl.bioinf.jp_kcd_wr.image_library.control;
 
-import nl.bioinf.jp_kcd_wr.image_library.breadcrumbs.BreadcrumbBuilder;
-import nl.bioinf.jp_kcd_wr.image_library.filebrowser.DirectoryExistsException;
-import nl.bioinf.jp_kcd_wr.image_library.filebrowser.FolderHandler;
-import nl.bioinf.jp_kcd_wr.image_library.storage.StorageService;
+import nl.bioinf.jp_kcd_wr.image_library.folder_manager.DirectoryExistsException;
+import nl.bioinf.jp_kcd_wr.image_library.folder_manager.FolderHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.File;
-import java.time.LocalDate;
+import java.lang.reflect.Array;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
+
 
 /**
  * Controller that handles storage interaction by users
@@ -61,11 +57,62 @@ public class DirectoryController {
         return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
     }
 
+    /**
+     * Handles folder deleting process
+     * @param directory directory that's to be deleted
+     * @return confirmation message
+     *
+     * @author Kim Chau Duong
+     */
     @PostMapping("/deletefolder")
     @ResponseBody
     public String deleteFolder(@RequestParam String directory) {
         folderHandler.removeFolder(directory);
         return "success";
+    }
+
+    /**
+     *
+     * @param currentPath Current directory that the user is in and will be redirected to.
+     * @param folders List of folders that are to be moved
+     * @param destination destination of the moving folders
+     * @param redirectAttributes attributes given back to redirected page
+     * @return redirect to current page
+     *
+     * @author Kim Chau Duong
+     */
+    @PostMapping("/movefolder")
+    public String moveFolder(@RequestParam String currentPath, @RequestParam(name = "movingFolders") List<String> folders, @RequestParam(name = "ft_1_active") String destination, RedirectAttributes redirectAttributes) {
+        if(null != folders && folders.size() > 0) {
+            logger.log(Level.INFO, "Moving folder(s)...");
+            for (String folder : folders) {
+                folderHandler.moveFolder(folder, destination);
+            }
+            logger.log(Level.INFO, "Finished moving folder(s)!");
+        }
+        return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
+    }
+
+    /**
+     *
+     * @param currentPath Current directory that the user is in and will be redirected to.
+     * @param folders List of folders that are to be copied
+     * @param destination destination of the copied folders
+     * @param redirectAttributes attributes given back to redirected page
+     * @return redirect to current page
+     *
+     * @author Kim Chau Duong
+     */
+    @PostMapping("/copyfolder")
+    public String copyFolder(@RequestParam String currentPath, @RequestParam(name = "copiedFolders") List<String> folders, @RequestParam(name = "ft_2_active") String destination, RedirectAttributes redirectAttributes) {
+        if(null != folders && folders.size() > 0) {
+            logger.log(Level.INFO, "Copying folder(s)...");
+            for (String folder : folders) {
+                folderHandler.copyFolder(folder, destination);
+            }
+            logger.log(Level.INFO, "Finished copying folder(s)!");
+        }
+        return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
     }
 
 

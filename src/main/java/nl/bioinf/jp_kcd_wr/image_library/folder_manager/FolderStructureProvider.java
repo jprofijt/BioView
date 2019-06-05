@@ -1,8 +1,7 @@
-package nl.bioinf.jp_kcd_wr.image_library.filebrowser;
+package nl.bioinf.jp_kcd_wr.image_library.folder_manager;
 
 import nl.bioinf.jp_kcd_wr.image_library.model.Directory;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -32,5 +31,17 @@ public interface FolderStructureProvider {
      */
     void removeFolder(String pathToDirectory);
 
+    /**
+     * Moves or copies directory from current location to newly assigned destination
+     * @param directory directory that's to be moved
+     */
+    void moveFolder(String directory, String destination);
+
+    /**
+     * copies given directory from current location to another destination
+     * @param directory copied directory
+     * @param destination paste destination
+     */
+    void copyFolder(String directory, String destination);
 
 }
