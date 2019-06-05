@@ -1,24 +1,19 @@
-$("#MoveTree").fancytree({
-    checkbox: true,
-    selectMode: 3,
-
-    source: [
-        // Typically we would load using ajax instead...
-        { title: "Node 1" },
-        { title: "Node 2" },
-        {
-            title: "Folder 3",
-            folder: true,
-            expanded: true,
-            children: [
-                { title: "Node 3.1", key: "id3.1" },
-                { title: "Node 3.2", selected: true }
-            ]
-        },
-        {
-            title: "Folder 4",
-            folder: true,
-            children: [{ title: "Node 4.1" }, { title: "Node 4.2" }]
-        }
-    ]
+$(function () {
+    $("#MoveTree").fancytree({
+        source: [
+            { title: "Node1", key: "Node1", folder: true },
+            { title: "Node2", key: "Node2", folder: false },
+            {
+                title: "Node3",
+                folder: true,
+                children: [
+                    { title: "Node3Child1", checkbox: false, folder: true },
+                    { title: "Node3Child2", folder: false },
+                    { title: "Node3Child3", folder: false }
+                ]
+            }
+        ]
+    });
+    $(".fancytree-container").toggleClass("fancytree-connectors");
 });
+

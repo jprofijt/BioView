@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Folder Manager</title>
-    <head>
-        <meta name="_csrf" th:content="${_csrf.token}"/>
-        <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    </head>
+
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta name="_current_location" th:content="${currentPath}"/>
 </head>
 <body>
 <div class="folder-container container col-md-4" th:fragment="folder-manager">
@@ -36,10 +36,10 @@
             </li>
             <!--<div th:replace="fragments/context-menu-unselected"></div>-->
         </ul>
-        <div th:replace="fragments/move-tree">
-        </div>
+
     </div>
 </div>
-
+<div th:replace="fragments/move-tree">
+</div>
 </body>
 </html>
