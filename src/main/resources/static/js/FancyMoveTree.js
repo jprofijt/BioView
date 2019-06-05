@@ -1,3 +1,10 @@
+/**
+ * Scripts that manage the directory trees
+ *
+ * @author Kim Chau Duong
+ * @version 1.0
+ */
+
 // Adds folder and lazy true by default and changes fields to match the FancyTree settings
 function renameTreeJsonData(response) {
     response = $.map(response, function (n) {
