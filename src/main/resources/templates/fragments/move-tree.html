@@ -11,13 +11,19 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="MoveModalLabel">Move Folder to</h5>
+                <h5 class="modal-title" id="MoveModalLabel">Move folder(s) to</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <div id="MoveTree"></div>
+                <form th:action="@{/movefolder}" method="post" id="moveFolder">
+                    <!--<input name="currentPath" type="hidden" th:value="${currentPath}">-->
+                    <input name="location" type="hidden">
+                    <div class="move-to-tree" id="moveTree" name=""></div>
+                    <br/><input type="submit" value="Move" />
+                </form>
+
             </div>
         </div>
     </div>

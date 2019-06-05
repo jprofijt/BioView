@@ -16,7 +16,7 @@ function renameTreeJsonData(response) {
 
 //Fancy 'Move to' directory Tree
 $(function () {
-    $("#MoveTree").fancytree({
+    $("#moveTree").fancytree({
         source: [
             { name: "HeadDirectory", path: "HeadDirectory", folder: true, lazy: true }
         ],
@@ -43,5 +43,15 @@ $(function () {
         }
     });
     $(".fancytree-container").toggleClass("fancytree-connectors");
+
+    $("#moveFolder").submit(function() {
+        // Render hidden <input> elements for active and selected nodes
+        $("#moveTree").fancytree("getTree").generateFormElements();
+
+        alert("POST data:\n" + jQuery.param($(this).serializeArray()));
+        // return false to prevent submission of this sample
+        return false;
+    });
+
 });
 
