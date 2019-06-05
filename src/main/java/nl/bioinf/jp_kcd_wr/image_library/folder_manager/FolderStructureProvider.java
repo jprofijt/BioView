@@ -32,8 +32,16 @@ public interface FolderStructureProvider {
     void removeFolder(String pathToDirectory);
 
     /**
-     * Moves directory from current location to newly assigned destination
+     * Moves or copies directory from current location to newly assigned destination
      * @param directory directory that's to be moved
      */
     void moveFolder(String directory, String destination);
+
+    /**
+     * copies given directory from current location to another destination
+     * @param directory copied directory
+     * @param destination paste destination
+     */
+    void copyFolder(String directory, String destination);
+
 }

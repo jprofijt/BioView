@@ -147,7 +147,10 @@ public class FolderHandler implements FolderStructureProvider {
 
     /**
      * Moves folder from current location to newly assigned destination
-     * @param directory
+     * @param directory moving directory
+     * @param destination paste destination
+     *
+     * @author Kim Chau Duong
      */
     @Override
     public void moveFolder(String directory, String destination) {
@@ -160,5 +163,26 @@ public class FolderHandler implements FolderStructureProvider {
             logger.log(Level.WARNING, "File {0} could not be moved", directory);
         }
     }
+
+    /**
+     * Copies folder from current location to another destination
+     * @param directory copied directory
+     * @param destination paste destination
+     *
+     * @author Kim Chau duong
+     */
+    @Override
+    public void copyFolder(String directory, String destination) {
+        Path directoryFrom = getFullPath(directory);
+        Path directoryTo = getFullPath(destination).resolve(new File(directory).getName());
+        try{
+            logger.log(Level.INFO,"Copying directory from {0} to {1}", new Object[]{directory, destination});
+            Files.copy(directoryFrom, directoryTo, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            logger.log(Level.WARNING, "File {0} could not be copied", directory);
+        }
+    }
+
+
 
 }

@@ -57,6 +57,13 @@ public class DirectoryController {
         return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
     }
 
+    /**
+     * Handles folder deleting process
+     * @param directory directory that's to be deleted
+     * @return confirmation message
+     *
+     * @author Kim Chau Duong
+     */
     @PostMapping("/deletefolder")
     @ResponseBody
     public String deleteFolder(@RequestParam String directory) {
@@ -64,6 +71,16 @@ public class DirectoryController {
         return "success";
     }
 
+    /**
+     *
+     * @param currentPath Current directory that the user is in and will be redirected to.
+     * @param folders List of folders that are to be moved
+     * @param destination destination of the moving folders
+     * @param redirectAttributes attributes given back to redirected page
+     * @return redirect to current page
+     *
+     * @author Kim Chau Duong
+     */
     @PostMapping("/movefolder")
     public String moveFolder(@RequestParam String currentPath, @RequestParam(name = "movingFolders") List<String> folders, @RequestParam(name = "ft_1_active") String destination, RedirectAttributes redirectAttributes) {
         if(null != folders && folders.size() > 0) {
@@ -72,6 +89,28 @@ public class DirectoryController {
                 folderHandler.moveFolder(folder, destination);
             }
             logger.log(Level.INFO, "Finished moving folder(s)!");
+        }
+        return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
+    }
+
+    /**
+     *
+     * @param currentPath Current directory that the user is in and will be redirected to.
+     * @param folders List of folders that are to be copied
+     * @param destination destination of the copied folders
+     * @param redirectAttributes attributes given back to redirected page
+     * @return redirect to current page
+     *
+     * @author Kim Chau Duong
+     */
+    @PostMapping("/copyfolder")
+    public String copyFolder(@RequestParam String currentPath, @RequestParam(name = "movingFolders") List<String> folders, @RequestParam(name = "ft_1_active") String destination, RedirectAttributes redirectAttributes) {
+        if(null != folders && folders.size() > 0) {
+            logger.log(Level.INFO, "Copying folder(s)...");
+            for (String folder : folders) {
+                folderHandler.copyFolder(folder, destination);
+            }
+            logger.log(Level.INFO, "Finished copying folder(s)!");
         }
         return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
     }
