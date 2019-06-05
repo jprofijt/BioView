@@ -46,11 +46,18 @@ $(function () {
 
     $("#moveFolder").submit(function() {
         // Render hidden <input> elements for active and selected nodes
+        var directoryArray = [];
+        $('.select').each(function(){
+            var directory = $(this).siblings('[name = "location"]').val();
+            directoryArray.push(directory);
+        });
+        $('input[name="movingFolders"]').val(directoryArray);
+
         $("#moveTree").fancytree("getTree").generateFormElements();
 
-        alert("POST data:\n" + jQuery.param($(this).serializeArray()));
-        // return false to prevent submission of this sample
-        return false;
+        // alert("POST data:\n" + jQuery.param($(this).serializeArray()));
+        // // return false to prevent submission of this sample
+        // return false;
     });
 
 });

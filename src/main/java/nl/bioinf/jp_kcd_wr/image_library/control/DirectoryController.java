@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.lang.reflect.Array;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -64,8 +65,12 @@ public class DirectoryController {
     }
 
     @PostMapping("/movefolder")
-    public String moveFolder(@RequestParam String currentPath, @RequestParam List<MultipartFile> folders, @RequestParam(name = "ft_1_active") String destination, RedirectAttributes redirectAttributes) {
-
+    public String moveFolder(@RequestParam String currentPath, @RequestParam(name = "movingFolders") List<String> folders, @RequestParam(name = "ft_1_active") String destination, RedirectAttributes redirectAttributes) {
+        if(null != folders && folders.size() > 0) {
+            for (String folder : folders) {
+                
+            }
+        }
         return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
     }
 

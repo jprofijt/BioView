@@ -18,8 +18,8 @@
             </div>
             <div class="modal-body">
                 <form th:action="@{/movefolder}" method="post" id="moveFolder">
-                    <!--<input name="currentPath" type="hidden" th:value="${currentPath}">-->
-                    <input name="location" type="hidden">
+                    <input name="currentPath" type="hidden" th:value="${currentPath}">
+                    <input name="movingFolders" type="hidden">
                     <div class="move-to-tree" id="moveTree" name=""></div>
                     <br/><input type="submit" value="Move" />
                 </form>
