@@ -6,30 +6,37 @@ function loadDynamicModal(id, path){
 
 
 function loadImageIntoCanvas(id, path){
-    var canvas = new fabric.Canvas("canvas"+id);
-    document.getElementById("canvas" + id).fabric = canvas;
-    var image = new Image();
-    image.src = 'files/' + path;
-    canvas.setHeight(window.innerHeight/2);
-    canvas.setWidth(window.innerWidth/2);
+    var canvas;
+    if ($("#image-canvas-holder"+id ).find(".canvas-container").length <= 0){
+        canvas = new fabric.Canvas('canvas' + id);
+        document.getElementById('canvas' + id).fabric = canvas;
+        var image = new Image();
+        image.src = 'files/' + path;
+        canvas.setHeight(window.innerHeight/2);
+        canvas.setWidth(window.innerWidth/2);
 
-    image.onload = () => {
-        var imgInstance = new fabric.Image(image,{
-            left: 0,
-            top: 0,
-            height: image.height,
-            width: image.width,
-            hasBorders: false
-            // stateful: true
-        });
-        canvas.add(imgInstance);
-        imgInstance.lockRotation=true;
-        // imgInstance.lockUniScaling=true;
-        // imgInstance.lockScalingY=true;
-        // imgInstance.lockScalingX=true;
-        imgInstance.hasControls=false;
+        image.onload = () => {
+            var imgInstance = new fabric.Image(image,{
+                left: 0,
+                top: 0,
+                height: image.height,
+                width: image.width,
+                hasBorders: false
+                // stateful: true
+            });
+            canvas.add(imgInstance);
+            imgInstance.lockRotation=true;
+            // imgInstance.lockUniScaling=true;
+            // imgInstance.lockScalingY=true;
+            // imgInstance.lockScalingX=true;
+            imgInstance.hasControls=false;
+        }
+
     }
-        canvasAnimation(canvas)
+    else{
+        canvas = document.getElementById("canvas" + id).fabric;
+    }
+    canvasAnimation(canvas)
 }
 
 function canvasAnimation(canvas){
@@ -89,12 +96,6 @@ function canvasAnimation(canvas){
         }});
 
 }
-function resetZoom(id){
-    var canvas = document.getElementById("canvas"+id).canvas;
-    alert("canvas"+ id);
-    canvas.setZoom(1);
-}
-
 //
 //
 //there is a bug in fabric that causes bounding rects to not be transformed by viewport matrix
@@ -136,3 +137,146 @@ function resetZoom(id){
 //     object.top = Math.min(object.top, object.canvas.height - boundingRect.height + object.top - boundingRect.top);
 //     object.left = Math.min(object.left, object.canvas.width - boundingRect.width + object.left - boundingRect.left);
 // }
+
+function drawPolygons(name, id){
+    var canvas;
+    if ($("#image-canvas-holder"+id ).find(".canvas-container").length > 0){
+        canvas = document.getElementById(name + id).fabric
+    }
+    var roof = null;
+    var roofPoints = [];
+    var lines = [];
+    var lineCounter = 0;
+    var drawingObject = {};
+    drawingObject.type = "";
+    drawingObject.background = "";
+    drawingObject.border = "";
+
+    function Point(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+
+
+    if (drawingObject.type == "roof") {
+        drawingObject.type = "";
+        lines.forEach(function(value, index, ar){
+            canvas.remove(value);
+        });
+        //canvas.remove(lines[lineCounter - 1]);
+        roof = makeRoof(roofPoints);
+        canvas.add(roof);
+        canvas.renderAll();
+    } else {
+        drawingObject.type = "roof"; // roof type
+    }
+
+    canvas.on('mouse:down', function (options) {
+        if (drawingObject.type == "roof") {
+            canvas.selection = false;
+            setStartingPoint(options); // set x,y
+            roofPoints.push(new Point(x, y));
+            var points = [x, y, x, y];
+            lines.push(new fabric.Line(points, {
+                strokeWidth: 3,
+                selectable: false,
+                stroke: 'red'
+            }).setOriginX(x).setOriginY(y));
+            canvas.add(lines[lineCounter]);
+            lineCounter++;
+            canvas.on('mouse:up', function (options) {
+                canvas.selection = true;
+            });
+        }
+    });
+    fabric.util.addListener(window,'dblclick', function(){
+        drawingObject.type = "";
+        lines.forEach(function(value, index, ar){
+            canvas.remove(value);
+        });
+        //canvas.remove(lines[lineCounter - 1]);
+        roof = makeRoof(roofPoints);
+        canvas.add(roof);
+        canvas.renderAll();
+
+        console.log("double click");
+        //clear arrays
+        roofPoints = [];
+        lines = [];
+        lineCounter = 0;
+        canvas.__eventListeners["mouse:dblclick"] = [];
+    });
+    canvas.on('mouse:down', function (options) {
+        if (drawingObject.type == "roof") {
+            canvas.selection = false;
+            setStartingPoint(options); // set x,y
+            roofPoints.push(new Point(x, y));
+            var points = [x, y, x, y];
+            lines.push(new fabric.Line(points, {
+                strokeWidth: 3,
+                selectable: false,
+                stroke: 'red'
+            }).setOriginX(x).setOriginY(y));
+            canvas.add(lines[lineCounter]);
+            lineCounter++;
+            canvas.on('mouse:up', function (options) {
+                canvas.selection = true;
+            });
+        }
+    });
+    canvas.on('mouse:move', function (options) {
+        if (lines[0] !== null && lines[0] !== undefined && drawingObject.type == "roof") {
+            setStartingPoint(options);
+            lines[lineCounter - 1].set({
+                x2: x,
+                y2: y
+            });
+            canvas.renderAll();
+        }
+    });
+
+    function setStartingPoint(options) {
+        var offset = $(name + id).offset();
+        x = options.e.pageX - offset.left;
+        y = options.e.pageY - offset.top;
+    }
+
+    function makeRoof(roofPoints) {
+
+        var left = findLeftPaddingForRoof(roofPoints);
+        var top = findTopPaddingForRoof(roofPoints);
+        roofPoints.push(new Point(roofPoints[0].x,roofPoints[0].y));
+        var roof = new fabric.Polyline(roofPoints, {
+            fill: 'rgba(0,0,0,0)',
+            stroke:'#58c'
+        });
+        roof.set({
+
+            left: left,
+            top: top
+
+        });
+        return roof;
+    }
+
+    function findTopPaddingForRoof(roofPoints) {
+        var result = 999999;
+        for (var f = 0; f < lineCounter; f++) {
+            if (roofPoints[f].y < result) {
+                result = roofPoints[f].y;
+            }
+        }
+        return Math.abs(result);
+    }
+
+    function findLeftPaddingForRoof(roofPoints) {
+        var result = 999999;
+        for (var i = 0; i < lineCounter; i++) {
+            if (roofPoints[i].x < result) {
+                result = roofPoints[i].x;
+            }
+        }
+        return Math.abs(result);
+    }
+
+}
