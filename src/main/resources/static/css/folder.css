@@ -19,7 +19,7 @@
     user-select:none;
 }
 .folder-manager ul li {
-    padding: 0;
+    padding: 0 2px;
     display: inline-block;
     margin: 0 auto;
 }
