@@ -14,17 +14,22 @@ $(document).ready(function () {
 
     });
 
-let available;
+let available = [];
 const url = "http://"+document.location.hostname + ":8081/api/tags/all/";
 $.getJSON(url, function (result) {
-    available = result;});
+    for (const i in result) {
+        available.push(result[i])
+    }
+});
 
 
 $(document).ready(function () {
-    $('.TagInput').typeahead({
-        highlight: true,
-        source: available
-    });
+    $('.TagInput').tagsinput({
+        typeahead: {
+            highlight: true,
+            source: available
+        }
+    })
 });
 
 /**
@@ -122,6 +127,10 @@ function LoadRoiTable(id) {
 
 }
 
+let selected;
+let SelectedImage;
+let Ready = true;
+
 function AppendNewRoiToTable(id, roi) {
     const RowID = "image-" + id + "-roi-" + roi.roiID;
     $('#ImageRois-' + id).append("<tr class='image-roi-row' id='"+ RowID + "'>" +
@@ -133,17 +142,33 @@ function AppendNewRoiToTable(id, roi) {
         "</tr>");
 
     $('.image-roi-row').on("click", function () {
+        Ready = false;
         $('.image-roi-row').removeClass("bg-primary selected");
-        $(this).addClass("bg-primary selected")
+        $(this).addClass("bg-primary selected");
+        const currentTags = $('#tag-input-roi-' + id).tagsinput('items')[0];
+
+        for (let i in currentTags) {
+            $('#tag-input-roi-' + id).tagsinput('remove', currentTags[i]);
+        }
+
+
+        selected = $(this).attr('id').replace(new RegExp("image-[0-9]+-roi-"), "");
+        SelectedImage = $(this).attr('id').replace("image-", "").replace(new RegExp("-roi-[0-9]+"), "");
+        $.getJSON("http://"+document.location.hostname + ":8081/api/roi/tags/?roi=" + selected, function (result) {
+            for (let i in result){
+                $('#tag-input-roi-' + SelectedImage).tagsinput('add', result[i])
+            }
+        });
+    Ready = true;
     })
 
 }
 
 $(document).ready(function () {
     $('.TagInput').on('itemAdded', function(event) {
-            let id = $(this).attr('id').replace("tag-input-roi-", "");
+        if (Ready)
             let data = {
-                id: id,
+                id: selected,
                 tag: event.item
             };
 

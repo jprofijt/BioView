@@ -21,6 +21,9 @@ DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS cache;
 drop table if exists image_tags;
 DROP table if exists tags;
+drop table if exists roi;
+drop table if exists meta_data;
+DROP TABLE IF EXISTS images;
 DROP TABLE IF EXISTS file_structure;
 DROP TABLE IF EXISTS directories;
 
@@ -31,8 +34,7 @@ drop table if exists image_attributes;
 drop table if exists image_tags;
 drop table if exists image_roi;
 DROP TABLE IF EXISTS tags;
-drop table if exists cache;
-drop table if exists images;
+drop table if exists image_data;
 
 
 
