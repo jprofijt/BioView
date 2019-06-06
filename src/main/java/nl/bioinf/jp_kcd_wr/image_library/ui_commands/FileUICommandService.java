@@ -1,6 +1,7 @@
 package nl.bioinf.jp_kcd_wr.image_library.ui_commands;
 
 import nl.bioinf.jp_kcd_wr.image_library.storage.FileSystemStorageService;
+import nl.bioinf.jp_kcd_wr.image_library.storage.StorageService;
 import org.apache.commons.io.FileUtils;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -17,12 +18,15 @@ import java.util.logging.Logger;
 @Service
 public class FileUICommandService implements UICommandService {
     private final Path rootLocation;
+    private final StorageService storageService;
     private static final Logger logger = Logger.getLogger(FileSystemStorageService.class.getName());
 
-    public FileUICommandService(Environment environment) {
-        this.rootLocation = Paths.get(environment.getProperty("library.upload"));
+    public FileUICommandService(Environment environment, StorageService storageService) {
+        rootLocation = Paths.get("upload/upload");
+        this.storageService = storageService;
         logger.log(Level.INFO, "Starting FileCommandService service using {0} as root location", this.rootLocation);
     }
+
 
     /**
      * Retrieves the full path, that includes the rootlocation and the given source path string
@@ -30,6 +34,7 @@ public class FileUICommandService implements UICommandService {
      * @return full directory path
      */
     private Path getFullPath(String path) { return this.rootLocation.resolve(path);}
+
 
     /**
      * Removes selected source directory or file
@@ -45,7 +50,7 @@ public class FileUICommandService implements UICommandService {
             FileUtils.deleteDirectory(path.toFile());
             logger.log(Level.INFO, "Successfully deleted {0}!", source);
         } catch (IOException e) {
-            logger.log(Level.WARNING, "Directory {0} could not be deleted", source);
+            logger.log(Level.WARNING, "{0} could not be deleted", source);
         }
 
     }
@@ -64,8 +69,10 @@ public class FileUICommandService implements UICommandService {
         try{
             logger.log(Level.INFO,"Moving directory from {0} to {1}", new Object[]{source, destination});
             Files.move(pathFrom, pathTo, StandardCopyOption.REPLACE_EXISTING);
+            storageService.processExistingImageLibrary(new File(String.valueOf(getFullPath(destination))));
+
         } catch (IOException e) {
-            logger.log(Level.WARNING, "File {0} could not be moved", source);
+            logger.log(Level.WARNING, "{0} could not be moved", source);
         }
     }
 
@@ -82,9 +89,10 @@ public class FileUICommandService implements UICommandService {
         Path pathTo = getFullPath(destination).resolve(new File(source).getName());
         try{
             logger.log(Level.INFO,"Copying directory from {0} to {1}", new Object[]{source, destination});
-            Files.copy(pathFrom, pathTo, StandardCopyOption.REPLACE_EXISTING);
+            FileUtils.copyDirectory(pathFrom.toFile(), pathTo.toFile());
+            storageService.processExistingImageLibrary(new File(String.valueOf(getFullPath(destination))));
         } catch (IOException e) {
-            logger.log(Level.WARNING, "File {0} could not be copied", source);
+            logger.log(Level.WARNING, "{0} could not be copied", source);
         }
     }
 
@@ -100,8 +108,9 @@ public class FileUICommandService implements UICommandService {
         try{
             logger.log(Level.INFO, "Renaming {0} to {1} in {2}", new Object[]{new File(source).getName(), renamedFileName, new File(source).getParent()});
             Files.move(oldPath, renamedPath, StandardCopyOption.REPLACE_EXISTING);
+            storageService.processExistingImageLibrary(new File(String.valueOf(renamedPath)));
         } catch (IOException e) {
-            logger.log(Level.WARNING, "File {0} could not be renamed", source);
+            logger.log(Level.WARNING, "{0} could not be renamed", source);
         }
 
     }
