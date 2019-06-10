@@ -1,5 +1,10 @@
 package nl.bioinf.jp_kcd_wr.image_library.ui_commands;
 
+/**
+ * Interface for file commands
+ *
+ * @author Kim Chau Duong
+ */
 public interface UICommandService {
 
     /**
@@ -21,5 +26,10 @@ public interface UICommandService {
      */
     void copyFile(String source, String destination);
 
+    /**
+     * Renames given source to its new name
+     * @param source given source to be renamed
+     * @param renamedFileName new name for the source
+     */
     void renameFile(String source, String renamedFileName);
 }
