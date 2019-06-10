@@ -14,8 +14,7 @@ $(document).on('dblclick', '.folder-manager ul li form div', function(e) {
 // Shows the folder select navbar
 function showFolderSelectNav() {
     $('.folder-navbar-unselected').hide();
-    $('.folder-navbar-selected').show();
-    $('.folder-navbar-selected li').css("display", "inline-block");
+    $('.folder-navbar-selected').css("display", "flex");
 }
 
 // Shows the folder unselect navbar
