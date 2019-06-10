@@ -189,3 +189,15 @@ function deleteSelected() {
 $(document).on("click", '[data-function="delete-folder"]', function () {
     deleteSelected()
 });
+
+/*---Rename command---*/
+$(document).on('show.bs.modal','#renameModal', function () {
+    var directory = $('.select').siblings('[name = "location"]').val();
+    var folderName = $('.select').find('b.folder-name').text();
+    $('input[name="renamedFolder"]').val(directory);
+    $('input[name="newFolderName"]').val(folderName);
+});
+
+$(document).on('shown.bs.modal','#renameModal', function () {
+    $('input[name="newFolderName"]').select().focus();
+});

@@ -21,7 +21,7 @@
                         <input name="currentPath" type="hidden" th:value="${currentPath}">
                         <input name="movedFolders" type="hidden">
                         <div class="move-to-tree" id="moveTree"></div>
-                        <br/><input type="submit" value="Move" />
+                        <br/><input class="btn btn-success" type="submit" value="Move" />
                     </form>
 
                 </div>
@@ -42,7 +42,7 @@
                         <input name="currentPath" type="hidden" th:value="${currentPath}">
                         <input name="copiedFolders" type="hidden">
                         <div class="copy-to-tree" id="copyTree"></div>
-                        <br/><input type="submit" value="Copy" />
+                        <br/><input class="btn btn-success" type="submit" value="Copy" />
                     </form>
 
                 </div>
@@ -62,8 +62,8 @@
                     <form th:action="@{/renamefolder}" method="post" id="renameFolder">
                         <input name="currentPath" type="hidden" th:value="${currentPath}">
                         <input name="renamedFolder" type="hidden">
-                        <input name="newfolderName" type="hidden">
-                        <br/><input type="submit" value="Copy" />
+                        <input class="form-control input-sm" name="newFolderName" type="text" th:required="true">
+                        <br/><input class="btn btn-success" type="submit" value="Rename" />
                     </form>
                 </div>
             </div>
