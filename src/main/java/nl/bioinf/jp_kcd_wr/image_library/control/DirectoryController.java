@@ -36,8 +36,8 @@ public class DirectoryController {
 
     /**
      * Mapping for the users to create directories
-     * @param directoryName Name for the new directory
-     * @param currentPath Path where the new directory will go
+     * @param directoryName name for the new directory
+     * @param currentPath path where the new directory will go
      * @param model request model
      * @return redirect to current page
      *
@@ -71,9 +71,9 @@ public class DirectoryController {
     }
 
     /**
-     *
-     * @param currentPath Current directory that the user is in and will be redirected to.
-     * @param folders List of folders that are to be moved
+     * Handles folder moving process
+     * @param currentPath current directory that the user is in and will be redirected to.
+     * @param folders list of folders that are to be moved
      * @param destination destination of the moving folders
      * @param redirectAttributes attributes given back to redirected page
      * @return redirect to current page
@@ -93,9 +93,9 @@ public class DirectoryController {
     }
 
     /**
-     *
-     * @param currentPath Current directory that the user is in and will be redirected to.
-     * @param folders List of folders that are to be copied
+     * Handles folder Copying process
+     * @param currentPath current directory that the user is in and will be redirected to.
+     * @param folders list of folders that are to be copied
      * @param destination destination of the copied folders
      * @param redirectAttributes attributes given back to redirected page
      * @return redirect to current page
@@ -114,9 +114,23 @@ public class DirectoryController {
         return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
     }
 
-
-//    @PostMapping
-//    public String renameFolder(@RequestParam String )
+    /**
+     * Handles folder renaming process
+     * @param currentPath Current directory that the user is in and will be redirected to.
+     * @param directory  Directory that's to be renamed
+     * @param newFolderName new name for the directory
+     * @param redirectAttributes attributes given back to redirected page
+     * @return redirect to current page
+     *
+     * @author Kim Chau Duong
+     */
+    @PostMapping("/renamefolder")
+    public String renameFolder(@RequestParam String currentPath, @RequestParam(name = "renamedFolder") String directory, @RequestParam(name = "newFolderName") String newFolderName, RedirectAttributes redirectAttributes) {
+        logger.log(Level.INFO, "Renaming folder...");
+        uiCommandService.renameFile(directory, newFolderName);
+        logger.log(Level.INFO, "Finished renaming folder!");
+        return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
+    }
 
 
 
