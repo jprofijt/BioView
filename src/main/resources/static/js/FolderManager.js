@@ -99,7 +99,7 @@ $(function() {
             "move": {name: "Move", icon: "fas fa-cut"},
             copy: {name: "Copy", icon: "fas fa-copy"},
             "delete": {name: "Delete", icon: "fas fa-trash-alt"},
-            "properties": {name: "Properties"}
+            "rename": {name: "Rename", icon: "fas fa-edit"}
         }
     });
 });

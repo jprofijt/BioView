@@ -57,7 +57,7 @@ $(function () {
             var directory = $(this).siblings('[name = "location"]').val();
             directoryArray.push(directory);
         });
-        $('input[name="movingFolders"]').val(directoryArray);
+        $('input[name="movedFolders"]').val(directoryArray);
 
         $("#moveTree").fancytree("getTree").generateFormElements();
     });

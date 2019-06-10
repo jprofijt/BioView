@@ -81,7 +81,7 @@ public class DirectoryController {
      * @author Kim Chau Duong
      */
     @PostMapping("/movefolder")
-    public String moveFolder(@RequestParam String currentPath, @RequestParam(name = "movingFolders") List<String> folders, @RequestParam(name = "ft_1_active") String destination, RedirectAttributes redirectAttributes) {
+    public String moveFolder(@RequestParam String currentPath, @RequestParam(name = "movedFolders") List<String> folders, @RequestParam(name = "ft_1_active") String destination, RedirectAttributes redirectAttributes) {
         if(null != folders && folders.size() > 0) {
             logger.log(Level.INFO, "Moving folder(s)...");
             for (String folder : folders) {
