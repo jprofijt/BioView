@@ -6,7 +6,7 @@
  */
 
 // Submits on double click
-$(document).on('dblclick', '.folder-manager ul li form div', function(e) {
+$(document).on('dblclick', '.folder-manager ul li form div', function() {
     $(this).addClass('folder-active');
     $(this).parents('form').submit();
 });
@@ -14,8 +14,7 @@ $(document).on('dblclick', '.folder-manager ul li form div', function(e) {
 // Shows the folder select navbar
 function showFolderSelectNav() {
     $('.folder-navbar-unselected').hide();
-    $('.folder-navbar-selected').show();
-    $('.folder-navbar-selected li').css("display", "inline-block");
+    $('.folder-navbar-selected').css("display", "flex");
 }
 
 // Shows the folder unselect navbar
@@ -72,6 +71,16 @@ function pickContextCommand(key) {
     else if (key == "copy"){
         $('#copyModal').modal('toggle');
     }
+    else if (key == "rename"){
+        if ($('.select').length < 2) {
+            $('#renameModal').modal('toggle');
+        }
+    }
+    else if (key == "open"){
+        if ($('.select').length < 2) {
+            $('.select').parents('form').submit();
+        }
+    }
 }
 
 $(function() {
@@ -100,7 +109,7 @@ $(function() {
             "move": {name: "Move", icon: "fas fa-cut"},
             copy: {name: "Copy", icon: "fas fa-copy"},
             "delete": {name: "Delete", icon: "fas fa-trash-alt"},
-            "properties": {name: "Properties"}
+            "rename": {name: "Rename", icon: "fas fa-edit"}
         }
     });
 });
@@ -189,4 +198,22 @@ function deleteSelected() {
 
 $(document).on("click", '[data-function="delete-folder"]', function () {
     deleteSelected()
+});
+
+/*---Rename command---*/
+$(document).on('show.bs.modal','#renameModal', function (e) {
+    if ($('.select').length > 1){
+        console.log($('.select').length);
+        e.preventDefault();
+    } else {
+        var directory = $('.select').siblings('[name = "location"]').val();
+        var folderName = $('.select').find('b.folder-name').text();
+        $('input[name="renamedFolder"]').val(directory);
+        $('input[name="newFolderName"]').val(folderName);
+    }
+
+});
+
+$(document).on('shown.bs.modal','#renameModal', function () {
+    $('input[name="newFolderName"]').select().focus();
 });

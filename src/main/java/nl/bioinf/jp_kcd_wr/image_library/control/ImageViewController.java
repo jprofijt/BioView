@@ -51,7 +51,7 @@ public class ImageViewController {
         model.addAttribute("currentPath", new File(location.replace("\\", "/")));
         model.addAttribute("date", LocalDate.now().toString());
 
-        logger.log(Level.INFO, "Creating Image view for images in {0}", location);
+        logger.log(Level.INFO, "Creating Image view for images in {0}", location.replace("\\", "/"));
         List<Path> list = storageService.loadAbsolute(location).collect(Collectors.toList());
         model.addAttribute("Images", loadCaches(list));
         model.addAttribute("cache_path", "../cache/");

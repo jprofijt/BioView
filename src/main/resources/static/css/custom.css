@@ -46,3 +46,8 @@ body {
 .docs-gallery {
     padding: 0 0;
 }
+
+.pic-select {
+    background: #03a9f42e;
+    outline: 1px solid #03A9F4;
+}

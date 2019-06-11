@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import java.util.stream.Stream;
 import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageDataSource;
 import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageFileType;
 import nl.bioinf.jp_kcd_wr.image_library.model.Image;
+import nl.bioinf.jp_kcd_wr.image_library.model.ImageAttribute;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -185,11 +187,11 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 
-    private ImageFileType getFileTypeEnum(String extention){
-        if (extention.toLowerCase() == ".jpg"){
+    private ImageFileType getFileTypeEnum(String extension){
+        if (extension.toLowerCase().equals("jpg")){
             return ImageFileType.JPG;
         }
-        if (extention.toLowerCase() == ".tiff"){
+        if (extension.toLowerCase().equals("tiff")){
             return ImageFileType.TIFF;
         }
         else {
@@ -200,12 +202,31 @@ public class FileSystemStorageService implements StorageService {
 
         String path = image.getPath();
         int id = imageDataSource.getImageIdFromPath(path);
-        File ImageFile = new File(path);
-        long size = ImageFile.length();
+        File imageFile = new File(path);
+        long size = imageFile.length();
         ImageFileType fileType = getFileTypeEnum(FilenameUtils.getExtension(path));
 
 
-        imageDataSource.insertImageMetaData(id, path, date, size, fileType);
+        imageDataSource.insertImageMetaData(new ImageAttribute(id, image.getNewFilename(),imageFile.getParent(), path, size, date, fileType));
+    }
+
+    private void indexImageAttributes(File directory){
+        for (File image : directory.listFiles(File::isFile)){
+            ImageAttribute attribute = new ImageAttribute();
+            attribute.setImageName(image.getName());
+            attribute.setPath(image.getParent());
+            attribute.setFilePath(image.getPath());
+            attribute.setImageSize(image.length());
+            attribute.setDateCreated(getDateModified(image));
+            attribute.setFileType(getFileTypeEnum(FilenameUtils.getExtension(String.valueOf(image))));
+        imageDataSource.insertImageMetaData(attribute);
+        }
+    }
+
+    private String getDateModified(File directory) {
+        long lastModified = directory.lastModified();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(lastModified);
     }
 
     /**
@@ -396,6 +417,7 @@ public class FileSystemStorageService implements StorageService {
         try {
             IndexImages(Directory);
             createThumbnails(Directory);
+            indexImageAttributes(Directory);
 
         } catch (IOException e) {
             logger.log(Level.WARNING, "Directory {0} not found", Directory.getPath());
@@ -448,8 +470,6 @@ public class FileSystemStorageService implements StorageService {
             anotatedImage.setOrigName(image.getName());
             anotatedImage.setNewFilename(image.getName());
             imageDataSource.insertImage(anotatedImage);
-
-
         }
     }
 

@@ -21,7 +21,7 @@ function renameTreeJsonData(response) {
     return response;
 }
 
-//Fancy 'Move to' directory Tree
+// Fancy 'Move to' directory tree
 $(function () {
     $("#moveTree").fancytree({
         source: [
@@ -36,7 +36,6 @@ $(function () {
             };
         },
         postProcess: function(event, data){
-            console.log(data.response);
             data.result = renameTreeJsonData(data.response);
         },
         loadChildren: function(event, data) {
@@ -58,14 +57,14 @@ $(function () {
             var directory = $(this).siblings('[name = "location"]').val();
             directoryArray.push(directory);
         });
-        $('input[name="movingFolders"]').val(directoryArray);
+        $('input[name="movedFolders"]').val(directoryArray);
 
         $("#moveTree").fancytree("getTree").generateFormElements();
     });
 
 });
 
-//Fancy 'Copy to' directory Tree
+// Fancy 'Copy to' directory tree
 $(function () {
     $("#copyTree").fancytree({
         source: [
@@ -80,7 +79,6 @@ $(function () {
             };
         },
         postProcess: function(event, data){
-            console.log(data.response);
             data.result = renameTreeJsonData(data.response);
         },
         loadChildren: function(event, data) {
@@ -105,10 +103,6 @@ $(function () {
         $('input[name="copiedFolders"]').val(directoryArray);
 
         $("#copyTree").fancytree("getTree").generateFormElements();
-
-        // alert("POST data:\n" + jQuery.param($(this).serializeArray()));
-        // // return false to prevent submission of this sample
-        // return false;
     });
 
 });

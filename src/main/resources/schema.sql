@@ -23,6 +23,7 @@ drop table if exists image_tags;
 DROP table if exists tags;
 drop table if exists roi;
 drop table if exists meta_data;
+drop table if exists image_attributes;
 DROP TABLE IF EXISTS images;
 DROP TABLE IF EXISTS file_structure;
 DROP TABLE IF EXISTS directories;
@@ -52,13 +53,16 @@ CREATE TABLE images(
   PRIMARY KEY (id)
 );
 
-create table images_meta(
-    id          INT                 not null    unique,
-    path        varchar(200)        not null    unique,
-    date        datetime            not null,
-    size        long,
-    type    enum('TIFF', 'PNG', 'JPEG'),
-    primary key (id)
+create table image_attributes(
+  id          INT                 not null    AUTO_INCREMENT,
+  name        VARCHAR(500)        NOT NULL,
+  path        varchar(200)        not null,
+  filepath    varchar(200)        not null UNIQUE,
+  date        datetime            not null,
+  size        long,
+  type        enum('TIFF', 'PNG', 'JPG'),
+  primary key (id),
+  foreign key (filepath) references images(path)
 );
 
 

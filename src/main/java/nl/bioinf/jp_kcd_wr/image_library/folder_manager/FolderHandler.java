@@ -33,7 +33,7 @@ public class FolderHandler implements FolderStructureProvider {
     @Autowired
     public FolderHandler(Environment environment){
         this.rootLocation = Paths.get(environment.getProperty("library.upload"));
-        logger.log(Level.INFO, "Starting FileSystemStorage service using {0} as root location", new Object[] {this.rootLocation});
+        logger.log(Level.INFO, "Starting FolderHandler service using {0} as root location", new Object[] {this.rootLocation});
     }
 
     /**
@@ -62,7 +62,7 @@ public class FolderHandler implements FolderStructureProvider {
      * @author Kim Chau Duong
      */
     private Directory createDirectoryObject(File directory){
-        String relativeDirectory = getRelativePath(directory.getPath()).toString();
+        String relativeDirectory = getRelativePath(directory.getPath()).toString().replace("\\", "/");
         String directoryName = directory.getName();
         String dateModified = getDateModified(directory);
 
@@ -126,62 +126,7 @@ public class FolderHandler implements FolderStructureProvider {
         }
 
 
-    /**
-     * Removes selected folder
-     * @param directory the to-be deleted directory
-     *
-     * @author Kim Chau Duong
-     */
-    @Override
-    public void removeFolder(String directory) {
-        Path path = getFullPath(directory);
-        try {
-            logger.log(Level.INFO, "Deleting directory: {0}", directory);
-            FileUtils.deleteDirectory(path.toFile());
-            logger.log(Level.INFO, "Successfully deleted {0}!", directory);
-        } catch (IOException e) {
-            logger.log(Level.WARNING, "Directory {0} could not be deleted", directory);
-        }
 
-    }
-
-    /**
-     * Moves folder from current location to newly assigned destination
-     * @param directory moving directory
-     * @param destination paste destination
-     *
-     * @author Kim Chau Duong
-     */
-    @Override
-    public void moveFolder(String directory, String destination) {
-        Path directoryFrom = getFullPath(directory);
-        Path directoryTo = getFullPath(destination).resolve(new File(directory).getName());
-        try{
-            logger.log(Level.INFO,"Moving directory from {0} to {1}", new Object[]{directory, destination});
-            Files.move(directoryFrom, directoryTo, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            logger.log(Level.WARNING, "File {0} could not be moved", directory);
-        }
-    }
-
-    /**
-     * Copies folder from current location to another destination
-     * @param directory copied directory
-     * @param destination paste destination
-     *
-     * @author Kim Chau duong
-     */
-    @Override
-    public void copyFolder(String directory, String destination) {
-        Path directoryFrom = getFullPath(directory);
-        Path directoryTo = getFullPath(destination).resolve(new File(directory).getName());
-        try{
-            logger.log(Level.INFO,"Copying directory from {0} to {1}", new Object[]{directory, destination});
-            Files.copy(directoryFrom, directoryTo, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            logger.log(Level.WARNING, "File {0} could not be copied", directory);
-        }
-    }
 
 
 

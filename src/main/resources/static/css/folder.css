@@ -19,7 +19,7 @@
     user-select:none;
 }
 .folder-manager ul li {
-    padding: 0;
+    padding: 0 2px;
     display: inline-block;
     margin: 0 auto;
 }
@@ -148,9 +148,7 @@
 .folder-navbar-selected{
     display: none;
 }
-.folder-navbar-selected li{
-    display: inline;
-}
+
 .folder-navbar-selected > li > .dropdown-menu > .div:hover {
     background: #343a4026;
     cursor:pointer;
