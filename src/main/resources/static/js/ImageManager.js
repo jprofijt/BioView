@@ -43,7 +43,7 @@ $(document).on('show.bs.modal','#imgPropertyModal', function (e) {
         console.log($('.select').length);
         e.preventDefault();
     } else {
-        var path = $('.pic-select').find('.image-path').val();
+        var path = $('.pic-select').find('.image-path').val().replace("\\", "/");
         var url = "http://" + document.location.hostname + ":8081/api/metadata/filepath";
         $.getJSON(url, {path: path}, function (data) {
             console.log(data);
