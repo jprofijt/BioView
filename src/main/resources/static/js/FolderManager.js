@@ -6,7 +6,7 @@
  */
 
 // Submits on double click
-$(document).on('dblclick', '.folder-manager ul li form div', function(e) {
+$(document).on('dblclick', '.folder-manager ul li form div', function() {
     $(this).addClass('folder-active');
     $(this).parents('form').submit();
 });
