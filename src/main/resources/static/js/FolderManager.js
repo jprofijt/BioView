@@ -190,7 +190,7 @@ function deleteSelected() {
                 console.log("Details0: " + desc + "\nError:" + err);
             }
         });
-        })
+        });
     $('.select').parents('li').css("display", "none");
     $(".select").removeClass("select");
     showFolderUnselectNav();

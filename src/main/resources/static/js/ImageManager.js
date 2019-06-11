@@ -50,3 +50,50 @@ $(document).on('show.bs.modal','#imgPropertyModal', function (e) {
         })
     }
 });
+
+$(function () {
+    function Toast(type, msg) {
+        this.type = type;
+        this.msg = msg;
+    }
+    toastr.options = {
+        "closeButton": true,
+        "positionClass": "toast-bottom-left",
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
+    var toasts = []
+    if ($('#successMessages').val()){
+        var successMessages = $('#successMessages').val().slice( 1, -1).split(",");
+        $.each(successMessages, function (index, value) {
+            setTimeout( function () {
+                Command: toastr["success"](value);
+            }, 500*index)
+        })
+    }
+    if ($('#errorMessages').val()){
+        var errorMessages = $('#errorMessages').val().slice( 1, -1).split(",");
+        $.each(errorMessages, function (index, value) {
+            setTimeout( function () {
+                Command: toastr["error"](value);
+            }, 500*index)
+        })
+
+    }
+
+    // var errorMessages = $('#errorMessages').val().slice( 1, -1).split(",");
+
+
+
+    //  var successArray = JSON.parse(successMessages);
+    // console.log(successArray);
+    // $.each(successArray, function (index, value) {
+    //     console.log(value)
+    // })
+});

@@ -2,6 +2,7 @@ package nl.bioinf.jp_kcd_wr.image_library.control;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import nl.bioinf.jp_kcd_wr.image_library.storage.StorageFileNotFoundException;
 import nl.bioinf.jp_kcd_wr.image_library.storage.StorageService;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * Controller class that handles file upload requests from the upload page
@@ -83,8 +85,9 @@ public class FileUploadController {
      * @return redirect to main page
      */
     @PostMapping("/multiFileUpload")
-    public String save(@RequestParam(name = "directory", required = false, defaultValue = "") File directory, @RequestParam("file") List<MultipartFile> uploadForm) {
-
+    public String save(@RequestParam(name = "directory", required = false, defaultValue = "") File directory, @RequestParam("file") List<MultipartFile> uploadForm, RedirectAttributes redirectAttributes) {
+        ArrayList<String> successMessages = new ArrayList<>();
+        ArrayList<String> errorMessages = new ArrayList<>();
         if (null != uploadForm && uploadForm.size() > 0) {
             for (MultipartFile multipartFile : uploadForm) {
                 String filename = multipartFile.getOriginalFilename();
@@ -92,11 +95,15 @@ public class FileUploadController {
                 if (contentTypes.contains(fileContentType)) {
                     storageService.store(multipartFile, directory);
                     logger.log(Level.INFO, "Succesfully uploaded {0} in {1}", new Object[]{filename, directory.toString()});
+                    successMessages.add("You successfully uploaded " + filename + "!");
                 } else {
                     logger.log(Level.WARNING, "Incompatible fileupload, file = {0}", new Object[]{filename});
+                    errorMessages.add("Incompatible fileupload: " + filename);
                 }
-
             }
+            redirectAttributes.addFlashAttribute("success_messages",successMessages);
+            redirectAttributes.addFlashAttribute("error_messages",errorMessages);
+
         }
         return "redirect:/imageview?location=" + directory.toString().replace("\\", "/");
     }

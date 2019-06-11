@@ -2,6 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
 <main th:fragment="images-window">
+    <div th:if="${success_messages}">
+        <input id="successMessages" type="hidden" th:value="${success_messages}">
+    </div>
+    <div th:if="${error_messages}">
+        <input id="errorMessages" type="hidden" th:value="${error_messages}">
+    </div>
     <script th:src="@{/js/TableLoader.js}"></script>
     <div class="container-fluid mt-4 mb-4">
         <div th:replace="fragments/breadcrumbs"></div>

@@ -46,13 +46,14 @@ public class DirectoryController {
     @PostMapping("/createfolder")
     public String createFolder(@RequestParam(name="directoryName", required=true) String directoryName, @RequestParam(name="currentPath", required=true) String currentPath, Model model) {
         try {
+            logger.log(Level.INFO, "Creating directory");
             folderHandler.createNewFolder(directoryName, currentPath);
         } catch (DirectoryExistsException e) {
             model.addAttribute("error", e.getMessage());
-            logger.log(Level.WARNING, "Folder {0} in {1} already exist", new Object[]{directoryName, currentPath});
+            logger.log(Level.WARNING, "Folder {0} already exist in {1}", new Object[]{directoryName, currentPath});
             return "directory-error";
         }
-        logger.log(Level.INFO, "Folders were created successfully!");
+        logger.log(Level.INFO, "Folder was created successfully!");
         return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
     }
 
