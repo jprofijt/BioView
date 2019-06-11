@@ -17,9 +17,47 @@ $(document).ready(function () {
 let available = [];
 const url = "http://"+document.location.hostname + ":8081/api/tags/all/";
 $.getJSON(url, function (result) {
-    for (const i in result) {
+    for (let i in result) {
         available.push(result[i])
     }
+});
+
+$(document).ready(function () {
+    const add = $('#add-button');
+    const save = $('#save-button');
+    const cancel = $('#cancel-button');
+    add.on("click", function () {
+        selected = undefined;
+        save.attr('hidden', false);
+        cancel.attr('hidden', false);
+        add.attr('hidden', true);
+        let EditingId = $(this).parent().attr('id');
+        $('#ImageRois-' + EditingId).append("<tr class='image-roi-row' id='editing-row'>" +
+            "<td>#</td>" +
+            "<td><input type='number' id='ph' name='ph' min='0' max='14' placeholder='pH'></td>" +
+            "<td><input type='number' id='t' name='t' min='0'></td>" +
+            "<td><input type='number' id='o2' name='o2' min='0' max='100' placeholder='oxygen %'></td>" +
+            "<td><input type='number' id='co2' name='co2' min='0' max='100' placeholder='Co2 %'></td>" +
+            "</tr>");
+    });
+
+    cancel.on("click", function () {
+        let EditingId = $(this).parent().attr('id');
+        $('#editing-row').remove();
+        save.attr('hidden', true);
+        cancel.attr('hidden', true);
+        add.attr('hidden', false);
+    });
+
+    save.on("click", function () {
+        let EditingId = $(this).parent().attr('id');
+        let editingRow = $('#editing-row');
+        let inputs = editingRow.find('input');
+
+    })
+
+
+
 });
 
 
@@ -156,8 +194,8 @@ function AppendNewRoiToTable(id, roi) {
         selected = $(this).attr('id').replace(new RegExp("image-[0-9]+-roi-"), "");
         SelectedImage = $(this).attr('id').replace("image-", "").replace(new RegExp("-roi-[0-9]+"), "");
         $.getJSON("http://"+document.location.hostname + ":8081/api/roi/tags/?roi=" + selected, function (result) {
-            for (let i in result){
-                $('#tag-input-roi-' + SelectedImage).tagsinput('add', result[i])
+            for (let i in result.tags){
+                $('#tag-input-roi-' + SelectedImage).tagsinput('add', result.tags[i])
             }
         });
     Ready = true;

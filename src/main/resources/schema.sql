@@ -21,13 +21,6 @@ DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS cache;
 drop table if exists image_tags;
 DROP table if exists tags;
-<<<<<<< HEAD
-=======
-drop table if exists roi;
-drop table if exists meta_data;
-drop table if exists image_attributes;
-DROP TABLE IF EXISTS images;
->>>>>>> 660f371f6d4246e3455b8baf6b835756c07bf3ee
 DROP TABLE IF EXISTS file_structure;
 DROP TABLE IF EXISTS directories;
 
@@ -66,19 +59,6 @@ CREATE TABLE images(
 );
 
 create table image_attributes(
-<<<<<<< HEAD
-    id          INT                 not null,
-    name        VARCHAR(500)        NOT NULL,
-    path        varchar(260)        not null    unique,
-    filepath    varchar(260)        not null,
-    date        datetime            not null,
-    size        long,
-    type        enum('TIFF', 'PNG', 'JPEG'),
-    foreign key (id) references images(id),
-    foreign key (name) references images(new_name),
-    foreign key (path) references images(path),
-    primary key (id)
-=======
   id          INT                 not null    AUTO_INCREMENT,
   name        VARCHAR(500)        NOT NULL,
   path        varchar(200)        not null,
@@ -88,7 +68,6 @@ create table image_attributes(
   type        enum('TIFF', 'PNG', 'JPG'),
   primary key (id),
   foreign key (filepath) references images(path)
->>>>>>> 660f371f6d4246e3455b8baf6b835756c07bf3ee
 );
 
 
