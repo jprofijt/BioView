@@ -72,9 +72,7 @@ $(function () {
     if ($('#successMessages').val()){
         var successMessages = $('#successMessages').val().slice( 1, -1).split(",");
         $.each(successMessages, function (index, value) {
-            setTimeout( function () {
-                Command: toastr["success"](value);
-            }, 500*index)
+            toasts.push(new Toast("success", value))
         })
     }
     if ($('#errorMessages').val()){
