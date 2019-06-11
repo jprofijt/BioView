@@ -3,6 +3,7 @@ package nl.bioinf.jp_kcd_wr.image_library.data_access.jdbc;
 import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageDataSource;
 import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageFileType;
 import nl.bioinf.jp_kcd_wr.image_library.model.Image;
+import nl.bioinf.jp_kcd_wr.image_library.model.ImageAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -52,7 +53,7 @@ public class ImageDataSourceJdbc implements ImageDataSource {
             SqlParameterSource parameters = new MapSqlParameterSource()
                     .addValue("orig_name", image.getOrigName())
                     .addValue("new_name", image.getNewFilename())
-                    .addValue("path", image.getPath());
+                    .addValue("path", image.getPath().replace("\\", "/"));
             String insertQuery = "INSERT INTO images (orig_name, new_name, path) VALUES (:orig_name, :new_name, :path)";
             namedJdbcTemplate.update(insertQuery, parameters);
         }
@@ -66,7 +67,7 @@ public class ImageDataSourceJdbc implements ImageDataSource {
      */
     private boolean checkImageIndex(Image image) {
         SqlParameterSource parameterSource = new MapSqlParameterSource()
-                .addValue("path", image.getPath());
+                .addValue("path", image.getPath().replace("\\", "/"));
         String query = "SELECT count(*) FROM images WHERE path = :path";
 
         int result = namedJdbcTemplate.queryForObject(query, parameterSource, Integer.class);
@@ -117,7 +118,7 @@ public class ImageDataSourceJdbc implements ImageDataSource {
     public int getImageIdFromPath(String path) {
         String query = "SELECT id from images where path = :path";
         SqlParameterSource parameter = new MapSqlParameterSource()
-                .addValue("path", path);
+                .addValue("path", path.replace("\\", "/"));
         Integer ImageId = namedJdbcTemplate.queryForObject(query, parameter, Integer.class);
         return ImageId;
     }
@@ -183,35 +184,45 @@ public class ImageDataSourceJdbc implements ImageDataSource {
     @Override
     public Path getThumbnailPathFromImagePath(String PathToImage) {
         SqlParameterSource parameterSource = new MapSqlParameterSource()
-                .addValue("image_path", PathToImage);
+                .addValue("image_path", PathToImage.replace("\\", "/"));
         String query = "SELECT cache.cache_path from cache INNER JOIN images i on cache.image_id = i.id WHERE i.path = :image_path";
         String result = namedJdbcTemplate.queryForObject(query, parameterSource, String.class);
         return Paths.get(result).getFileName();
     }
 
     /**
-     * Inserts new image metadata
+     * Inserts new image attribute data
      *
-     * @param id    image id
-     * @param path  image path
-     * @param date  creation date
-     * @param size  image size
-     * @param fileType  image file type
+     * @param imageAttribute
      *
-     * @author Jouke Profijt
+     * @author Jouke Profijt, Kim Chau Duong
      */
     @Override
-    public void insertImageMetaData(int id, String path, String date, long size, ImageFileType fileType) {
+    public void insertImageMetaData(ImageAttribute imageAttribute) {
+        if (!checkImageAttributeIndex(imageAttribute)){
+            SqlParameterSource parameterSource = new MapSqlParameterSource()
+//                .addValue("id", imageAttribute.getId())
+                    .addValue("name", imageAttribute.getImageName())
+                    .addValue("path", imageAttribute.getPath().replace("\\", "/"))
+                    .addValue("filepath", imageAttribute.getFilePath().replace("\\", "/"))
+                    .addValue("date", imageAttribute.getDateCreated())
+                    .addValue("size", imageAttribute.getImageSize())
+                    .addValue("type", imageAttribute.getFileType().toString());
+            String query = "insert into image_attributes ( name, path, filepath, date, size, type) values ( :name, :path, :filepath, :date, :size, :type)";
+
+            namedJdbcTemplate.update(query, parameterSource);
+        }
+    }
+
+
+    private boolean checkImageAttributeIndex(ImageAttribute imageAttribute) {
         SqlParameterSource parameterSource = new MapSqlParameterSource()
-                .addValue("id", id)
-                .addValue("path", path)
-                .addValue("date", date)
-                .addValue("size", size)
-                .addValue("fileType", fileType.toString());
-        String query = "insert into images_meta (id, path, date, size, type) values (:id, :path, :date, :size, :fileType)";
+                .addValue("filepath", imageAttribute.getFilePath().replace("\\", "/"));
+        String query = "SELECT count(*) FROM image_attributes WHERE filepath = :filepath";
 
-        namedJdbcTemplate.update(query, parameterSource);
+        int result = namedJdbcTemplate.queryForObject(query, parameterSource, Integer.class);
 
+        return result >= 1;
     }
 
 
