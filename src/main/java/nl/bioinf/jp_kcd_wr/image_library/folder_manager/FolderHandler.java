@@ -1,4 +1,4 @@
-package nl.bioinf.jp_kcd_wr.image_library.filebrowser;
+package nl.bioinf.jp_kcd_wr.image_library.folder_manager;
 
 import nl.bioinf.jp_kcd_wr.image_library.model.Directory;
 import nl.bioinf.jp_kcd_wr.image_library.storage.FileSystemStorageService;
@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,7 +33,7 @@ public class FolderHandler implements FolderStructureProvider {
     @Autowired
     public FolderHandler(Environment environment){
         this.rootLocation = Paths.get(environment.getProperty("library.upload"));
-        logger.log(Level.INFO, "Starting FileSystemStorage service using {0} as root location", new Object[] {this.rootLocation});
+        logger.log(Level.INFO, "Starting FolderHandler service using {0} as root location", new Object[] {this.rootLocation});
     }
 
     /**
@@ -48,6 +48,13 @@ public class FolderHandler implements FolderStructureProvider {
     }
 
     /**
+     * Retrieves the full path, that includes the rootlocation and the given directory string
+     * @param directory a relative path
+     * @return full directory path
+     */
+    private Path getFullPath(String directory) { return this.rootLocation.resolve(directory);}
+
+    /**
      * Creates directory object
      * @param directory directory path
      * @return directory object
@@ -55,7 +62,7 @@ public class FolderHandler implements FolderStructureProvider {
      * @author Kim Chau Duong
      */
     private Directory createDirectoryObject(File directory){
-        Path relativeDirectory = getRelativePath(directory.getPath());
+        String relativeDirectory = getRelativePath(directory.getPath()).toString().replace("\\", "/");
         String directoryName = directory.getName();
         String dateModified = getDateModified(directory);
 
@@ -82,7 +89,7 @@ public class FolderHandler implements FolderStructureProvider {
      */
     @Override
     public ArrayList<Directory> getNextFolders(String nextFolders){
-        File[] directories = new File(String.valueOf(this.rootLocation.resolve(nextFolders))).listFiles(File::isDirectory);
+        File[] directories = new File(String.valueOf(getFullPath(nextFolders))).listFiles(File::isDirectory);
 
         ArrayList<Directory> directoryList = new ArrayList<>();
         if(directories != null){
@@ -103,7 +110,7 @@ public class FolderHandler implements FolderStructureProvider {
      */
     @Override
     public void createNewFolder(String directoryName, String currentPath) throws DirectoryExistsException {
-        String path = this.rootLocation.resolve(currentPath) + File.separator + directoryName;
+        String path = getFullPath(currentPath) + File.separator + directoryName;
         File newDir = new File(path);
         try {
             Files.createDirectory(newDir.toPath());
@@ -119,23 +126,8 @@ public class FolderHandler implements FolderStructureProvider {
         }
 
 
-    /**
-     * Removes selected folder
-     * @param directory the to-be deleted directory
-     *
-     * @author Kim Chau Duong
-     */
-    @Override
-    public void removeFolder(String directory) {
-        Path path = this.rootLocation.resolve(directory);
-        try {
-            logger.log(Level.INFO, "Deleting directory: {0}", directory);
-            FileUtils.deleteDirectory(path.toFile());
-            logger.log(Level.INFO, "Successfully deleted {0}!", directory);
-        } catch (IOException e) {
-            logger.log(Level.WARNING, "Directory {0} could not be deleted", directory);
-        }
 
-    }
+
+
 
 }
