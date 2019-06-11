@@ -12,14 +12,17 @@
                     <nav class="folder-navbar navbar navbar-expand-md navbar-light bg-dark">
                         <a class="navbar-brand">Menu</a>
                     </nav>
-                    <ul class="pictures clearfix rounded-bottom">
-                        <li class="col-xs-12 col-sm-6 col-md-4 col-lg-3" th:each="image, iterStat : ${Images}">
+                    <ul class="pictures clearfix rounded-bottom context-menu-pics">
+                        <div th:replace="fragments/image-modals"></div>
+                        <li class="picture-img col-xs-12 col-sm-6 col-md-4 col-lg-3" th:each="image, iterStat : ${Images}">
                             <!--th:attr="data-el_id=${element.getId()}"-->
                             <input class="image-iter" type="hidden" th:value="${iterStat.count}">
                             <input class="image-path" type="hidden" th:value="${image.getActual()}">
                             <a th:attr="data-id=${''+image.getActual()}" th:class="modallink" th:id="'link'+${iterStat.count}">
                                 <img class="img-thumbnail img-fluid" th:src="@{'/cache/' + ${image.getThumbnail()}}" />
                             </a>
+
+
                             <!-- Modal -->
                             <div th:id="'myModal'+ ${iterStat.count}" class="modal fade image-modal" role="dialog">
                                 <div class="modal-dialog modal-dialog-bioview modal-dialog-scrollable">
