@@ -145,10 +145,11 @@ function AppendNewRoiToTable(id, roi) {
         Ready = false;
         $('.image-roi-row').removeClass("bg-primary selected");
         $(this).addClass("bg-primary selected");
-        const currentTags = $('#tag-input-roi-' + id).tagsinput('items')[0];
-
+        const currentTags = $('#tag-input-roi-' + id).tagsinput('items');
+        console.log(currentTags);
         for (let i in currentTags) {
             $('#tag-input-roi-' + id).tagsinput('remove', currentTags[i]);
+
         }
 
 
@@ -166,11 +167,12 @@ function AppendNewRoiToTable(id, roi) {
 
 $(document).ready(function () {
     $('.TagInput').on('itemAdded', function(event) {
-        if (Ready)
+        if (Ready) {
             let data = {
                 id: selected,
                 tag: event.item
-            };
+        };
+
 
             $.ajax({
                 type: "POST",
@@ -185,6 +187,7 @@ $(document).ready(function () {
                     console.log('Adding tag success')
                 }
             })
-        });
+        }
+    });
     });
 

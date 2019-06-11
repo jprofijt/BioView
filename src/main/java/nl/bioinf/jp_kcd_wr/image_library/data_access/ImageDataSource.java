@@ -30,5 +30,5 @@ public interface ImageDataSource {
 
     Path getThumbnailPathFromImagePath(String PathToImage);
 
-    void insertImageMetaData(int id, String path, String date, long size, ImageFileType fileType);
+    void insertImageMetaData(int id, String name, String path, String date, long size, ImageFileType fileType);
 }

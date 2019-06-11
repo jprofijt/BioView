@@ -32,8 +32,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
     public WebConfig(Environment environment) {
-        this.rootLocation = Paths.get(environment.getProperty("library.upload"));
-        this.thumbnailLocation = Paths.get(environment.getProperty("cache-location"));
+        this.rootLocation = new File (environment.getProperty("library.upload")).toPath();
+        this.thumbnailLocation = new File(environment.getProperty("cache-location")).toPath();
         this.rootSymbolicLink = new File("upload/upload/");
         this.thumbnailSymbolicLink = new File("upload/thumbnails");
     }
