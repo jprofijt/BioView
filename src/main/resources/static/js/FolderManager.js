@@ -6,13 +6,24 @@
  */
 
 // Submits on double click
-$(document).on('dblclick', '.folder-manager ul li form div', function(e) {
+$(document).on('dblclick', '.folder-manager ul li form div', function() {
     $(this).addClass('folder-active');
     $(this).parents('form').submit();
 });
 
+// Shows the folder select navbar
+function showFolderSelectNav() {
+    $('.folder-navbar-unselected').hide();
+    $('.folder-navbar-selected').css("display", "flex");
+}
 
-// Adds select class to selected folder(s)
+// Shows the folder unselect navbar
+function showFolderUnselectNav(){
+    $('.folder-navbar-selected').hide();
+    $('.folder-navbar-unselected').show();
+}
+
+// Adds select class to selected folder(s) and shows the select navbar
 $(document).on("click contextmenu", "[data-file-icon] form div", function(e) {
     if (e.ctrlKey) {
         $(this).addClass("select");
@@ -20,14 +31,15 @@ $(document).on("click contextmenu", "[data-file-icon] form div", function(e) {
         $(".select").removeClass("select");
         $(this)
             .addClass("select");
-        // $('.append-option-box').css("visibility", "hidden");
     }
+    showFolderSelectNav();
 });
 
-// Deselects (and submits new folder) when clicking elsewhere
+// Deselects (and submits new folder) when clicking elsewhere and shows the default unselected navbar
 $(document).on("click dblclick", ".folder-manager", function() {
     $("[data-file-icon] div")
         .removeClass("select");
+    showFolderUnselectNav();
 });
 
 $(document).on("click", "[data-file-icon]", function() {
@@ -40,8 +52,6 @@ $(document).on("click", "[data-file-icon] form div", function(e) {
 
 
 /*---Context Menu ---*/
-
-
 function pickContextCommand(key) {
     if (key == "new-folder"){
         createNewFolder();
@@ -51,6 +61,25 @@ function pickContextCommand(key) {
     }
     else if (key == "sort-by-date"){
         sortByDate('ul#folders > li', '.last-modified-date')
+    }
+    else if (key == "delete"){
+        deleteSelected()
+    }
+    else if( key == "move"){
+        $('#moveModal').modal('toggle');
+    }
+    else if (key == "copy"){
+        $('#copyModal').modal('toggle');
+    }
+    else if (key == "rename"){
+        if ($('.select').length < 2) {
+            $('#renameModal').modal('toggle');
+        }
+    }
+    else if (key == "open"){
+        if ($('.select').length < 2) {
+            $('.select').parents('form').submit();
+        }
     }
 }
 
@@ -67,21 +96,20 @@ $(function() {
                 "sort-by-name": {name: "Name"},
                 "sort-by-date": {name: "Date"}
                 }
-            },
-            "paste": {name: "Paste", icon: "fas fa-paste"}
+            }
         }
     });
     $.contextMenu({
         selector: '.context-menu-folder-selected',
         callback: function(key, options) {
-
+            pickContextCommand(key)
         },
         items: {
             "open": {name: "Open", icon: "fas fa-folder-open"},
-            "cut": {name: "Cut", icon: "fas fa-cut"},
+            "move": {name: "Move", icon: "fas fa-cut"},
             copy: {name: "Copy", icon: "fas fa-copy"},
-            "paste": {name: "Paste", icon: "fas fa-paste"},
-            "delete": {name: "Delete", icon: "fas fa-trash-alt"}
+            "delete": {name: "Delete", icon: "fas fa-trash-alt"},
+            "rename": {name: "Rename", icon: "fas fa-edit"}
         }
     });
 });
@@ -134,4 +162,58 @@ function sortByDate(list, element){
 }
 $(document).on("click", '[data-sort="folder-date"]', function () {
     sortByDate('ul#folders > li', '.last-modified-date')
+});
+
+/*--- Delete command---*/
+// Spring csrf token
+$(function () {
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+    $(document).ajaxSend(function(e, xhr, options) {
+        xhr.setRequestHeader(header, token);
+    });
+});
+
+function deleteSelected() {
+    $('.select').each(function (index) {
+        var directory = $(this).siblings('[name = "location"]').val();
+        $.ajax({
+            type: "POST",
+            url: "/deletefolder",
+            dataType: "text",
+            data: {'directory' : directory},
+            success: function (data) {
+                console.log("successfully deleted", directory);
+            },
+            error: function(xhr, desc, err) {
+                console.log(xhr);
+                console.log("Details0: " + desc + "\nError:" + err);
+            }
+        });
+        })
+    $('.select').parents('li').css("display", "none");
+    $(".select").removeClass("select");
+    showFolderUnselectNav();
+}
+
+$(document).on("click", '[data-function="delete-folder"]', function () {
+    deleteSelected()
+});
+
+/*---Rename command---*/
+$(document).on('show.bs.modal','#renameModal', function (e) {
+    if ($('.select').length > 1){
+        console.log($('.select').length);
+        e.preventDefault();
+    } else {
+        var directory = $('.select').siblings('[name = "location"]').val();
+        var folderName = $('.select').find('b.folder-name').text();
+        $('input[name="renamedFolder"]').val(directory);
+        $('input[name="newFolderName"]').val(folderName);
+    }
+
+});
+
+$(document).on('shown.bs.modal','#renameModal', function () {
+    $('input[name="newFolderName"]').select().focus();
 });

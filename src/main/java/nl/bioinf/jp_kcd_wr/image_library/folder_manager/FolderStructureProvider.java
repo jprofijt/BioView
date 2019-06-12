@@ -1,8 +1,7 @@
-package nl.bioinf.jp_kcd_wr.image_library.filebrowser;
+package nl.bioinf.jp_kcd_wr.image_library.folder_manager;
 
 import nl.bioinf.jp_kcd_wr.image_library.model.Directory;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -26,11 +25,6 @@ public interface FolderStructureProvider {
      */
     void createNewFolder(String directoryName, String currentPath) throws DirectoryExistsException, IOException;
 
-    /**
-     * Remove directory if the user has the permissions and if the directory is empty
-     * @param pathToDirectory path to directory that needs to be removed
-     */
-    void removeFolder(File pathToDirectory);
 
 
 }

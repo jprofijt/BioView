@@ -2,7 +2,7 @@ package nl.bioinf.jp_kcd_wr.image_library.control;
 
 import nl.bioinf.jp_kcd_wr.image_library.breadcrumbs.BreadcrumbBuilder;
 import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageDataSource;
-import nl.bioinf.jp_kcd_wr.image_library.filebrowser.FolderHandler;
+import nl.bioinf.jp_kcd_wr.image_library.folder_manager.FolderHandler;
 import nl.bioinf.jp_kcd_wr.image_library.model.ImageRequest;
 import nl.bioinf.jp_kcd_wr.image_library.storage.StorageService;
 import org.apache.commons.io.FilenameUtils;
@@ -12,8 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
-import java.nio.file.Files;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -53,7 +51,7 @@ public class ImageViewController {
         model.addAttribute("currentPath", new File(location.replace("\\", "/")));
         model.addAttribute("date", LocalDate.now().toString());
 
-        logger.log(Level.INFO, "Creating Image view for images in {0}", location);
+        logger.log(Level.INFO, "Creating Image view for images in {0}", location.replace("\\", "/"));
         List<Path> list = storageService.loadAbsolute(location).collect(Collectors.toList());
         model.addAttribute("Images", loadCaches(list));
         model.addAttribute("cache_path", "../cache/");

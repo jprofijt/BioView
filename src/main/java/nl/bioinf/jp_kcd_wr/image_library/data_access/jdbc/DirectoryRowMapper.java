@@ -18,7 +18,7 @@ public class DirectoryRowMapper implements RowMapper {
     public Directory mapRow(ResultSet rs, int rowNum) throws SQLException {
         Directory directory = new Directory();
 
-        directory.setPath(FileSystems.getDefault().getPath(rs.getString("path")));
+        directory.setPath(rs.getString("path"));
         directory.setName(rs.getString("name"));
         return directory;
     }

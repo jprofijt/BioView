@@ -1,3 +1,9 @@
+$(document).on('dblclick', '.pictures li a', function(){
+    let count = $(this).siblings('.image-iter').val();
+    let path = $(this).siblings('.image-path').val();
+    loadDynamicModal(count, path);
+});
+
 function loadDynamicModal(id, path){
     var modalImage = $(this).attr('id');
     $("#myModal"+ id).modal({backdrop: 'static', keyboard: false});

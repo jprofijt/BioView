@@ -1,23 +1,18 @@
 package nl.bioinf.jp_kcd_wr.image_library.control;
 
-import nl.bioinf.jp_kcd_wr.image_library.breadcrumbs.BreadcrumbBuilder;
-import nl.bioinf.jp_kcd_wr.image_library.filebrowser.DirectoryExistsException;
-import nl.bioinf.jp_kcd_wr.image_library.filebrowser.FolderHandler;
-import nl.bioinf.jp_kcd_wr.image_library.storage.StorageService;
+import nl.bioinf.jp_kcd_wr.image_library.folder_manager.DirectoryExistsException;
+import nl.bioinf.jp_kcd_wr.image_library.folder_manager.FolderHandler;
+import nl.bioinf.jp_kcd_wr.image_library.ui_commands.UICommandService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.File;
-import java.time.LocalDate;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
+
 
 /**
  * Controller that handles storage interaction by users
@@ -28,31 +23,28 @@ import java.util.stream.Collectors;
  */
 @Controller
 public class DirectoryController {
-    private final StorageService storageService;
     private final FolderHandler folderHandler;
-    private final BreadcrumbBuilder breadcrumbBuilder;
+    private final UICommandService uiCommandService;
 
     @Autowired
-    public DirectoryController(StorageService storageService, FolderHandler folderHandler, BreadcrumbBuilder breadcrumbBuilder) {
-        this.storageService = storageService;
+    public DirectoryController(FolderHandler folderHandler, UICommandService uiCommandService) {
         this.folderHandler = folderHandler;
-        this.breadcrumbBuilder = breadcrumbBuilder;
+        this.uiCommandService = uiCommandService;
     }
 
     private static final Logger logger = Logger.getLogger(DirectoryController.class.getName());
 
     /**
      * Mapping for the users to create directories
-     * @param directoryName Name for the new directory
-     * @param currentPath Path where the new directory will go
+     * @param directoryName name for the new directory
+     * @param currentPath path where the new directory will go
      * @param model request model
      * @return redirect to current page
      *
      * @author Jouke Profijt, Kim Chau Duong
      */
     @PostMapping("/createfolder")
-    public String CreateFolder(@RequestParam(name="directoryName", required=true) String directoryName, @RequestParam(name="currentPath", required=true) String currentPath, Model model) {
-//        FolderHandler creator = new FolderHandler();
+    public String createFolder(@RequestParam(name="directoryName", required=true) String directoryName, @RequestParam(name="currentPath", required=true) String currentPath, Model model) {
         try {
             folderHandler.createNewFolder(directoryName, currentPath);
         } catch (DirectoryExistsException e) {
@@ -60,91 +52,88 @@ public class DirectoryController {
             logger.log(Level.WARNING, "Folder {0} in {1} already exist", new Object[]{directoryName, currentPath});
             return "directory-error";
         }
-        model.addAttribute("folders", folderHandler.getNextFolders(currentPath));
-        model.addAttribute("currentPath", new File(currentPath.replace("\\", "/")));
         logger.log(Level.INFO, "Folders were created successfully!");
         return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
     }
 
     /**
-     * mapping that lets users create a folder with the data as name
-     * @param currentPath path where directory should be located
-     * @param model request model
+     * Handles folder deleting process
+     * @param directory directory that's to be deleted
+     * @return confirmation message
+     *
+     * @author Kim Chau Duong
+     */
+    @PostMapping("/deletefolder")
+    @ResponseBody
+    public String deleteFolder(@RequestParam String directory) {
+        uiCommandService.removeFile(directory);
+        return "success";
+    }
+
+    /**
+     * Handles folder moving process
+     * @param currentPath current directory that the user is in and will be redirected to.
+     * @param folders list of folders that are to be moved
+     * @param destination destination of the moving folders
+     * @param redirectAttributes attributes given back to redirected page
      * @return redirect to current page
      *
-     * @author Jouke Profijt
+     * @author Kim Chau Duong
      */
-    @PostMapping("/createdatefolder")
-    public String createDateFolder(@RequestParam(name="currentPath", required=true) String currentPath, Model model){
-        try {
-            folderHandler.createDateDirectory(currentPath);
-        } catch (DirectoryExistsException e){
-            model.addAttribute("error", e.getMessage());
-            logger.log(Level.WARNING, "Current date folder in {0} already exists", new Object[]{currentPath});
-            return "directory-error";
+    @PostMapping("/movefolder")
+    public String moveFolder(@RequestParam String currentPath, @RequestParam(name = "movedFolders") List<String> folders, @RequestParam(name = "ft_1_active") String destination, RedirectAttributes redirectAttributes) {
+        if(null != folders && folders.size() > 0) {
+            logger.log(Level.INFO, "Moving folder(s)...");
+            for (String folder : folders) {
+                uiCommandService.moveFile(folder, destination);
+            }
+            logger.log(Level.INFO, "Finished moving folder(s)!");
         }
-        model.addAttribute("folders", folderHandler.getNextFolders(currentPath));
-        model.addAttribute("currentPath", new File(currentPath.replace("\\", "/")));
-        logger.log(Level.INFO, "Successfully created folder in {0}", new Object[]{currentPath});
         return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
     }
 
     /**
-     * Get request that provides all folders, files and the current path
-     * @param folder current directory path
-     * @param model
-     * @return Folders contained in current view
-     *
-     * @author Jouke Profijt, Kim Chau Duong
-     */
-    @GetMapping("/nextfolder")
-    public String nextFolder(@RequestParam(name="folder", required=false, defaultValue="") String folder, Model model) {
-        model.addAttribute("folders", folderHandler.getNextFolders(folder));
-        model.addAttribute("currentPath", new File(folder.replace("\\", "/")));
-        model.addAttribute("date", LocalDate.now().toString());
-
-        model.addAttribute("files", storageService.loadAll(folder).map(
-                path -> MvcUriComponentsBuilder.fromMethodName(DirectoryController.class,
-                        "serveFile", path.getFileName().toString(), folder.replace("\\", "/")).build().toString())
-                .collect(Collectors.toList()));
-        model.addAttribute("breadcrumbs", breadcrumbBuilder.getBreadcrumbs(folder));
-        return "folders";
-    }
-
-    /**
-     * Loads file body
-     * @param filename given filename
-     * @return file body
+     * Handles folder Copying process
+     * @param currentPath current directory that the user is in and will be redirected to.
+     * @param folders list of folders that are to be copied
+     * @param destination destination of the copied folders
+     * @param redirectAttributes attributes given back to redirected page
+     * @return redirect to current page
      *
      * @author Kim Chau Duong
      */
-    /*@GetMapping("/files/{directory}/{filename:.+}")
-    @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable String directory, @PathVariable String filename) {
-
-        Resource file = storageService.loadAsResource(filename, directory);
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "inline; filename=\"" + file.getFilename() + "\"").body(file);
+    @PostMapping("/copyfolder")
+    public String copyFolder(@RequestParam String currentPath, @RequestParam(name = "copiedFolders") List<String> folders, @RequestParam(name = "ft_2_active") String destination, RedirectAttributes redirectAttributes) {
+        if(null != folders && folders.size() > 0) {
+            logger.log(Level.INFO, "Copying folder(s)...");
+            for (String folder : folders) {
+                uiCommandService.copyFile(folder, destination);
+            }
+            logger.log(Level.INFO, "Finished copying folder(s)!");
+        }
+        return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
     }
 
-    @GetMapping("/files/{filename:.+}")
-    @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
-
-        Resource file = storageService.loadAsResource(filename, directory);
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "inline; filename=\"" + file.getFilename() + "\"").body(file);
+    /**
+     * Handles folder renaming process
+     * @param currentPath Current directory that the user is in and will be redirected to.
+     * @param directory  Directory that's to be renamed
+     * @param newFolderName new name for the directory
+     * @param redirectAttributes attributes given back to redirected page
+     * @return redirect to current page
+     *
+     * @author Kim Chau Duong
+     */
+    @PostMapping("/renamefolder")
+    public String renameFolder(@RequestParam String currentPath, @RequestParam(name = "renamedFolder") String directory, @RequestParam(name = "newFolderName") String newFolderName, RedirectAttributes redirectAttributes) {
+        logger.log(Level.INFO, "Renaming folder...");
+        uiCommandService.renameFile(directory, newFolderName);
+        logger.log(Level.INFO, "Finished renaming folder!");
+        return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
     }
 
-    @GetMapping("/cache/{filename:.+}")
-    @ResponseBody
-    public ResponseEntity<Resource> serveThumbnail(@PathVariable String filename) {
 
-        Resource thumbnail = storageService.loadThumbnailAsResource(filename);
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "inline; filename=\"" + thumbnail.getFilename() + "\"").body(thumbnail);
 
-    }*/
 
 }
 

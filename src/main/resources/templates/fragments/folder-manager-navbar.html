@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
-<nav class="folder-navbar navbar navbar-expand-md navbar-dark bg-dark">
-    <a class="navbar-brand">Menu</a>
+<nav class="folder-navbar navbar navbar-expand-xl navbar-dark bg-dark">
+    <i class="fas fa-folder folder-manager-icon"></i>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#folder-manager-navbar-collapse"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="folder-manager-navbar-collapse">
-        <ul class="navbar-nav mr-auto folder-navbar">
+        <ul class="navbar-nav mr-auto folder-navbar-unselected">
             <li class="nav-item">
                 <button class="btn nav-link"  data-function="new-folder">New Folder</button>
             </li>
@@ -20,6 +20,20 @@
                     <div class="dropdown-item" data-sort="folder-date">Date</div>
                 </div>
                 <div class="dropdown-menu"></div>
+            </li>
+        </ul>
+        <ul class="navbar-nav mr-auto folder-navbar-selected">
+            <li class="nav-item">
+                <button class="btn nav-link" data-toggle="modal" data-target="#moveModal"><i class="fas fa-cut"></i> Move</button>
+            </li>
+            <li class="nav-item">
+                <button class="btn nav-link" data-toggle="modal" data-target="#copyModal"><i class="fas fa-copy"></i> Copy</button>
+            </li>
+            <li class="nav-item">
+                <button class="btn nav-link"  data-function="delete-folder"><i class="fas fa-trash-alt"></i> Delete</button>
+            </li>
+            <li class="nav-item">
+                <button class="btn nav-link"  data-toggle="modal" data-target="#renameModal"><i class="fas fa-edit"></i> Rename</button>
             </li>
         </ul>
     </div>

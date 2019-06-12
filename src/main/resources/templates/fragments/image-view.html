@@ -7,14 +7,22 @@
         <div th:replace="fragments/breadcrumbs"></div>
         <div class="row justify-content-around">
             <div th:replace="fragments/folder-manager"></div>
-            <div class="col-md-6">
-                <div class="docs-galleSry col-12" >
-                    <ul class="pictures clearfix" style="height:800px; overflow: scroll">
-                        <li class="col-sm-12 col-md-6 col-lg-4" th:each="image, iterStat : ${Images}">
+            <div class="col-md-8">
+                <div class="docs-gallery col-12" >
+                    <nav class="folder-navbar navbar navbar-expand-md navbar-light bg-dark">
+                        <a class="navbar-brand">Menu</a>
+                    </nav>
+                    <ul class="pictures clearfix rounded-bottom context-menu-pics">
+                        <div th:replace="fragments/image-modals"></div>
+                        <li class="picture-img col-xs-12 col-sm-6 col-md-4 col-lg-3" th:each="image, iterStat : ${Images}">
                             <!--th:attr="data-el_id=${element.getId()}"-->
-                            <a th:attr="data-id=${''+image.getActual()}" th:ondblclick="loadDynamicModal([[${iterStat.count}]], [[${''+ image.getActual()}]])" th:class="modallink" th:id="'link'+${iterStat.count}">
+                            <input class="image-iter" type="hidden" th:value="${iterStat.count}">
+                            <input class="image-path" type="hidden" th:value="${image.getActual()}">
+                            <a th:attr="data-id=${''+image.getActual()}" th:class="modallink" th:id="'link'+${iterStat.count}">
                                 <img class="img-thumbnail img-fluid" th:src="@{'/cache/' + ${image.getThumbnail()}}" />
                             </a>
+
+
                             <!-- Modal -->
                             <div th:id="'myModal'+ ${iterStat.count}" class="modal fade image-modal" role="dialog">
                                 <div class="modal-dialog modal-dialog-bioview modal-dialog-scrollable">
@@ -39,13 +47,6 @@
                                                     </div>
                                                     <div class="col-6">
                                                         <table class="table tag-table" th:id="${'ImageTags-' + image.getId()}" th:replace="fragments/tag-table"></table>
-                                                        <div class="new-tag-input" th:id="${'tag-input-div-' + image.getId()}">
-                                                            <input class="newTag" th:id="${'tag-input-' + image.getId()}" type="text">
-                                                            <button class="btn-sm btn-primary" th:onclick="AddTag(this, [[${#httpServletRequest.remoteUser}]], [[${image.getId()}]])">Add new tag</button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <p>ROI's</p>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -106,11 +107,11 @@
                             <!--</div>-->
                         <!--</div>-->
 
-                    <!--</ul>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div th:replace="fragments/upload-form" class="modal fade" id="UploadModal" tabindex="-2" role="dialog" aria-labelledby="UploadModalLable" aria-hidden="true">
     </div>
