@@ -23,7 +23,7 @@ function renameTreeJsonData(response) {
 
 // Fancy 'Move to' directory tree
 $(function () {
-    $("#moveTree").fancytree({
+    $("#moveFolderTree").fancytree({
         source: [
             { name: "HeadDirectory", path: "HeadDirectory", folder: true, lazy: true }
         ],
@@ -59,14 +59,16 @@ $(function () {
         });
         $('input[name="movedFolders"]').val(directoryArray);
 
-        $("#moveTree").fancytree("getTree").generateFormElements();
+        $("#moveFolderTree").fancytree("getTree").generateFormElements();
+        alert("POST data:\n" + jQuery.param($(this).serializeArray()));
+        // return false to prevent submission of this sample
+        return false;
     });
-
 });
 
 // Fancy 'Copy to' directory tree
 $(function () {
-    $("#copyTree").fancytree({
+    $("#copyFolderTree").fancytree({
         source: [
             { name: "HeadDirectory", path: "HeadDirectory", folder: true, lazy: true }
         ],
@@ -102,8 +104,98 @@ $(function () {
         });
         $('input[name="copiedFolders"]').val(directoryArray);
 
-        $("#copyTree").fancytree("getTree").generateFormElements();
+        $("#copyFolderTree").fancytree("getTree").generateFormElements();
+        alert("POST data:\n" + jQuery.param($(this).serializeArray()));
+        // return false to prevent submission of this sample
+        return false;
     });
+});
 
+$(function () {
+    $("#moveImageTree").fancytree({
+        source: [
+            { name: "HeadDirectory", path: "HeadDirectory", folder: true, lazy: true }
+        ],
+        lazyLoad: function(event, data){
+            var node = data.node;
+            data.result = {
+                url: "/api/folder/branch",
+                data: {parent: node.key},
+                cache: false
+            };
+        },
+        postProcess: function(event, data){
+            data.result = renameTreeJsonData(data.response);
+        },
+        loadChildren: function(event, data) {
+
+            data.node.visit(function(subNode){
+                // Loads all lazy/unloaded child nodes and triggers loadChildren recursively
+                if( subNode.isUndefined() && subNode.isExpanded() ) {
+                    subNode.load();
+                }
+            });
+        }
+    });
+    $(".fancytree-container").toggleClass("fancytree-connectors");
+
+    $("#moveImage").submit(function() {
+        // Render hidden <input> elements for active and selected nodes
+        var imagePathArray = [];
+        $('.pic-select').each(function(){
+            var imagePath = $(this).parents('.image-surrounding').find('.image-path').val();
+            imagePathArray.push(imagePath);
+        });
+        $('input[name="movedImages"]').val(imagePathArray);
+
+        $("#moveImageTree").fancytree("getTree").generateFormElements();
+        alert("POST data:\n" + jQuery.param($(this).serializeArray()));
+        // return false to prevent submission of this sample
+        return false;
+    });
+});
+
+$(function () {
+    $("#copyImageTree").fancytree({
+        source: [
+            { name: "HeadDirectory", path: "HeadDirectory", folder: true, lazy: true }
+        ],
+        lazyLoad: function(event, data){
+            var node = data.node;
+            data.result = {
+                url: "/api/folder/branch",
+                data: {parent: node.key},
+                cache: false
+            };
+        },
+        postProcess: function(event, data){
+            data.result = renameTreeJsonData(data.response);
+        },
+        loadChildren: function(event, data) {
+
+            data.node.visit(function(subNode){
+                // Loads all lazy/unloaded child nodes and triggers loadChildren recursively
+                if( subNode.isUndefined() && subNode.isExpanded() ) {
+                    subNode.load();
+                }
+            });
+        }
+    });
+    $(".fancytree-container").toggleClass("fancytree-connectors");
+
+    $("#copyImage").submit(function() {
+        // Render hidden <input> elements for active and selected nodes
+        var imagePathArray = [];
+        $('.pic-select').each(function(){
+            var imagePath = $(this).parents('.image-surrounding').find('.image-path').val();
+            imagePathArray.push(imagePath);
+        });
+        $('input[name="copiedImages"]').val(imagePathArray);
+
+        $("#copyImageTree").fancytree("getTree").generateFormElements();
+        alert("POST data:\n" + jQuery.param($(this).serializeArray()));
+        // return false to prevent submission of this sample
+        return false;
+    });
 });
 

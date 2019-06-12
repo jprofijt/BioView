@@ -1,4 +1,4 @@
-$(document).on('dblclick', '.pictures li a', function(){
+$(document).on('dblclick', '.images li .image-surrounding a', function(){
     let count = $(this).siblings('.image-iter').val();
     let path = $(this).siblings('.image-path').val();
     loadDynamicModal(count, path);

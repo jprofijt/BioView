@@ -57,10 +57,10 @@ function pickContextCommand(key) {
         createNewFolder();
     }
     else if (key == "sort-by-name"){
-        sortbyName('ul#folders > li', 'b:not(.created-title)')
+        sortbyName()
     }
     else if (key == "sort-by-date"){
-        sortByDate('ul#folders > li', '.last-modified-date')
+        sortByDate()
     }
     else if (key == "delete"){
         deleteSelected()
@@ -137,8 +137,8 @@ $(document).on("click", '[data-function="new-folder"]',function() {
 
 /*---Sort by buttons---*/
 var nameOrder = 'asc';
-function sortbyName(list, element){
-    tinysort(list,{selector : element, order : nameOrder});
+function sortbyName(){
+    tinysort('ul#folders > li',{selector : 'b:not(.created-title)', order : nameOrder});
     if (nameOrder === 'asc') {
         nameOrder = 'desc'
     }
@@ -147,12 +147,12 @@ function sortbyName(list, element){
     }
 }
 $(document).on("click", '[data-sort="folder-name"]', function () {
-    sortbyName('ul#folders > li', 'b:not(.created-title)')
+    sortbyName()
 });
 
 var dateOrder = 'asc';
-function sortByDate(list, element){
-    tinysort(list,{selector : element, attr:'value', order : dateOrder});
+function sortByDate(){
+    tinysort('ul#folders > li',{selector : '.last-modified-date', attr:'value', order : dateOrder});
     if (dateOrder === 'asc') {
         dateOrder = 'desc'
     }
@@ -161,7 +161,7 @@ function sortByDate(list, element){
     }
 }
 $(document).on("click", '[data-sort="folder-date"]', function () {
-    sortByDate('ul#folders > li', '.last-modified-date')
+    sortByDate()
 });
 
 /*--- Delete command---*/

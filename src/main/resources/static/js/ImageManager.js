@@ -4,10 +4,10 @@ function deleteSelectedImages() {
 
 function pickPicContextCommand(key) {
     if (key == "img-sort-by-name"){
-        sortbyName('ul#folders > li', 'b:not(.created-title)')
+        sortImageByName()
     }
     else if (key == "img-sort-by-date"){
-        sortByDate('ul#folders > li', '.last-modified-date')
+        sortImageByDate()
     }
     else if (key == "img-delete"){
         deleteSelectedImages()
@@ -44,6 +44,20 @@ $(function() {
             "img-properties": {name: "Properties", icon: "fas fa-info"}
         }
     });
+    $.contextMenu({
+        selector: '.context-menu-pics-unselected',
+        callback: function(key, options) {
+            pickContextCommand(key)
+        },
+        items: {
+            "img-sort-by": {name: "Sort By", icon: "fas fa-sort",
+                items: {
+                    "img-sort-by-name": {name: "Name"},
+                    "img-sort-by-date": {name: "Date"}
+                }
+            }
+        }
+    });
 });
 
 // Shows the Image select navbar
@@ -73,6 +87,9 @@ $(document).on("click dblclick", ".img-gallery", function() {
     $(".picture-img a img")
         .removeClass("pic-select");
     showImageUnselectNav()
+});
+$(document).on("click", "picture-img", function() {
+    $(".pic-select").removeClass("pic-select");
 });
 
 $(document).on("click", ".picture-img a img", function(e) {
@@ -115,7 +132,7 @@ $(function () {
         "showMethod": "fadeIn",
         "hideMethod": "fadeOut"
     };
-    var toasts = []
+    var toasts = [];
     if (!isEmpty($('#successMessages').val())){
         if(!isEmpty($('#successMessages').val().slice( 1, -1))){
             var successMessages = $('#successMessages').val().slice( 1, -1).split(",");
@@ -137,4 +154,34 @@ $(function () {
             toastr[t.type](t.msg);
         }, 500*index)
     })
+});
+
+/*---Image sort by buttons---*/
+var imageNameOrder = 'asc';
+function sortImageByName(){
+    tinysort('ul.images > li',{selector : '.image-path', order : imageNameOrder});
+    if (imageNameOrder === 'asc') {
+        imageNameOrder = 'desc'
+    }
+    else {
+        imageNameOrder = 'asc'
+    }
+}
+$(document).on("click", '[data-sort="image-name"]', function () {
+    sortImageByName()
+});
+
+// !! Still no existing date parameter so selector is a placeholder
+var imageDateOrder = 'asc';
+function sortImageByDate(){
+    tinysort('ul.images > li',{selector : '.image-path', attr:'value', order : imageDateOrder});
+    if (imageDateOrder === 'asc') {
+        imageDateOrder = 'desc'
+    }
+    else {
+        imageDateOrder = 'asc'
+    }
+}
+$(document).on("click", '[data-sort="image-date"]', function () {
+    sortImageByDate()
 });
