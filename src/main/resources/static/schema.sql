@@ -6,12 +6,13 @@ drop table if exists image_annotation;
 drop table if exists image_values;
 drop table if exists ROI_TAGS;
 drop table if exists ROI_STATE;
+drop table if exists image_roi;
 drop table if exists image_tags;
 
 drop table if exists image_annotation;
 drop table if exists image_values;
 drop table if exists image_tags;
-
+drop table if exists image_roi;
 DROP TABLE IF EXISTS tags;
 drop table if exists images_meta;
 
@@ -20,6 +21,9 @@ DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS cache;
 drop table if exists image_tags;
 DROP table if exists tags;
+drop table if exists roi;
+drop table if exists meta_data;
+DROP TABLE IF EXISTS images;
 DROP TABLE IF EXISTS file_structure;
 DROP TABLE IF EXISTS directories;
 
@@ -28,11 +32,9 @@ DROP TABLE IF EXISTS directories;
 drop table if exists image_annotation;
 drop table if exists image_attributes;
 drop table if exists image_tags;
-drop table if exists roi_points;
 drop table if exists image_roi;
 DROP TABLE IF EXISTS tags;
-drop table if exists cache;
-drop table if exists images;
+drop table if exists image_data;
 
 
 
@@ -59,15 +61,17 @@ CREATE TABLE images(
 );
 
 create table image_attributes(
-  id          INT                 not null    AUTO_INCREMENT,
-  name        VARCHAR(500)        NOT NULL,
-  path        varchar(200)        not null,
-  filepath    varchar(200)        not null UNIQUE,
-  date        datetime            not null,
-  size        long,
-  type        enum('TIFF', 'PNG', 'JPG'),
-  primary key (id),
-  foreign key (filepath) references images(path)
+    id          INT                 not null,
+    name        VARCHAR(500)        NOT NULL,
+    path        varchar(260)        not null    unique,
+    filepath    varchar(260)        not null,
+    date        datetime            not null,
+    size        long,
+    type        enum('TIFF', 'PNG', 'JPEG'),
+    foreign key (id) references images(id),
+    foreign key (name) references images(new_name),
+    foreign key (path) references images(path),
+    primary key (id)
 );
 
 
@@ -110,21 +114,16 @@ create table image_annotation(
 );
 
 create table image_roi(
-    roi_id      int     not null,
+
+    roi_id      int     not null    AUTO_INCREMENT,
     image_id    int     not null,
+    x1          int     not null,
+    y1          int     not null,
+    x2          int     not null,
+    y2          int     not null,
     foreign key (image_id) references images(id),
     primary key (roi_id)
 );
-
-
-create table roi_points(
-    id          int     not null,
-    roi_id      int     not null,
-    x_pos       int     not null,
-    y_pos       int     not null,
-    foreign key (roi_id) references image_roi(roi_id)
-);
-
 
 create table ROI_STATE(
  roi_id      int     not null,

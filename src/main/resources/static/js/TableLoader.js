@@ -14,17 +14,109 @@ $(document).ready(function () {
 
     });
 
-let available;
+let available = [];
 const url = "http://"+document.location.hostname + ":8081/api/tags/all/";
 $.getJSON(url, function (result) {
-    available = result;});
+    for (let i in result) {
+        available.push(result[i])
+    }
+});
+
+function ReloadTable(id) {
+    $('#ImageRois-' + id).find('tbody').find('tr').remove();
+    LoadRoiTable(id);
+}
+
+$(document).ready(function () {
+    const add = $('.add-button');
+    const save = $('.save-button');
+    const cancel = $('.cancel-button');
+    add.on("click", function () {
+        $('.image-roi-row').removeClass("bg-primary selected");
+        save.attr('hidden', false);
+        cancel.attr('hidden', false);
+        add.attr('hidden', true);
+        let EditingId = $(this).parent().attr('id');
+        $('#ImageRois-' + EditingId).append("<tr class='image-roi-row' id='editing-row'>" +
+            "<td>#</td>" +
+            "<td><input type='number' id='ph' name='ph' min='0' max='14' placeholder='pH' step='0.01'></td>" +
+            "<td><input type='number' id='t' name='t' min='0'></td>" +
+            "<td><input type='number' id='o2' name='o2' min='0' max='100' placeholder='oxygen %'></td>" +
+            "<td><input type='number' id='co2' name='co2' min='0' max='100' placeholder='Co2 %'></td>" +
+            "</tr>");
+    });
+
+    cancel.on("click", function () {
+        let EditingId = $(this).parent().attr('id');
+        $('#editing-row').remove();
+        save.attr('hidden', true);
+        cancel.attr('hidden', true);
+        add.attr('hidden', false);
+    });
+
+    save.on("click", function () {
+        let EditingId = $(this).parent().attr('id');
+        let editingRow = $('#editing-row');
+        let inputs = editingRow.find('input');
+        let InputData = {
+            id: EditingId,
+            ph: parseFloat(inputs[0].value),
+            temp:  parseInt(inputs[1].value),
+            o2: parseInt(inputs[2].value),
+            co2: parseInt(inputs[3].value)
+        };
+
+        /**
+         * @return {boolean}
+         */
+        function CheckInputs(InputData) {
+            if (InputData.ph > 14 || InputData.ph < 0) {
+                return false;
+            }
+            if (InputData.o2 < 0 || InputData.o2 > 100){
+                return false;
+            }
+            if (InputData.co2 < 0 || InputData.co2 > 100) {
+                return false;
+            }
+            return true
+        }
+
+        if (CheckInputs(InputData)) {
+            const url = "http://"+document.location.hostname + ":8081/api/roi/state/";
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: JSON.stringify(InputData),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function () {
+
+                    ReloadTable(EditingId);
+                    save.attr('hidden', true);
+                    cancel.attr('hidden', true);
+                    add.attr('hidden', false)
+                }
+
+                }
+
+            )
+        }
+
+    })
+
+
+
+});
 
 
 $(document).ready(function () {
-    $('.TagInput').typeahead({
-        highlight: true,
-        source: available
-    });
+    $('.TagInput').tagsinput({
+        typeahead: {
+            highlight: true,
+            source: available
+        }
+    })
 });
 
 /**
@@ -122,30 +214,67 @@ function LoadRoiTable(id) {
 
 }
 
+let selected;
+let SelectedImage;
+let Ready = true;
+
 function AppendNewRoiToTable(id, roi) {
-    const RowID = "image-" + id + "-roi-" + roi.roiID;
+    const RowID = "image-" + id + "-roi-" + roi.id;
     $('#ImageRois-' + id).append("<tr class='image-roi-row' id='"+ RowID + "'>" +
-        "<td>" + roi.roiID + "</td>" +
+        "<td>" + roi.id + "</td>" +
         "<td>" + roi.ph + "</td>" +
-        "<td>" + roi.t + "</td>" +
-        "<td>" + roi.oxygen + "</td>" +
+        "<td>" + roi.temp + "</td>" +
+        "<td>" + roi.o2 + "</td>" +
         "<td>" + roi.co2 + "</td>" +
         "</tr>");
 
     $('.image-roi-row').on("click", function () {
+        Ready = false;
         $('.image-roi-row').removeClass("bg-primary selected");
-        $(this).addClass("bg-primary selected")
-    })
+        $(this).addClass("bg-primary selected");
+        const currentTags = $('#tag-input-roi-' + id).tagsinput('items');
+        console.log(currentTags);
 
+        $('#tag-input-roi-' + id).tagsinput('removeAll');
+
+
+
+
+        selected = $(this).attr('id').replace(new RegExp("image-[0-9]+-roi-"), "");
+        console.log(selected);
+        SelectedImage = $(this).attr('id').replace("image-", "").replace(new RegExp("-roi-[0-9]+"), "");
+        $.getJSON("http://"+document.location.hostname + ":8081/api/roi/tags/?roi=" + selected, function (result) {
+            //let remainingTags = $('#tag-input-roi-' + id).tagsinput('items');
+            //checkRemain(remainingTags, id);
+            for (let i in result.tags){
+                $('#tag-input-roi-' + SelectedImage).tagsinput('add', result.tags[i])
+            }
+        });
+    Ready = true;
+    });
+
+    function checkRemain(tags, id) {
+        if ($.isEmptyObject(tags)) {
+            return
+        }
+        else {
+            for (let i in tags) {
+                $('#tag-input-roi-' + id).tagsinput('remove', tags[i]);
+            }
+            checkRemain($('#tag-input-roi-' + id).tagsinput('items'), id);
+        }
+
+    }
 }
 
 $(document).ready(function () {
     $('.TagInput').on('itemAdded', function(event) {
-            let id = $(this).attr('id').replace("tag-input-roi-", "");
+        if (Ready) {
             let data = {
-                id: id,
+                id: selected,
                 tag: event.item
-            };
+        };
+
 
             $.ajax({
                 type: "POST",
@@ -160,6 +289,7 @@ $(document).ready(function () {
                     console.log('Adding tag success')
                 }
             })
-        });
+        }
+    });
     });
 
