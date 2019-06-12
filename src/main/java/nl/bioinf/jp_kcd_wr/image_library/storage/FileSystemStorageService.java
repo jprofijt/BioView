@@ -201,11 +201,11 @@ public class FileSystemStorageService implements StorageService {
     private void createMetaData(Image image, String date) {
 
         String path = image.getPath();
+        String name = image.getNewFilename();
         int id = imageDataSource.getImageIdFromPath(path);
         File imageFile = new File(path);
         long size = imageFile.length();
         ImageFileType fileType = getFileTypeEnum(FilenameUtils.getExtension(path));
-
 
         imageDataSource.insertImageMetaData(new ImageAttribute(id, image.getNewFilename(),imageFile.getParent(), path, size, date, fileType));
     }
@@ -435,8 +435,8 @@ public class FileSystemStorageService implements StorageService {
     }
 
     private List<File> listDirectories(File Directory){
-        ArrayList<File> contents = new ArrayList<>(Arrays.asList(Directory.listFiles(File::isDirectory)));
-        return contents;
+        System.out.println(Directory.toString());
+        return new ArrayList<>(Arrays.asList(Directory.listFiles(File::isDirectory)));
 
     }
 

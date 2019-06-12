@@ -5,9 +5,7 @@
     <title>Tag Table fragment</title>
 </head>
 <body>
-<table th:fragment="tag-table" class="table tag-table" th:id="${'ImageRois-' + image.getId()}">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
-
+<table th:fragment="tag-table" class="table tag-table" th:id="${'ImageRois-' + image.getId()}" data-sortable="true" th:data-toggle="${'ImageRois-' + image.getId()}">
     <thead class="thead-dark">
     <tr>
         <th scope="col">#</th>
@@ -24,6 +22,11 @@
 
 </table>
 
-<input class="TagInput" th:id="${'tag-input-roi-' + image.getId()}"  data-role="tagsinput" type="text" value="hello1,hello2">
+
+<div>
+    <span th:id="${image.getId()}" class="button-span"><button id="add-button" class="btn btn-primary add-button"><i class="fas fa-plus"></i> Add New</button><button class="btn-primary btn save-button" id="save-button" hidden>Save</button> <button class="btn-primary btn cancel-button" id="cancel-button" hidden>Cancel</button></span>
+</div>
+<br>
+<div><input class="TagInput" th:id="${'tag-input-roi-' + image.getId()}"  data-role="tagsinput" type="text" value=""></div>
 </body>
 </html>
