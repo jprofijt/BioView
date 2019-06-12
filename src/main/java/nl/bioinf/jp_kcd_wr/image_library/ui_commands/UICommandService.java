@@ -17,19 +17,19 @@ public interface UICommandService {
      * Moves or copies directory from current location to newly assigned destination
      * @param source directory that's to be moved
      */
-    void moveFile(String source, String destination);
+    boolean moveFile(String source, String destination);
 
     /**
      * copies given source directory or folder from current location to another destination
      * @param source copied file or directory
      * @param destination paste destination
      */
-    void copyFile(String source, String destination);
+    boolean copyFile(String source, String destination);
 
     /**
      * Renames given source to its new name
      * @param source given source to be renamed
      * @param renamedFileName new name for the source
      */
-    void renameFile(String source, String renamedFileName);
+    boolean renameFile(String source, String renamedFileName);
 }

@@ -103,7 +103,6 @@ public class FileUploadController {
             }
             redirectAttributes.addFlashAttribute("success_messages",successMessages);
             redirectAttributes.addFlashAttribute("error_messages",errorMessages);
-
         }
         return "redirect:/imageview?location=" + directory.toString().replace("\\", "/");
     }

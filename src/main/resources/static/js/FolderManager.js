@@ -187,7 +187,7 @@ function deleteSelected() {
                 toastr["success"]("Successfully deleted " + directoryname + "!");
             },
             error: function(xhr, desc, err) {
-                toastr["error"]("Error deleting " + directoryname + "!");
+                toastr["error"]("Could not delete " + directoryname + "!");
             }
         });
         });

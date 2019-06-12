@@ -5,7 +5,6 @@ import nl.bioinf.jp_kcd_wr.image_library.folder_manager.FolderHandler;
 import nl.bioinf.jp_kcd_wr.image_library.ui_commands.UICommandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -90,11 +89,19 @@ public class DirectoryController {
     @PostMapping("/movefolder")
     public String moveFolder(@RequestParam String currentPath, @RequestParam(name = "movedFolders") List<String> folders, @RequestParam(name = "ft_1_active") String destination, RedirectAttributes redirectAttributes) {
         if(null != folders && folders.size() > 0) {
+            ArrayList<String> successMessages = new ArrayList<>();
+            ArrayList<String> errorMessages = new ArrayList<>();
             logger.log(Level.INFO, "Moving folder(s)...");
             for (String folder : folders) {
-                uiCommandService.moveFile(folder, destination);
+                if (uiCommandService.moveFile(folder, destination)) {
+                    successMessages.add("Successfully moved " + new File(folder).getName() + " to " + destination + "!");
+                } else {
+                    errorMessages.add("Could not move " + new File(folder).getName() + " to " + destination + "!");
+                }
             }
             logger.log(Level.INFO, "Finished moving folder(s)!");
+            redirectAttributes.addFlashAttribute("success_messages",successMessages);
+            redirectAttributes.addFlashAttribute("error_messages",errorMessages);
         }
         return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
     }
@@ -112,11 +119,19 @@ public class DirectoryController {
     @PostMapping("/copyfolder")
     public String copyFolder(@RequestParam String currentPath, @RequestParam(name = "copiedFolders") List<String> folders, @RequestParam(name = "ft_2_active") String destination, RedirectAttributes redirectAttributes) {
         if(null != folders && folders.size() > 0) {
+            ArrayList<String> successMessages = new ArrayList<>();
+            ArrayList<String> errorMessages = new ArrayList<>();
             logger.log(Level.INFO, "Copying folder(s)...");
             for (String folder : folders) {
-                uiCommandService.copyFile(folder, destination);
+                if (uiCommandService.copyFile(folder, destination)){
+                    successMessages.add("Successfully copied " + new File(folder).getName() + " to " + destination + "!");
+                } else {
+                    errorMessages.add("Could not copy " + new File(folder).getName() + " to " + destination + "!");
+                }
             }
             logger.log(Level.INFO, "Finished copying folder(s)!");
+            redirectAttributes.addFlashAttribute("success_messages",successMessages);
+            redirectAttributes.addFlashAttribute("error_messages",errorMessages);
         }
         return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
     }
@@ -134,8 +149,13 @@ public class DirectoryController {
     @PostMapping("/renamefolder")
     public String renameFolder(@RequestParam String currentPath, @RequestParam(name = "renamedFolder") String directory, @RequestParam(name = "newFolderName") String newFolderName, RedirectAttributes redirectAttributes) {
         logger.log(Level.INFO, "Renaming folder...");
-        uiCommandService.renameFile(directory, newFolderName);
-        logger.log(Level.INFO, "Finished renaming folder!");
+        if(uiCommandService.renameFile(directory, newFolderName)) {
+            redirectAttributes.addFlashAttribute("success_messages","[Successfully renamed " + new File(directory).getName() + " to " + newFolderName + "!]");
+            logger.log(Level.INFO, "Finished renaming folder!");
+        } else {
+            redirectAttributes.addFlashAttribute("error_messages", "["+ newFolderName +" already exists!]");
+            logger.log(Level.INFO, "Renaming interrupted");
+        }
         return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
     }
 
