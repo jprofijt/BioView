@@ -9,6 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,22 +41,21 @@ public class DirectoryController {
      * Mapping for the users to create directories
      * @param directoryName name for the new directory
      * @param currentPath path where the new directory will go
-     * @param model request model
      * @return redirect to current page
      *
      * @author Jouke Profijt, Kim Chau Duong
      */
     @PostMapping("/createfolder")
-    public String createFolder(@RequestParam(name="directoryName", required=true) String directoryName, @RequestParam(name="currentPath", required=true) String currentPath, Model model) {
+    public String createFolder(@RequestParam(name="directoryName", required=true) String directoryName, @RequestParam(name="currentPath", required=true) String currentPath, RedirectAttributes redirectAttributes) {
         try {
             logger.log(Level.INFO, "Creating directory");
             folderHandler.createNewFolder(directoryName, currentPath);
+            logger.log(Level.INFO, "Folder was created successfully!");
+            redirectAttributes.addFlashAttribute("success_messages","[Successfully created " + directoryName + "!]");
         } catch (DirectoryExistsException e) {
-            model.addAttribute("error", e.getMessage());
+            redirectAttributes.addFlashAttribute("error_messages", "["+ directoryName +" already exists!]");
             logger.log(Level.WARNING, "Folder {0} already exist in {1}", new Object[]{directoryName, currentPath});
-            return "directory-error";
         }
-        logger.log(Level.INFO, "Folder was created successfully!");
         return "redirect:/imageview?location=" + currentPath.replace("\\", "/");
     }
 
@@ -66,9 +68,13 @@ public class DirectoryController {
      */
     @PostMapping("/deletefolder")
     @ResponseBody
-    public String deleteFolder(@RequestParam String directory) {
-        uiCommandService.removeFile(directory);
-        return "success";
+    public String deleteFolder(@RequestParam String directory, RedirectAttributes redirectAttributes) throws IOException {
+        logger.log(Level.INFO, "Deleting folder...");
+        if (uiCommandService.removeFile(directory)){
+            return "success";
+        } else {
+            return "failed";
+        }
     }
 
     /**

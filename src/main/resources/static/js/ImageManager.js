@@ -52,6 +52,10 @@ $(document).on('show.bs.modal','#imgPropertyModal', function (e) {
 });
 
 /*---Toast messages ---*/
+function isEmpty(value) {
+    return typeof value == 'string' && !value.trim() || typeof value == 'undefined' || value === null;
+}
+
 $(function () {
     function Toast(type, msg) {
         this.type = type;
@@ -70,21 +74,25 @@ $(function () {
         "hideMethod": "fadeOut"
     };
     var toasts = []
-    if ($('#successMessages').val().slice( 1, -1)){
-        var successMessages = $('#successMessages').val().slice( 1, -1).split(",");
-        $.each(successMessages, function (index, value) {
-            toasts.push(new Toast("success", value))
-        })
+    if (!isEmpty($('#successMessages').val())){
+        if(!isEmpty($('#successMessages').val().slice( 1, -1))){
+            var successMessages = $('#successMessages').val().slice( 1, -1).split(",");
+            $.each(successMessages, function (index, value) {
+                toasts.push(new Toast("success", value))
+            })
+        }
     }
-    if ($('#errorMessages').val().slice( 1, -1)){
-        var errorMessages = $('#errorMessages').val().slice( 1, -1).split(",");
-        $.each(errorMessages, function (index, value) {
-            toasts.push(new Toast("error", value))
-        })
+    if (!isEmpty($('#errorMessages').val())){
+        if (!isEmpty($('#errorMessages').val().slice( 1, -1))){
+            var errorMessages = $('#errorMessages').val().slice( 1, -1).split(",");
+            $.each(errorMessages, function (index, value) {
+                toasts.push(new Toast("error", value))
+            })
+        }
     }
     $.each(toasts, function (index, t) {
         setTimeout( function () {
-            Command: toastr[t.type](t.msg);
+            toastr[t.type](t.msg);
         }, 500*index)
     })
 });

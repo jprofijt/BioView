@@ -176,6 +176,7 @@ $(function () {
 
 function deleteSelected() {
     $('.select').each(function (index) {
+        var directoryname = $(this).find('b').text();
         var directory = $(this).siblings('[name = "location"]').val();
         $.ajax({
             type: "POST",
@@ -183,16 +184,15 @@ function deleteSelected() {
             dataType: "text",
             data: {'directory' : directory},
             success: function (data) {
-                console.log("successfully deleted", directory);
+                toastr["success"]("Successfully deleted " + directoryname + "!");
             },
             error: function(xhr, desc, err) {
-                console.log(xhr);
-                console.log("Details0: " + desc + "\nError:" + err);
+                toastr["error"]("Error deleting " + directoryname + "!");
             }
         });
         });
-    $('.select').parents('li').css("display", "none");
-    $(".select").removeClass("select");
+    $('.select').parents('li').remove();
+    $('.select').removeClass("select");
     showFolderUnselectNav();
 }
 

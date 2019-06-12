@@ -43,16 +43,17 @@ public class FileUICommandService implements UICommandService {
      * @author Kim Chau Duong
      */
     @Override
-    public void removeFile(String source) {
+    public boolean removeFile(String source) {
         Path path = getFullPath(source);
         try {
-            logger.log(Level.INFO, "Deleting directory: {0}", source);
+            logger.log(Level.INFO, "Deleting directory {0}", source);
             FileUtils.deleteDirectory(path.toFile());
             logger.log(Level.INFO, "Successfully deleted {0}!", source);
+            return true;
         } catch (IOException e) {
             logger.log(Level.WARNING, "{0} could not be deleted", source);
+            return false;
         }
-
     }
 
     /**

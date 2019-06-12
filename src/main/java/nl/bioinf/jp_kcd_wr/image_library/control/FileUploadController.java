@@ -95,7 +95,7 @@ public class FileUploadController {
                 if (contentTypes.contains(fileContentType)) {
                     storageService.store(multipartFile, directory);
                     logger.log(Level.INFO, "Succesfully uploaded {0} in {1}", new Object[]{filename, directory.toString()});
-                    successMessages.add("You successfully uploaded " + filename + "!");
+                    successMessages.add("Successfully uploaded " + filename + "!");
                 } else {
                     logger.log(Level.WARNING, "Incompatible fileupload, file = {0}", new Object[]{filename});
                     errorMessages.add("Incompatible fileupload: " + filename);

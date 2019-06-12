@@ -11,7 +11,7 @@ public interface UICommandService {
      * Removes directory or folder
      * @param source path to directory or folder that needs to be removed
      */
-    void removeFile(String source);
+    boolean removeFile(String source);
 
     /**
      * Moves or copies directory from current location to newly assigned destination
