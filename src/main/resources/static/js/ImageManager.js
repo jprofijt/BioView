@@ -1,7 +1,3 @@
-function deleteSelectedImages() {
-
-}
-
 function pickPicContextCommand(key) {
     if (key == "img-sort-by-name"){
         sortImageByName()
@@ -39,9 +35,9 @@ $(function() {
         items: {
             "img-move": {name: "Move", icon: "fas fa-cut"},
             "img-copy": {name: "Copy", icon: "fas fa-copy"},
-            "img-delete": {name: "Delete", icon: "fas fa-trash-alt"},
-            "img-rename": {name: "Rename", icon: "fas fa-edit"},
-            "img-properties": {name: "Properties", icon: "fas fa-info"}
+            "img-delete": {name: "Delete", icon: "fas fa-trash-alt"}
+            // "img-rename": {name: "Rename", icon: "fas fa-edit"},
+            // "img-properties": {name: "Properties", icon: "fas fa-info"}
         }
     });
     $.contextMenu({
@@ -157,6 +153,7 @@ $(function () {
 });
 
 /*---Image sort by buttons---*/
+// Uses placeholder .image-path that doesnt work.
 var imageNameOrder = 'asc';
 function sortImageByName(){
     tinysort('ul.images > li',{selector : '.image-path', order : imageNameOrder});
@@ -184,4 +181,32 @@ function sortImageByDate(){
 }
 $(document).on("click", '[data-sort="image-date"]', function () {
     sortImageByDate()
+});
+
+
+function deleteSelectedImages() {
+    $('.pic-select').each(function (index) {
+        var directory = $(this).parent().siblings('.image-path').val().replace("\\", "/");
+        var imageName = directory.lastIndexOf('/');
+
+        $.ajax({
+            type: "POST",
+            url: "/deleteimage",
+            dataType: "text",
+            data: {'directory' : directory},
+            success: function (data) {
+                toastr["success"]("Successfully deleted " + imageName + "!");
+            },
+            error: function(xhr, desc, err) {
+                toastr["error"]("Could not delete " + imageName + "!");
+            }
+        });
+    });
+    $('.pic-select').parents('li').remove();
+    $('.pic-select').removeClass("select");
+    showImageUnselectNav()
+}
+
+$(document).on("click", '[data-function="delete-folder"]', function () {
+    deleteSelectedImages()
 });
