@@ -32,7 +32,6 @@ $(document).ready(function () {
     const save = $('.save-button');
     const cancel = $('.cancel-button');
     add.on("click", function () {
-        selected = undefined;
         $('.image-roi-row').removeClass("bg-primary selected");
         save.attr('hidden', false);
         cancel.attr('hidden', false);
@@ -220,7 +219,7 @@ let SelectedImage;
 let Ready = true;
 
 function AppendNewRoiToTable(id, roi) {
-    const RowID = "image-" + id + "-roi-" + roi.roiID;
+    const RowID = "image-" + id + "-roi-" + roi.id;
     $('#ImageRois-' + id).append("<tr class='image-roi-row' id='"+ RowID + "'>" +
         "<td>" + roi.id + "</td>" +
         "<td>" + roi.ph + "</td>" +
@@ -235,22 +234,37 @@ function AppendNewRoiToTable(id, roi) {
         $(this).addClass("bg-primary selected");
         const currentTags = $('#tag-input-roi-' + id).tagsinput('items');
         console.log(currentTags);
-        for (let i in currentTags) {
-            $('#tag-input-roi-' + id).tagsinput('remove', currentTags[i]);
 
-        }
+        $('#tag-input-roi-' + id).tagsinput('removeAll');
+
+
 
 
         selected = $(this).attr('id').replace(new RegExp("image-[0-9]+-roi-"), "");
+        console.log(selected);
         SelectedImage = $(this).attr('id').replace("image-", "").replace(new RegExp("-roi-[0-9]+"), "");
         $.getJSON("http://"+document.location.hostname + ":8081/api/roi/tags/?roi=" + selected, function (result) {
+            //let remainingTags = $('#tag-input-roi-' + id).tagsinput('items');
+            //checkRemain(remainingTags, id);
             for (let i in result.tags){
                 $('#tag-input-roi-' + SelectedImage).tagsinput('add', result.tags[i])
             }
         });
     Ready = true;
-    })
+    });
 
+    function checkRemain(tags, id) {
+        if ($.isEmptyObject(tags)) {
+            return
+        }
+        else {
+            for (let i in tags) {
+                $('#tag-input-roi-' + id).tagsinput('remove', tags[i]);
+            }
+            checkRemain($('#tag-input-roi-' + id).tagsinput('items'), id);
+        }
+
+    }
 }
 
 $(document).ready(function () {
