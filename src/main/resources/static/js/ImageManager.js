@@ -51,6 +51,7 @@ $(document).on('show.bs.modal','#imgPropertyModal', function (e) {
     }
 });
 
+/*---Toast messages ---*/
 $(function () {
     function Toast(type, msg) {
         this.type = type;
@@ -69,29 +70,21 @@ $(function () {
         "hideMethod": "fadeOut"
     };
     var toasts = []
-    if ($('#successMessages').val()){
+    if ($('#successMessages').val().slice( 1, -1)){
         var successMessages = $('#successMessages').val().slice( 1, -1).split(",");
         $.each(successMessages, function (index, value) {
             toasts.push(new Toast("success", value))
         })
     }
-    if ($('#errorMessages').val()){
+    if ($('#errorMessages').val().slice( 1, -1)){
         var errorMessages = $('#errorMessages').val().slice( 1, -1).split(",");
         $.each(errorMessages, function (index, value) {
-            setTimeout( function () {
-                Command: toastr["error"](value);
-            }, 500*index)
+            toasts.push(new Toast("error", value))
         })
-
     }
-
-    // var errorMessages = $('#errorMessages').val().slice( 1, -1).split(",");
-
-
-
-    //  var successArray = JSON.parse(successMessages);
-    // console.log(successArray);
-    // $.each(successArray, function (index, value) {
-    //     console.log(value)
-    // })
+    $.each(toasts, function (index, t) {
+        setTimeout( function () {
+            Command: toastr[t.type](t.msg);
+        }, 500*index)
+    })
 });
