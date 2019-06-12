@@ -1,23 +1,64 @@
+function deleteSelectedImages() {
+
+}
+
 function pickPicContextCommand(key) {
-    if (key == "properties") {
-        $('#imgPropertyModal').modal('toggle');
+    if (key == "img-sort-by-name"){
+        sortbyName('ul#folders > li', 'b:not(.created-title)')
+    }
+    else if (key == "img-sort-by-date"){
+        sortByDate('ul#folders > li', '.last-modified-date')
+    }
+    else if (key == "img-delete"){
+        deleteSelectedImages()
+    }
+    else if( key == "img-move"){
+        $('#moveImageModal').modal('toggle');
+    }
+    else if (key == "img-copy"){
+        $('#copyImageModal').modal('toggle');
+    }
+    else if (key == "img-rename"){
+        if ($('.select').length < 2) {
+            $('#renameImageModal').modal('toggle');
+        }
+    }
+    else if (key == "img-properties") {
+        if ($('.select').length < 2) {
+            $('#imgPropertyModal').modal('toggle');
+        }
     }
 }
 
 $(function() {
     $.contextMenu({
-        selector: '.context-menu-pics',
+        selector: '.context-menu-pics-selected',
         callback: function(key, options) {
             pickPicContextCommand(key)
         },
         items: {
-            "properties": {name: "Properties", icon: "fas fa-info"}
-
+            "img-move": {name: "Move", icon: "fas fa-cut"},
+            "img-copy": {name: "Copy", icon: "fas fa-copy"},
+            "img-delete": {name: "Delete", icon: "fas fa-trash-alt"},
+            "img-rename": {name: "Rename", icon: "fas fa-edit"},
+            "img-properties": {name: "Properties", icon: "fas fa-info"}
         }
     });
 });
 
-$(document).on("click contextmenu", ".picture-img", function(e) {
+// Shows the Image select navbar
+function showImageSelectNav() {
+    $('.img-navbar-unselected').hide();
+    $('.img-navbar-selected').css("display", "flex");
+}
+
+// Shows the Image unselect navbar
+function showImageUnselectNav(){
+    $('.img-navbar-selected').hide();
+    $('.img-navbar-unselected').show();
+}
+
+$(document).on("click contextmenu", ".picture-img a img", function(e) {
     if (e.ctrlKey) {
         $(this).addClass("pic-select");
     } else {
@@ -25,25 +66,26 @@ $(document).on("click contextmenu", ".picture-img", function(e) {
         $(this)
             .addClass("pic-select");
     }
-
+    showImageSelectNav()
 });
 
-$(document).on("click dblclick", ".pictures", function() {
-    $(".picture-img")
+$(document).on("click dblclick", ".img-gallery", function() {
+    $(".picture-img a img")
         .removeClass("pic-select");
-
+    showImageUnselectNav()
 });
 
-$(document).on("click", ".picture-img", function(e) {
+$(document).on("click", ".picture-img a img", function(e) {
     e.stopPropagation();
 });
+
 
 $(document).on('show.bs.modal','#imgPropertyModal', function (e) {
     if ($('.pic-select').length > 1){
         console.log($('.select').length);
         e.preventDefault();
     } else {
-        var path = $('.pic-select').find('.image-path').val().replace("\\", "/");
+        var path = $('.pic-select').parent().siblings('.image-path').val().replace("\\", "/");
         var url = "http://" + document.location.hostname + ":8081/api/metadata/filepath";
         $.getJSON(url, {path: path}, function (data) {
             console.log(data);

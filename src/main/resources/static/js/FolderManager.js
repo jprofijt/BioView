@@ -107,7 +107,7 @@ $(function() {
         items: {
             "open": {name: "Open", icon: "fas fa-folder-open"},
             "move": {name: "Move", icon: "fas fa-cut"},
-            copy: {name: "Copy", icon: "fas fa-copy"},
+            "copy": {name: "Copy", icon: "fas fa-copy"},
             "delete": {name: "Delete", icon: "fas fa-trash-alt"},
             "rename": {name: "Rename", icon: "fas fa-edit"}
         }

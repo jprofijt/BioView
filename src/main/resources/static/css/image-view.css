@@ -20,10 +20,6 @@
 }
 .image-view-canvas {
 }
-
-
-
-
 .img-div{
     width: 1440px;
     height: 1080px;
@@ -37,4 +33,68 @@
     cursor: -moz-grab;
     cursor: -webkit-grab;
 
+}
+
+
+.pictures {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    height: 70vh;
+    overflow-y: scroll;
+    background: #f7f7f7;
+    border: 1px solid #b1b1b1;
+}
+
+.pictures > li {
+    float: left;
+    margin: 0 -1px -1px 0;
+    border: 1px solid transparent;
+    overflow: hidden;
+}
+
+.pictures > li > img {
+    width: 100%;
+    cursor: -webkit-zoom-in;
+    cursor: zoom-in;
+}
+
+.img-gallery {
+    padding: 0 0;
+}
+
+.pic-select {
+    background: #03a9f42e;
+    outline: 1px solid #03A9F4;
+}
+
+
+.image-navbar {
+    color: #ffffff;
+}
+
+.img-gallery-icon {
+    color: #FFFFFF;
+    font-size: 20px;
+    display: block;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.img-navbar-unselected{
+    height: 42px;
+}
+
+.img-navbar-unselected > li > .dropdown-menu > div:hover {
+    background: #343a4026;
+    cursor:pointer;
+}
+
+.img-navbar-selected{
+    display: none;
+}
+
+.img-navbar-selected > li > .dropdown-menu > .div:hover {
+    background: #343a4026;
+    cursor:pointer;
 }
