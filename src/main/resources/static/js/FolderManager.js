@@ -203,7 +203,6 @@ $(document).on("click", '[data-function="delete-folder"]', function () {
 /*---Rename command---*/
 $(document).on('show.bs.modal','#renameModal', function (e) {
     if ($('.select').length > 1){
-        console.log($('.select').length);
         e.preventDefault();
     } else {
         var directory = $('.select').siblings('[name = "location"]').val();

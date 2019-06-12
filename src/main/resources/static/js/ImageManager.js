@@ -15,13 +15,18 @@ function pickPicContextCommand(key) {
         $('#copyImageModal').modal('toggle');
     }
     else if (key == "img-rename"){
-        if ($('.select').length < 2) {
+        if ($('.pic-select').length < 2) {
             $('#renameImageModal').modal('toggle');
         }
     }
     else if (key == "img-properties") {
-        if ($('.select').length < 2) {
+        if ($('.pic-select').length < 2) {
             $('#imgPropertyModal').modal('toggle');
+        }
+    }
+    else if (key == "img-edit"){
+        if ($('.pic-select').length < 2) {
+            openImageModal()
         }
     }
 }
@@ -33,6 +38,7 @@ $(function() {
             pickPicContextCommand(key)
         },
         items: {
+            "img-edit": {name: "Edit", icon: "fas fa-pencil-alt"},
             "img-move": {name: "Move", icon: "fas fa-cut"},
             "img-copy": {name: "Copy", icon: "fas fa-copy"},
             "img-delete": {name: "Delete", icon: "fas fa-trash-alt"}
@@ -207,6 +213,20 @@ function deleteSelectedImages() {
     showImageUnselectNav()
 }
 
-$(document).on("click", '[data-function="delete-folder"]', function () {
+$(document).on("click", '[data-function="delete-image"]', function () {
     deleteSelectedImages()
+});
+
+function openImageModal() {
+    if ($('.pic-select').length > 1){
+        e.preventDefault();
+    } else {
+        let count = $('.pic-select').parent().siblings('.image-iter').val();
+        let path = $('.pic-select').parent().siblings('.image-path').val();
+        loadDynamicModal(count, path);
+    }
+}
+
+$(document).on("click", '[data-function="edit-image"]', function () {
+    openImageModal()
 });
