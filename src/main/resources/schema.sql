@@ -129,7 +129,7 @@ create table roi_points(
 create table ROI_STATE(
  roi_id      int     not null,
  ph          double,
- T           int,
+ T           double,
  o2          int,
  co2         int,
   FOREIGN KEY (roi_id) references image_roi(roi_id)
