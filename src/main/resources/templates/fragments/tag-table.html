@@ -10,7 +10,7 @@
     <tr>
         <th scope="col">#</th>
         <th scope="col">Ph</th>
-        <th scope="col">T</th>
+        <th scope="col">Temp</th>
         <th scope="col">O2</th>
         <th scope="col">CO2</th>
     </tr>
@@ -25,6 +25,10 @@
 
 <div>
     <span th:id="${image.getId()}" class="button-span"><button id="add-button" class="btn btn-primary add-button"><i class="fas fa-plus"></i> Add New</button><button class="btn-primary btn save-button" id="save-button" hidden>Save</button> <button class="btn-primary btn cancel-button" id="cancel-button" hidden>Cancel</button></span>
+</div>
+<br>
+<div class="alert alert-danger fade show" th:id="${'InputError-' + image.getId()}" hidden="">
+    <strong>Error</strong> Make sure all fields are entered correctly!
 </div>
 <br>
 <div><input class="TagInput" th:id="${'tag-input-roi-' + image.getId()}"  data-role="tagsinput" type="text" value=""></div>
