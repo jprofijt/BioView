@@ -36,7 +36,7 @@
 }
 
 
-.pictures {
+.images {
     margin: 0;
     padding: 0;
     list-style: none;
@@ -46,14 +46,18 @@
     border: 1px solid #b1b1b1;
 }
 
-.pictures > li {
+.images > li {
     float: left;
     margin: 0 -1px -1px 0;
     border: 1px solid transparent;
     overflow: hidden;
 }
 
-.pictures > li > img {
+.images > li > div.image-surrounding{
+    padding: 2px 0;
+}
+
+.images > li > div > a > img {
     width: 100%;
     cursor: -webkit-zoom-in;
     cursor: zoom-in;
@@ -81,8 +85,8 @@
     margin-right: 5px;
 }
 
-.img-navbar-unselected{
-    height: 42px;
+.dropdown-img{
+    border: 1px solid transparent;
 }
 
 .img-navbar-unselected > li > .dropdown-menu > div:hover {

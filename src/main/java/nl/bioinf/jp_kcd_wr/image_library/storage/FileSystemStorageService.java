@@ -437,7 +437,6 @@ public class FileSystemStorageService implements StorageService {
     }
 
     private List<File> listDirectories(File Directory){
-        System.out.println(Directory.toString());
         return new ArrayList<>(Arrays.asList(Directory.listFiles(File::isDirectory)));
 
     }

@@ -14,103 +14,106 @@
         <div class="row justify-content-around">
             <div th:replace="fragments/folder-manager"></div>
             <div class="col-md-8">
-                <div class="img-gallery col-12" >
+                <div class="col-12" >
+                    <div th:replace="fragments/image-modals"></div>
                     <div th:replace="fragments/image-view-navbar"></div>
-                    <ul class="pictures clearfix rounded-bottom">
-                        <div th:replace="fragments/image-modals"></div>
-                        <li class="picture-img col-xs-12 col-sm-6 col-md-4 col-lg-3" th:each="image, iterStat : ${Images}">
-                            <div>
-                                <!--th:attr="data-el_id=${element.getId()}"-->
-                                <input class="image-iter" type="hidden" th:value="${iterStat.count}">
-                                <input class="image-path" type="hidden" th:value="${image.getActual()}">
-                                <a th:attr="data-id=${''+image.getActual()}" th:class="modallink" th:id="'link'+${iterStat.count}">
-                                    <img class="img-thumbnail img-fluid context-menu-pics-selected" th:src="@{'/cache/' + ${image.getThumbnail()}}" />
-                                </a>
-                            </div>
+                    <div class="img-gallery">
+                        <ul class="images clearfix rounded-bottom">
+                            <li class="picture-img col-xs-12 col-sm-6 col-md-4 col-lg-3" th:each="image, iterStat : ${Images}">
+                                <div class="image-surrounding">
+                                    <!--th:attr="data-el_id=${element.getId()}"-->
+                                    <input class="image-iter" type="hidden" th:value="${iterStat.count}">
+                                    <input class="image-path" type="hidden" th:value="${image.getActual()}">
+                                    <a th:attr="data-id=${''+image.getActual()}" th:class="modallink" th:id="'link'+${iterStat.count}">
+                                        <img class="img-thumbnail img-fluid context-menu-pics-selected" th:src="@{'/cache/' + ${image.getThumbnail()}}" />
+                                    </a>
+                                </div>
 
-                            <!-- Modal -->
-                            <div th:id="'myModal'+ ${iterStat.count}" class="modal fade image-modal" role="dialog">
-                                <div class="modal-dialog modal-dialog-bioview modal-dialog-scrollable">
+                                <!-- Modal -->
+                                <div th:id="'myModal'+ ${iterStat.count}" class="modal fade image-modal" role="dialog">
+                                    <div class="modal-dialog modal-dialog-bioview modal-dialog-scrollable">
 
-                                    <!-- Modal content-->
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title">Image editor</h4>
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="container-fluid">
-                                                <div class="row">
-                                                    <div class="col-6">
-                                                        <!--<input type="button" value="reset zoom" th:onclick="resetZoom([[${iterStat.count}]])">-->
-                                                        <div class="img-div scene", th:id="'image-canvas-holder'+${iterStat.count}">
-                                                            <canvas class="image-view-canvas" th:id="'canvas' + ${iterStat.count}"></canvas>
-                                                            <!--<img class="modal-image" th:id="'image-canvas' + ${iterStat.count}" th:src="${'files/' + image.getActual()}"/>-->
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Image editor</h4>
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <!--<input type="button" value="reset zoom" th:onclick="resetZoom([[${iterStat.count}]])">-->
+                                                            <div class="img-div scene", th:id="'image-canvas-holder'+${iterStat.count}">
+                                                                <canvas class="image-view-canvas" th:id="'canvas' + ${iterStat.count}"></canvas>
+                                                                <!--<img class="modal-image" th:id="'image-canvas' + ${iterStat.count}" th:src="${'files/' + image.getActual()}"/>-->
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <table class="table tag-table" th:id="${'ImageTags-' + image.getId()}" th:replace="fragments/tag-table"></table>
                                                         </div>
                                                     </div>
-                                                    <div class="col-6">
-                                                        <table class="table tag-table" th:id="${'ImageTags-' + image.getId()}" th:replace="fragments/tag-table"></table>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <p>Description</p>
-                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <p>Description</p>
+                                                        </div>
 
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                         </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                        <!--&lt;!&ndash; Modal &ndash;&gt;-->
-                        <!--<div id='myModal' class="modal fade image-modal" role="dialog">-->
+                            </li>
+                            <!--&lt;!&ndash; Modal &ndash;&gt;-->
+                            <!--<div id='myModal' class="modal fade image-modal" role="dialog">-->
                             <!--<div class="modal-dialog modal-dialog-bioview modal-dialog-scrollable">-->
 
-                                <!--&lt;!&ndash; Modal content&ndash;&gt;-->
-                                <!--<div class="modal-content">-->
-                                    <!--<div class="modal-header">-->
-                                        <!--<h4 class="modal-title">Image editor</h4>-->
-                                        <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
-                                    <!--</div>-->
-                                    <!--<div class="modal-body">-->
-                                        <!--<div class="container-fluid">-->
-                                            <!--<div class="row">-->
-                                                <!--<div class="col">-->
-                                                    <!--<div class="navi-bar">-->
-                                                    <!--</div>-->
-                                                    <!--<div class="img-div scene">-->
-                                                        <!--&lt;!&ndash;<canvas class="image-view-canvas" th:id="'canvas'"></canvas>&ndash;&gt;-->
-                                                        <!--&lt;!&ndash;<img class="modal-image" th:id="'image-canvas' + ${iterStat.count}" th:src="${'files/' + image.getActual()}"/>&ndash;&gt;-->
-                                                    <!--</div>-->
-                                                <!--</div>-->
-                                                <!--<div class="col">-->
-                                                    <!--<p>ROI's</p>-->
-                                                <!--</div>-->
-                                            <!--</div>-->
-                                            <!--<div class="row">-->
-                                                <!--<div class="col">-->
-                                                    <!--<p>Description</p>-->
-                                                <!--</div>-->
-                                                <!--<div class="col">-->
-                                                    <!--<p>Tags</p>-->
-
-                                                <!--</div>-->
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                                <!--<div class="modal-footer">-->
-                                    <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-                                <!--</div>-->
+                            <!--&lt;!&ndash; Modal content&ndash;&gt;-->
+                            <!--<div class="modal-content">-->
+                            <!--<div class="modal-header">-->
+                            <!--<h4 class="modal-title">Image editor</h4>-->
+                            <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
                             <!--</div>-->
-                        <!--</div>-->
+                            <!--<div class="modal-body">-->
+                            <!--<div class="container-fluid">-->
+                            <!--<div class="row">-->
+                            <!--<div class="col">-->
+                            <!--<div class="navi-bar">-->
+                            <!--</div>-->
+                            <!--<div class="img-div scene">-->
+                            <!--&lt;!&ndash;<canvas class="image-view-canvas" th:id="'canvas'"></canvas>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<img class="modal-image" th:id="'image-canvas' + ${iterStat.count}" th:src="${'files/' + image.getActual()}"/>&ndash;&gt;-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="col">-->
+                            <!--<p>ROI's</p>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="row">-->
+                            <!--<div class="col">-->
+                            <!--<p>Description</p>-->
+                            <!--</div>-->
+                            <!--<div class="col">-->
+                            <!--<p>Tags</p>-->
 
-                    </ul>
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="modal-footer">-->
+                            <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--</div>-->
+
+                        </ul>
+                    </div>
+
                 </div>
             </div>
         </div>
