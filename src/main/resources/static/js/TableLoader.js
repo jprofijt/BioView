@@ -22,19 +22,25 @@ $.getJSON(url, function (result) {
     }
 });
 
+function ReloadTable(id) {
+    $('#ImageRois-' + id).find('tbody').find('tr').remove();
+    LoadRoiTable(id);
+}
+
 $(document).ready(function () {
-    const add = $('#add-button');
-    const save = $('#save-button');
-    const cancel = $('#cancel-button');
+    const add = $('.add-button');
+    const save = $('.save-button');
+    const cancel = $('.cancel-button');
     add.on("click", function () {
         selected = undefined;
+        $('.image-roi-row').removeClass("bg-primary selected");
         save.attr('hidden', false);
         cancel.attr('hidden', false);
         add.attr('hidden', true);
         let EditingId = $(this).parent().attr('id');
         $('#ImageRois-' + EditingId).append("<tr class='image-roi-row' id='editing-row'>" +
             "<td>#</td>" +
-            "<td><input type='number' id='ph' name='ph' min='0' max='14' placeholder='pH'></td>" +
+            "<td><input type='number' id='ph' name='ph' min='0' max='14' placeholder='pH' step='0.01'></td>" +
             "<td><input type='number' id='t' name='t' min='0'></td>" +
             "<td><input type='number' id='o2' name='o2' min='0' max='100' placeholder='oxygen %'></td>" +
             "<td><input type='number' id='co2' name='co2' min='0' max='100' placeholder='Co2 %'></td>" +
@@ -53,6 +59,50 @@ $(document).ready(function () {
         let EditingId = $(this).parent().attr('id');
         let editingRow = $('#editing-row');
         let inputs = editingRow.find('input');
+        let InputData = {
+            id: EditingId,
+            ph: parseFloat(inputs[0].value),
+            temp:  parseInt(inputs[1].value),
+            o2: parseInt(inputs[2].value),
+            co2: parseInt(inputs[3].value)
+        };
+
+        /**
+         * @return {boolean}
+         */
+        function CheckInputs(InputData) {
+            if (InputData.ph > 14 || InputData.ph < 0) {
+                return false;
+            }
+            if (InputData.o2 < 0 || InputData.o2 > 100){
+                return false;
+            }
+            if (InputData.co2 < 0 || InputData.co2 > 100) {
+                return false;
+            }
+            return true
+        }
+
+        if (CheckInputs(InputData)) {
+            const url = "http://"+document.location.hostname + ":8081/api/roi/state/";
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: JSON.stringify(InputData),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function () {
+
+                    ReloadTable(EditingId);
+                    save.attr('hidden', true);
+                    cancel.attr('hidden', true);
+                    add.attr('hidden', false)
+                }
+
+                }
+
+            )
+        }
 
     })
 
@@ -172,10 +222,10 @@ let Ready = true;
 function AppendNewRoiToTable(id, roi) {
     const RowID = "image-" + id + "-roi-" + roi.roiID;
     $('#ImageRois-' + id).append("<tr class='image-roi-row' id='"+ RowID + "'>" +
-        "<td>" + roi.roiID + "</td>" +
+        "<td>" + roi.id + "</td>" +
         "<td>" + roi.ph + "</td>" +
-        "<td>" + roi.t + "</td>" +
-        "<td>" + roi.oxygen + "</td>" +
+        "<td>" + roi.temp + "</td>" +
+        "<td>" + roi.o2 + "</td>" +
         "<td>" + roi.co2 + "</td>" +
         "</tr>");
 

@@ -6,13 +6,12 @@ drop table if exists image_annotation;
 drop table if exists image_values;
 drop table if exists ROI_TAGS;
 drop table if exists ROI_STATE;
-drop table if exists image_roi;
 drop table if exists image_tags;
 
 drop table if exists image_annotation;
 drop table if exists image_values;
 drop table if exists image_tags;
-drop table if exists image_roi;
+
 DROP TABLE IF EXISTS tags;
 drop table if exists images_meta;
 
@@ -29,6 +28,7 @@ DROP TABLE IF EXISTS directories;
 drop table if exists image_annotation;
 drop table if exists image_attributes;
 drop table if exists image_tags;
+drop table if exists roi_points;
 drop table if exists image_roi;
 DROP TABLE IF EXISTS tags;
 drop table if exists cache;
@@ -110,16 +110,21 @@ create table image_annotation(
 );
 
 create table image_roi(
-
-    roi_id      int     not null    AUTO_INCREMENT,
+    roi_id      int     not null,
     image_id    int     not null,
-    x1          int     not null,
-    y1          int     not null,
-    x2          int     not null,
-    y2          int     not null,
     foreign key (image_id) references images(id),
     primary key (roi_id)
 );
+
+
+create table roi_points(
+    id          int     not null,
+    roi_id      int     not null,
+    x_pos       int     not null,
+    y_pos       int     not null,
+    foreign key (roi_id) references image_roi(roi_id)
+);
+
 
 create table ROI_STATE(
  roi_id      int     not null,
