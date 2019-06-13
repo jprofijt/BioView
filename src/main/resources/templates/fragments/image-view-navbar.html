@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+<body>
+<nav class="image-navbar navbar navbar-expand-md navbar-dark bg-dark">
+    <i class="fas fa-images img-gallery-icon"></i>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#img-gallery-navbar-collapse"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="img-gallery-navbar-collapse">
+        <ul class="navbar-nav mr-auto img-navbar-unselected">
+            <li class="dropdown-img nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="img-sort-nav" data-function="sort-images" role="button"
+                   data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false"> Sort by</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown-sort-image">
+                    <div class="dropdown-item" data-sort="image-name">Name</div>
+                    <div class="dropdown-item" data-sort="image-date">Date</div>
+                </div>
+                <div class="dropdown-menu"></div>
+            </li>
+        </ul>
+        <ul class="navbar-nav mr-auto img-navbar-selected">
+            <li class="nav-item">
+                <button class="btn nav-link"  data-function="edit-image"><i class="fas fa-pencil-alt"></i> Edit</button>
+            </li>
+            <li class="nav-item">
+                <button class="btn nav-link" data-toggle="modal" data-target="#moveImageModal"><i class="fas fa-cut"></i> Move</button>
+            </li>
+            <li class="nav-item">
+                <button class="btn nav-link" data-toggle="modal" data-target="#copyImageModal"><i class="fas fa-copy"></i> Copy</button>
+            </li>
+            <li class="nav-item">
+                <button class="btn nav-link"  data-function="delete-image"><i class="fas fa-trash-alt"></i> Delete</button>
+            </li>
+            <!--<li class="nav-item">-->
+                <!--<button class="btn nav-link"  data-toggle="modal" data-target="#renameImageModal"><i class="fas fa-edit"></i> Rename</button>-->
+            <!--</li>-->
+        </ul>
+    </div>
+</nav>
+</body>
+</html>

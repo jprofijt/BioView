@@ -43,16 +43,22 @@ public class FileUICommandService implements UICommandService {
      * @author Kim Chau Duong
      */
     @Override
-    public void removeFile(String source) {
+    public boolean removeFile(String source) {
         Path path = getFullPath(source);
         try {
-            logger.log(Level.INFO, "Deleting directory: {0}", source);
-            FileUtils.deleteDirectory(path.toFile());
+            logger.log(Level.INFO, "Deleting {0}", source);
+            if (Files.isDirectory(path)){
+                FileUtils.deleteDirectory(path.toFile());
+            } else{
+                Files.delete(path);
+            }
+
             logger.log(Level.INFO, "Successfully deleted {0}!", source);
+            return true;
         } catch (IOException e) {
             logger.log(Level.WARNING, "{0} could not be deleted", source);
+            return false;
         }
-
     }
 
     /**
@@ -63,16 +69,23 @@ public class FileUICommandService implements UICommandService {
      * @author Kim Chau Duong
      */
     @Override
-    public void moveFile(String source, String destination) {
+    public boolean moveFile(String source, String destination) {
         Path pathFrom = getFullPath(source);
         Path pathTo = getFullPath(destination).resolve(new File(source).getName());
-        try{
-            logger.log(Level.INFO,"Moving directory from {0} to {1}", new Object[]{source, destination});
-            Files.move(pathFrom, pathTo, StandardCopyOption.REPLACE_EXISTING);
-            storageService.processExistingImageLibrary(new File(String.valueOf(getFullPath(destination))));
-
-        } catch (IOException e) {
-            logger.log(Level.WARNING, "{0} could not be moved", source);
+        if (Files.exists(pathTo)){
+            logger.log(Level.WARNING, "{0} already exists!", source);
+            return false;
+        } else {
+            try{
+                logger.log(Level.INFO,"Moving {0} from {1} to {2}", new Object[]{new File(source).getName(),source, destination});
+                Files.move(pathFrom, pathTo, StandardCopyOption.REPLACE_EXISTING);
+                storageService.processExistingImageLibrary(new File(String.valueOf(getFullPath(destination))));
+//                storageService.processDirectory(new File(String.valueOf(pathFrom.getParent()));
+                return true;
+            } catch (IOException e) {
+                logger.log(Level.WARNING, "{0} could not be moved", source);
+                return false;
+            }
         }
     }
 
@@ -84,15 +97,26 @@ public class FileUICommandService implements UICommandService {
      * @author Kim Chau duong
      */
     @Override
-    public void copyFile(String source, String destination) {
+    public boolean copyFile(String source, String destination) {
         Path pathFrom = getFullPath(source);
         Path pathTo = getFullPath(destination).resolve(new File(source).getName());
-        try{
-            logger.log(Level.INFO,"Copying directory from {0} to {1}", new Object[]{source, destination});
-            FileUtils.copyDirectory(pathFrom.toFile(), pathTo.toFile());
-            storageService.processExistingImageLibrary(new File(String.valueOf(getFullPath(destination))));
-        } catch (IOException e) {
-            logger.log(Level.WARNING, "{0} could not be copied", source);
+        if (Files.exists(pathTo)){
+            logger.log(Level.WARNING, "{0} already exists!", source);
+            return false;
+        } else {
+            try{
+                logger.log(Level.INFO,"Copying {0} from {1} to {2}", new Object[]{new File(source).getName(),source, destination});
+                if (Files.isDirectory(pathFrom)){
+                    FileUtils.copyDirectory(pathFrom.toFile(), pathTo.toFile());
+                } else {
+                    FileUtils.copyFile(pathFrom.toFile(), pathTo.toFile());
+                }
+                storageService.processExistingImageLibrary(new File(String.valueOf(getFullPath(destination))));
+                return true;
+            } catch (IOException e) {
+                logger.log(Level.WARNING, "{0} could not be copied", source);
+                return false;
+            }
         }
     }
 
@@ -102,16 +126,23 @@ public class FileUICommandService implements UICommandService {
      * @param renamedFileName new name
      */
     @Override
-    public void renameFile(String source, String renamedFileName) {
+    public boolean renameFile(String source, String renamedFileName) {
         Path oldPath = getFullPath(source);
         Path renamedPath = oldPath.resolveSibling(renamedFileName);
-        try{
-            logger.log(Level.INFO, "Renaming {0} to {1} in {2}", new Object[]{new File(source).getName(), renamedFileName, new File(source).getParent()});
-            Files.move(oldPath, renamedPath, StandardCopyOption.REPLACE_EXISTING);
-            storageService.processExistingImageLibrary(new File(String.valueOf(renamedPath)));
-        } catch (IOException e) {
-            logger.log(Level.WARNING, "{0} could not be renamed", source);
+        if (Files.exists(renamedPath)){
+            logger.log(Level.WARNING, "{0} already exists!", source);
+            return false;
         }
-
+        else {
+            try{
+                logger.log(Level.INFO, "Renaming {0} to {1} in {2}", new Object[]{new File(source).getName(), renamedFileName, new File(source).getParent()});
+                Files.move(oldPath, renamedPath, StandardCopyOption.REPLACE_EXISTING);
+                storageService.processExistingImageLibrary(new File(String.valueOf(renamedPath)));
+                return true;
+            } catch (IOException e) {
+                logger.log(Level.WARNING, "{0} could not be renamed", source);
+                return false;
+            }
+        }
     }
 }

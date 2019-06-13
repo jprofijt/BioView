@@ -201,14 +201,14 @@ public class ImageDataSourceJdbc implements ImageDataSource {
     public void insertImageMetaData(ImageAttribute imageAttribute) {
         if (!checkImageAttributeIndex(imageAttribute)){
             SqlParameterSource parameterSource = new MapSqlParameterSource()
-//                .addValue("id", imageAttribute.getId())
+                .addValue("id", imageAttribute.getId())
                     .addValue("name", imageAttribute.getImageName())
                     .addValue("path", imageAttribute.getPath().replace("\\", "/"))
                     .addValue("filepath", imageAttribute.getFilePath().replace("\\", "/"))
                     .addValue("date", imageAttribute.getDateCreated())
                     .addValue("size", imageAttribute.getImageSize())
                     .addValue("type", imageAttribute.getFileType().toString());
-            String query = "insert into image_attributes ( name, path, filepath, date, size, type) values ( :name, :path, :filepath, :date, :size, :type)";
+            String query = "insert into image_attributes ( id, name, path, filepath, date, size, type) values (:id, :name, :path, :filepath, :date, :size, :type)";
 
             namedJdbcTemplate.update(query, parameterSource);
         }

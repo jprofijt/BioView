@@ -32,7 +32,7 @@ public class FolderHandler implements FolderStructureProvider {
 
     @Autowired
     public FolderHandler(Environment environment){
-        this.rootLocation = Paths.get(environment.getProperty("library.upload"));
+        this.rootLocation = Paths.get(environment.getProperty("library.sym"));
         logger.log(Level.INFO, "Starting FolderHandler service using {0} as root location", new Object[] {this.rootLocation});
     }
 
@@ -110,9 +110,10 @@ public class FolderHandler implements FolderStructureProvider {
      */
     @Override
     public void createNewFolder(String directoryName, String currentPath) throws DirectoryExistsException {
-        String path = getFullPath(currentPath) + File.separator + directoryName;
-        File newDir = new File(path);
+        Path path = getFullPath(currentPath).resolve(directoryName);
+        File newDir = new File(String.valueOf(path));
         try {
+            logger.log(Level.INFO, "Creating {0}", newDir);
             Files.createDirectory(newDir.toPath());
             newDir.setWritable(true, false);
             newDir.setReadable(true, false);
@@ -120,6 +121,7 @@ public class FolderHandler implements FolderStructureProvider {
 
         } catch (IOException e){
             e.printStackTrace();
+            logger.log(Level.WARNING, "Could not create {0}", newDir);
             throw new DirectoryExistsException("Directory " + directoryName + " already exists");
         }
 
