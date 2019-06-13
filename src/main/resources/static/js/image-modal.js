@@ -173,25 +173,25 @@ function drawPolygons(name, id){
     } else {
         drawingObject.type = "roof"; // roof type
     }
-    // window.canvas.on('mouse:down', function (options) {
-    //     if (drawingObject.type == "roof") {
-    //         window.canvas.selection = false;
-    //         setStartingPoint(options); // set x,y
-    //         roofPoints.push(new Point(x, y));
-    //         roiPointsList.push([x,y]);
-    //         var points = [x, y, x, y];
-    //         lines.push(new fabric.Line(points, {
-    //             strokeWidth: 3,
-    //             selectable: false,
-    //             stroke: 'red'
-    //         }).setOriginX(x).setOriginY(y));
-    //         window.canvas.add(lines[lineCounter]);
-    //         lineCounter++;
-    //         window.canvas.on('mouse:up', function (options) {
-    //             window.canvas.selection = true;
-    //         });
-    //     }
-    // });
+    window.canvas.on('mouse:down', function (options) {
+        if (drawingObject.type == "roof") {
+            window.canvas.selection = false;
+            setStartingPoint(options); // set x,y
+            roofPoints.push(new Point(x, y));
+            roiPointsList.push([x,y]);
+            var points = [x, y, x, y];
+            lines.push(new fabric.Line(points, {
+                strokeWidth: 3,
+                selectable: false,
+                stroke: 'red'
+            }).setOriginX(x).setOriginY(y));
+            window.canvas.add(lines[lineCounter]);
+            lineCounter++;
+            window.canvas.on('mouse:up', function (options) {
+                window.canvas.selection = true;
+            });
+        }
+    });
     fabric.util.addListener(window,'dblclick', function(){
         drawingObject.type = "";
         lines.forEach(function(value, index, ar){
@@ -205,27 +205,24 @@ function drawPolygons(name, id){
         roof = makeRoof(roofPoints);
         window.canvas.add(roof);
         window.canvas.renderAll();
-        var objs = [];
-        //get all the objects into an array
-        objs = canvas._objects.filter(function(obj){
-            return obj;
-        });
-
-        //group all the objects
-        var alltogetherObj = new fabric.Group(objs,{
-            top:200,left:250,
-            originX:'center',
-            originY:'center'});
-
-
-        //clear previous objects
-        canvas._objects.forEach(function(obj){
-            obj.remove();
-        });
-
-        canvas.add(alltogetherObj);
-        alltogether.setCoords();
-        canvas.renderAll();
+        // var objs = [];
+        // // get all the objects into an array
+        // objs = canvas._objects.filter(function(obj){
+        //     return obj;
+        // });
+        //
+        // //group all the objects
+        // var alltogetherObj = new fabric.Group(objs);
+        //
+        //
+        // //clear previous objects
+        // canvas._objects.forEach(function(obj){
+        //     obj.remove();
+        // });
+        //
+        // canvas.add(alltogetherObj);
+        // alltogether.setCoords();
+        // canvas.renderAll();
 
         console.log("double click");
         //clear arrays
@@ -263,7 +260,9 @@ function drawPolygons(name, id){
     });
 
     function setStartingPoint(options) {
-        var offset = $('#canvas1').offset();
+        var offset = $('#'+name + id).offset();
+        console.log(offset);
+        console.log($('canvas1').offset());
         x = options.e.pageX - offset.left;
         y = options.e.pageY - offset.top;
     }
@@ -272,7 +271,7 @@ function drawPolygons(name, id){
 
         var left = findLeftPaddingForRoof(roofPoints);
         var top = findTopPaddingForRoof(roofPoints);
-        roofPoints.push(new Point(roofPoints[0].x,roofPoints[0].y))
+        roofPoints.push(new Point(roofPoints[0].x,roofPoints[0].y));
         var roof = new fabric.Polyline(roofPoints, {
             fill: 'rgba(0,0,0,0)',
             stroke:'rgba(252, 185, 65, 1)',
