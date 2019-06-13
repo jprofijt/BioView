@@ -13,5 +13,5 @@ import java.util.List;
 public interface BreadcrumbBuilder {
     List<Breadcrumb> getBreadcrumbs(String directory);
 
-    Breadcrumb getFolderBreadCrumb(StringBuilder crumbPath);
+
 }

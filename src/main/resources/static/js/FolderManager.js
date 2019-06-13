@@ -57,10 +57,10 @@ function pickContextCommand(key) {
         createNewFolder();
     }
     else if (key == "sort-by-name"){
-        sortbyName('ul#folders > li', 'b:not(.created-title)')
+        sortbyName()
     }
     else if (key == "sort-by-date"){
-        sortByDate('ul#folders > li', '.last-modified-date')
+        sortByDate()
     }
     else if (key == "delete"){
         deleteSelected()
@@ -107,7 +107,7 @@ $(function() {
         items: {
             "open": {name: "Open", icon: "fas fa-folder-open"},
             "move": {name: "Move", icon: "fas fa-cut"},
-            copy: {name: "Copy", icon: "fas fa-copy"},
+            "copy": {name: "Copy", icon: "fas fa-copy"},
             "delete": {name: "Delete", icon: "fas fa-trash-alt"},
             "rename": {name: "Rename", icon: "fas fa-edit"}
         }
@@ -137,8 +137,8 @@ $(document).on("click", '[data-function="new-folder"]',function() {
 
 /*---Sort by buttons---*/
 var nameOrder = 'asc';
-function sortbyName(list, element){
-    tinysort(list,{selector : element, order : nameOrder});
+function sortbyName(){
+    tinysort('ul#folders > li',{selector : 'b:not(.created-title)', order : nameOrder});
     if (nameOrder === 'asc') {
         nameOrder = 'desc'
     }
@@ -147,12 +147,12 @@ function sortbyName(list, element){
     }
 }
 $(document).on("click", '[data-sort="folder-name"]', function () {
-    sortbyName('ul#folders > li', 'b:not(.created-title)')
+    sortbyName()
 });
 
 var dateOrder = 'asc';
-function sortByDate(list, element){
-    tinysort(list,{selector : element, attr:'value', order : dateOrder});
+function sortByDate(){
+    tinysort('ul#folders > li',{selector : '.last-modified-date', attr:'value', order : dateOrder});
     if (dateOrder === 'asc') {
         dateOrder = 'desc'
     }
@@ -161,7 +161,7 @@ function sortByDate(list, element){
     }
 }
 $(document).on("click", '[data-sort="folder-date"]', function () {
-    sortByDate('ul#folders > li', '.last-modified-date')
+    sortByDate()
 });
 
 /*--- Delete command---*/
@@ -176,6 +176,7 @@ $(function () {
 
 function deleteSelected() {
     $('.select').each(function (index) {
+        var directoryname = $(this).find('b').text();
         var directory = $(this).siblings('[name = "location"]').val();
         $.ajax({
             type: "POST",
@@ -183,16 +184,15 @@ function deleteSelected() {
             dataType: "text",
             data: {'directory' : directory},
             success: function (data) {
-                console.log("successfully deleted", directory);
+                toastr["success"]("Successfully deleted " + directoryname + "!");
             },
             error: function(xhr, desc, err) {
-                console.log(xhr);
-                console.log("Details0: " + desc + "\nError:" + err);
+                toastr["error"]("Could not delete " + directoryname + "!");
             }
         });
-        })
-    $('.select').parents('li').css("display", "none");
-    $(".select").removeClass("select");
+        });
+    $('.select').parents('li').remove();
+    $('.select').removeClass("select");
     showFolderUnselectNav();
 }
 
@@ -203,7 +203,6 @@ $(document).on("click", '[data-function="delete-folder"]', function () {
 /*---Rename command---*/
 $(document).on('show.bs.modal','#renameModal', function (e) {
     if ($('.select').length > 1){
-        console.log($('.select').length);
         e.preventDefault();
     } else {
         var directory = $('.select').siblings('[name = "location"]').val();

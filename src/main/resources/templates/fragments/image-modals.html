@@ -5,6 +5,47 @@
     <title>Title</title>
 </head>
 <body>
+<div class="modal fade" id="moveImageModal" tabindex="-1" role="dialog" aria-labelledby="MoveImageModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="moveImageModalLabel">Move image(s) to</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/moveimage}" method="post" id="moveImage">
+                    <input name="currentPath" type="hidden" th:value="${currentPath}">
+                    <input name="movedImages" type="hidden">
+                    <div class="move-to-tree" id="moveImageTree"></div>
+                    <br/><input class="btn btn-success" type="submit" value="Move" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="copyImageModal" tabindex="-1" role="dialog" aria-labelledby="copyModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="copyModalLabel">Copy image(s) to</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/copyimage}" method="post" id="copyImage">
+                    <input name="currentPath" type="hidden" th:value="${currentPath}">
+                    <input name="copiedImages" type="hidden">
+                    <div class="copy-to-tree" id="copyImageTree"></div>
+                    <br/><input class="btn btn-success" type="submit" value="Copy" />
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="imgPropertyModal" tabindex="-1" role="dialog" aria-labelledby="imgPropertyModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

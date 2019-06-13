@@ -59,12 +59,12 @@ public class FileSystemStorageService implements StorageService {
      * Contructor
      */
     @Autowired
-    public FileSystemStorageService(ImageDataSource imageDataSource) {
+    public FileSystemStorageService(ImageDataSource imageDataSource, Environment environment) {
         this.imageDataSource = imageDataSource;
-        rootLocation = Paths.get("upload/upload");
-        this.cacheLocation = Paths.get("upload/thumbnails");
+        rootLocation = Paths.get(environment.getProperty("library.sym"));
+        this.cacheLocation = Paths.get(environment.getProperty("library.sym.thumbnails"));
 
-        File rootDirectory = new File(rootLocation.toString()+"/HeadDirectory/");
+        File rootDirectory = new File(String.valueOf(rootLocation.resolve("/HeadDirectory")));
         if (!rootDirectory.exists()){
             rootDirectory.mkdirs();
         }
@@ -216,6 +216,8 @@ public class FileSystemStorageService implements StorageService {
             attribute.setImageName(image.getName());
             attribute.setPath(image.getParent());
             attribute.setFilePath(image.getPath());
+            int id = imageDataSource.getImageIdFromPath(image.getPath());
+            attribute.setId(id);
             attribute.setImageSize(image.length());
             attribute.setDateCreated(getDateModified(image));
             attribute.setFileType(getFileTypeEnum(FilenameUtils.getExtension(String.valueOf(image))));
@@ -404,27 +406,30 @@ public class FileSystemStorageService implements StorageService {
 
     /**
      * For each image in existing image library will create a cached image if it doesn't exist and makes a database insert
-     * @param Directory Root directory to recursively
+     * @param directory Root directory to recursively
      *
      * @author Jouke Profijt
      */
     @Override
-    public void processExistingImageLibrary(File Directory) {
-        for (File contentDirectory : listDirectories(Directory)){
+    public void processExistingImageLibrary(File directory) {
+        for (File contentDirectory : listDirectories(directory)){
             processExistingImageLibrary(contentDirectory);
         }
+        processDirectory(directory);
 
-        try {
-            IndexImages(Directory);
-            createThumbnails(Directory);
-            indexImageAttributes(Directory);
-
-        } catch (IOException e) {
-            logger.log(Level.WARNING, "Directory {0} not found", Directory.getPath());
-        }
 
     }
 
+    private void processDirectory(File directory) {
+        try {
+            IndexImages(directory);
+            createThumbnails(directory);
+            indexImageAttributes(directory);
+
+        } catch (IOException e) {
+            logger.log(Level.WARNING, "Directory {0} not found", directory.getPath());
+        }
+    }
 
 
     private void processLibrary() {
@@ -435,7 +440,6 @@ public class FileSystemStorageService implements StorageService {
     }
 
     private List<File> listDirectories(File Directory){
-        System.out.println(Directory.toString());
         return new ArrayList<>(Arrays.asList(Directory.listFiles(File::isDirectory)));
 
     }

@@ -53,7 +53,7 @@ CREATE TABLE users(
 CREATE TABLE images(
   id          INT           NOT NULL    AUTO_INCREMENT,
   orig_name   VARCHAR(500)  NOT NULL,
-  new_name    VARCHAR(500)  NOT NULL    unique,
+  new_name    VARCHAR(500)  NOT NULL,
   path        VARCHAR(260)  NOT NULL    UNIQUE,
   PRIMARY KEY (id)
 );
