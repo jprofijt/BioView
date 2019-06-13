@@ -21,12 +21,11 @@
 .image-view-canvas {
 }
 .img-div{
-    width: 1440px;
-    height: 1080px;
-    max-height: 1080px;
-    min-width: 600px;
-    min-height: 600px;
-    max-width: 1440px;
+    height: 80vh;
+    /*max-height: 1080px;*/
+    /*min-width: 600px;*/
+    /*min-height: 600px;*/
+    /*max-width: 1440px;*/
     overflow: auto;
     cursor: grab;
     cursor: -o-grab;
