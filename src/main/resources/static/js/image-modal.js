@@ -261,8 +261,6 @@ function drawPolygons(name, id){
 
     function setStartingPoint(options) {
         var offset = $('#'+name + id).offset();
-        console.log(offset);
-        console.log($('canvas1').offset());
         x = options.e.pageX - offset.left;
         y = options.e.pageY - offset.top;
     }
