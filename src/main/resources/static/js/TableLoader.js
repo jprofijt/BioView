@@ -5,8 +5,11 @@
  */
 
 
-$(document).ready(function () {
 
+/**
+ * Fills each table with the correct Regions of interest
+ */
+$(document).ready(function () {
         $('.tag-table').each(function () {
             let id = $(this).attr('id').replace("ImageRois-", "");
             new LoadRoiTable(id)
@@ -14,6 +17,10 @@ $(document).ready(function () {
 
     });
 
+/**
+ * Pre-existing Tags the user can choose from
+ * @type {Array}
+ */
 let available = [];
 const url = "http://"+document.location.hostname + ":8081/api/tags/all/";
 $.getJSON(url, function (result) {
@@ -22,11 +29,18 @@ $.getJSON(url, function (result) {
     }
 });
 
+/**
+ * Reloads Regions of interest for given id
+ * @param id    Image id
+ */
 function ReloadTable(id) {
     $('#ImageRois-' + id).find('tbody').find('tr').remove();
     LoadRoiTable(id);
 }
 
+/**
+ * Handles Adding of regions of interest
+ */
 $(document).ready(function () {
     const add = $('.add-button');
     const save = $('.save-button');
@@ -40,7 +54,7 @@ $(document).ready(function () {
         $('#ImageRois-' + EditingId).append("<tr class='image-roi-row' id='editing-row'>" +
             "<td>#</td>" +
             "<td><input type='number' id='ph' name='ph' min='0' max='14' placeholder='pH' step='0.01'></td>" +
-            "<td><input type='number' id='t' name='t' min='0'></td>" +
+            "<td><input type='number' id='t' name='t' min='-273.15' placeholder='Temperature (C)' step='0.01'></td>" +
             "<td><input type='number' id='o2' name='o2' min='0' max='100' placeholder='oxygen %'></td>" +
             "<td><input type='number' id='co2' name='co2' min='0' max='100' placeholder='Co2 %'></td>" +
             "</tr>");
@@ -48,10 +62,12 @@ $(document).ready(function () {
 
     cancel.on("click", function () {
         let EditingId = $(this).parent().attr('id');
+        let error = $('#InputError-'+EditingId);
         $('#editing-row').remove();
         save.attr('hidden', true);
         cancel.attr('hidden', true);
         add.attr('hidden', false);
+        error.attr('hidden', true);
     });
 
     save.on("click", function () {
@@ -61,7 +77,7 @@ $(document).ready(function () {
         let InputData = {
             id: EditingId,
             ph: parseFloat(inputs[0].value),
-            temp:  parseInt(inputs[1].value),
+            temp:  parseFloat(inputs[1].value),
             o2: parseInt(inputs[2].value),
             co2: parseInt(inputs[3].value)
         };
@@ -70,19 +86,23 @@ $(document).ready(function () {
          * @return {boolean}
          */
         function CheckInputs(InputData) {
-            if (InputData.ph > 14 || InputData.ph < 0) {
+            if (isNaN(InputData.ph) || InputData.ph > 14 || InputData.ph < 0) {
                 return false;
             }
-            if (InputData.o2 < 0 || InputData.o2 > 100){
+            if (isNaN(InputData.o2) || InputData.o2 < 0 || InputData.o2 > 100){
                 return false;
             }
-            if (InputData.co2 < 0 || InputData.co2 > 100) {
+            if (isNaN(InputData.co2) || InputData.co2 < 0 || InputData.co2 > 100) {
+                return false;
+            }
+            if (isNaN(InputData.temp) || InputData.temp < -273.15){
                 return false;
             }
             return true
         }
 
         if (CheckInputs(InputData)) {
+            $('#InputError-'+EditingId).attr("hidden", true);
             const url = "http://"+document.location.hostname + ":8081/api/roi/state/";
             $.ajax({
                 url: url,
@@ -101,6 +121,8 @@ $(document).ready(function () {
                 }
 
             )
+        } else {
+            $('#InputError-'+EditingId).attr("hidden", false);
         }
 
     })
@@ -111,12 +133,7 @@ $(document).ready(function () {
 
 
 $(document).ready(function () {
-    $('.TagInput').tagsinput({
-        typeahead: {
-            highlight: true,
-            source: available
-        }
-    })
+
 });
 
 /**
@@ -135,7 +152,6 @@ function LoadTagTable(id) {
         success: function (data) {
             $.each(data.tags, function (tag) {
                 //$('#ImageTags-' + id).append("<tr><td>" + data.tags[tag] + "</td></tr>")
-                console.log("appending new " + data.tags);
                 AppendNewTagToTable(id, data.tags[tag]);
 
             })
@@ -233,7 +249,6 @@ function AppendNewRoiToTable(id, roi) {
         $('.image-roi-row').removeClass("bg-primary selected");
         $(this).addClass("bg-primary selected");
         const currentTags = $('#tag-input-roi-' + id).tagsinput('items');
-        console.log(currentTags);
 
         $('#tag-input-roi-' + id).tagsinput('removeAll');
 
@@ -241,9 +256,8 @@ function AppendNewRoiToTable(id, roi) {
 
 
         selected = $(this).attr('id').replace(new RegExp("image-[0-9]+-roi-"), "");
-        console.log(selected);
         SelectedImage = $(this).attr('id').replace("image-", "").replace(new RegExp("-roi-[0-9]+"), "");
-        $.getJSON("http://"+document.location.hostname + ":8081/api/roi/tags/?roi=" + selected, function (result) {
+        $.getJSON("http://"+document.location.hostname + ":8081/api/roi/tags/get/?roi=" + selected, function (result) {
             //let remainingTags = $('#tag-input-roi-' + id).tagsinput('items');
             //checkRemain(remainingTags, id);
             for (let i in result.tags){
@@ -252,23 +266,11 @@ function AppendNewRoiToTable(id, roi) {
         });
     Ready = true;
     });
-
-    function checkRemain(tags, id) {
-        if ($.isEmptyObject(tags)) {
-            return
-        }
-        else {
-            for (let i in tags) {
-                $('#tag-input-roi-' + id).tagsinput('remove', tags[i]);
-            }
-            checkRemain($('#tag-input-roi-' + id).tagsinput('items'), id);
-        }
-
-    }
 }
 
 $(document).ready(function () {
-    $('.TagInput').on('itemAdded', function(event) {
+    const TagInput = $('.TagInput');
+    TagInput.on('itemAdded', function(event) {
         if (Ready) {
             let data = {
                 id: selected,
@@ -278,7 +280,7 @@ $(document).ready(function () {
 
             $.ajax({
                 type: "POST",
-                url: "http://" + document.location.hostname + ":8081/api/roi/tags/",
+                url: "http://" + document.location.hostname + ":8081/api/roi/tags/add/",
                 data: JSON.stringify(data),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -286,10 +288,38 @@ $(document).ready(function () {
                 success: function () {
                     //$('#ImageTags-' + id).append("<tr><td>" + $('#tag-input-' + id).val() + "</td></tr>")
 
-                    console.log('Adding tag success')
                 }
             })
         }
     });
+
+    TagInput.on('beforeItemRemove', function (event) {
+        let tag = event.item;
+        let removeData = {
+            id: selected,
+            tag: tag
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "http://" + document.location.hostname + ":8081/api/roi/tags/delete/",
+            data: JSON.stringify(removeData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function () {
+                console.log("removed tag " + tag + "from roi " + selected)
+            }
+
+        })
+
     });
+
+    TagInput.tagsinput({
+        typeahead: {
+            highlight: true,
+            source: available
+        }
+    })
+});
 
