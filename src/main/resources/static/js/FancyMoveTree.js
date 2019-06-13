@@ -60,9 +60,6 @@ $(function () {
         $('input[name="movedFolders"]').val(directoryArray);
 
         $("#moveFolderTree").fancytree("getTree").generateFormElements();
-        alert("POST data:\n" + jQuery.param($(this).serializeArray()));
-        // return false to prevent submission of this sample
-        return false;
     });
 });
 
@@ -105,9 +102,6 @@ $(function () {
         $('input[name="copiedFolders"]').val(directoryArray);
 
         $("#copyFolderTree").fancytree("getTree").generateFormElements();
-        alert("POST data:\n" + jQuery.param($(this).serializeArray()));
-        // return false to prevent submission of this sample
-        return false;
     });
 });
 
@@ -149,9 +143,6 @@ $(function () {
         $('input[name="movedImages"]').val(imagePathArray);
 
         $("#moveImageTree").fancytree("getTree").generateFormElements();
-        alert("POST data:\n" + jQuery.param($(this).serializeArray()));
-        // return false to prevent submission of this sample
-        return false;
     });
 });
 
@@ -193,9 +184,9 @@ $(function () {
         $('input[name="copiedImages"]').val(imagePathArray);
 
         $("#copyImageTree").fancytree("getTree").generateFormElements();
-        alert("POST data:\n" + jQuery.param($(this).serializeArray()));
-        // return false to prevent submission of this sample
-        return false;
+        // alert("POST data:\n" + jQuery.param($(this).serializeArray()));
+        // // return false to prevent submission of this sample
+        // return false;
     });
 });
 
