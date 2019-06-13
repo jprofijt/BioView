@@ -406,27 +406,30 @@ public class FileSystemStorageService implements StorageService {
 
     /**
      * For each image in existing image library will create a cached image if it doesn't exist and makes a database insert
-     * @param Directory Root directory to recursively
+     * @param directory Root directory to recursively
      *
      * @author Jouke Profijt
      */
     @Override
-    public void processExistingImageLibrary(File Directory) {
-        for (File contentDirectory : listDirectories(Directory)){
+    public void processExistingImageLibrary(File directory) {
+        for (File contentDirectory : listDirectories(directory)){
             processExistingImageLibrary(contentDirectory);
         }
+        processDirectory(directory);
 
-        try {
-            IndexImages(Directory);
-            createThumbnails(Directory);
-            indexImageAttributes(Directory);
-
-        } catch (IOException e) {
-            logger.log(Level.WARNING, "Directory {0} not found", Directory.getPath());
-        }
 
     }
 
+    private void processDirectory(File directory) {
+        try {
+            IndexImages(directory);
+            createThumbnails(directory);
+            indexImageAttributes(directory);
+
+        } catch (IOException e) {
+            logger.log(Level.WARNING, "Directory {0} not found", directory.getPath());
+        }
+    }
 
 
     private void processLibrary() {

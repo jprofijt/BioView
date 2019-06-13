@@ -192,14 +192,14 @@ $(document).on("click", '[data-sort="image-date"]', function () {
 
 function deleteSelectedImages() {
     $('.pic-select').each(function (index) {
-        var directory = $(this).parent().siblings('.image-path').val().replace("\\", "/");
-        var imageName = directory.lastIndexOf('/');
+        var image = $(this).parent().siblings('.image-path').val().replace("\\", "/");
+        var imageName = image.lastIndexOf('/');
 
         $.ajax({
             type: "POST",
             url: "/deleteimage",
             dataType: "text",
-            data: {'directory' : directory},
+            data: {'image' : image},
             success: function (data) {
                 toastr["success"]("Successfully deleted " + imageName + "!");
             },

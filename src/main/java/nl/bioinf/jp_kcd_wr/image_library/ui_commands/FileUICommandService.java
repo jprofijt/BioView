@@ -46,8 +46,13 @@ public class FileUICommandService implements UICommandService {
     public boolean removeFile(String source) {
         Path path = getFullPath(source);
         try {
-            logger.log(Level.INFO, "Deleting directory {0}", source);
-            FileUtils.deleteDirectory(path.toFile());
+            logger.log(Level.INFO, "Deleting {0}", source);
+            if (Files.isDirectory(path)){
+                FileUtils.deleteDirectory(path.toFile());
+            } else{
+                Files.delete(path);
+            }
+
             logger.log(Level.INFO, "Successfully deleted {0}!", source);
             return true;
         } catch (IOException e) {
@@ -75,6 +80,7 @@ public class FileUICommandService implements UICommandService {
                 logger.log(Level.INFO,"Moving {0} from {1} to {2}", new Object[]{new File(source).getName(),source, destination});
                 Files.move(pathFrom, pathTo, StandardCopyOption.REPLACE_EXISTING);
                 storageService.processExistingImageLibrary(new File(String.valueOf(getFullPath(destination))));
+//                storageService.processDirectory(new File(String.valueOf(pathFrom.getParent()));
                 return true;
             } catch (IOException e) {
                 logger.log(Level.WARNING, "{0} could not be moved", source);
@@ -100,7 +106,11 @@ public class FileUICommandService implements UICommandService {
         } else {
             try{
                 logger.log(Level.INFO,"Copying {0} from {1} to {2}", new Object[]{new File(source).getName(),source, destination});
-                FileUtils.copyDirectory(pathFrom.toFile(), pathTo.toFile());
+                if (Files.isDirectory(pathFrom)){
+                    FileUtils.copyDirectory(pathFrom.toFile(), pathTo.toFile());
+                } else {
+                    FileUtils.copyFile(pathFrom.toFile(), pathTo.toFile());
+                }
                 storageService.processExistingImageLibrary(new File(String.valueOf(getFullPath(destination))));
                 return true;
             } catch (IOException e) {
