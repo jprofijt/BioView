@@ -111,7 +111,7 @@ $(document).ready(function () {
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function () {
-
+                    toastr["success"]("Successfully Added Region of Interest!");
                     ReloadTable(EditingId);
                     save.attr('hidden', true);
                     cancel.attr('hidden', true);
@@ -122,7 +122,7 @@ $(document).ready(function () {
 
             )
         } else {
-            $('#InputError-'+EditingId).attr("hidden", false);
+            toastr["error"]("Could Not add Roi: incorrect inputs!");
         }
 
     })
