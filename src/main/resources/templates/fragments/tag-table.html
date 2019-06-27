@@ -5,7 +5,7 @@
     <title>Tag Table fragment</title>
 </head>
 <body>
-<table th:fragment="tag-table" class="table tag-table" th:id="${'ImageRois-' + image.getId()}" data-sortable="true" th:data-toggle="${'ImageRois-' + image.getId()}">
+<table th:fragment="tag-table" class="table tag-table" th:id="'ImageRois-img'" data-sortable="true" th:data-toggle="'ImageRois-img'">
     <thead class="thead-dark">
     <tr>
         <th scope="col">#</th>
@@ -24,13 +24,17 @@
 
 
 <div>
-    <span th:id="${image.getId()}" class="button-span"><button id="add-button" class="btn btn-primary add-button"><i class="fas fa-plus"></i> Add New</button><button class="btn-primary btn save-button" id="save-button" hidden>Save</button> <button class="btn-primary btn cancel-button" id="cancel-button" hidden>Cancel</button></span>
+    <span th:id="imageTable-img" class="button-span">
+        <button id="add-button" class="btn btn-primary add-button">
+            <i class="fas fa-plus"></i> Add New</button><button class="btn-primary btn save-button" id="save-button" hidden>Save</button>
+        <button class="btn-primary btn cancel-button" id="cancel-button" hidden>Cancel</button>
+    </span>
 </div>
 <br>
-<div class="alert alert-danger fade show" th:id="${'InputError-' + image.getId()}" hidden="">
+<div class="alert alert-danger fade show" th:id="${'InputError-img'}" hidden="">
     <strong>Error</strong> Make sure all fields are entered correctly!
 </div>
 <br>
-<div><input class="TagInput" th:id="${'tag-input-roi-' + image.getId()}"  data-role="tagsinput" type="text" value=""></div>
+<div><input class="TagInput" th:id="${'tag-input-roi-img'}"  data-role="tagsinput" type="text" value=""></div>
 </body>
 </html>
