@@ -15,7 +15,7 @@
         <ul id="folders" class="">
             <li data-file-icon="folder" class="existing-folder" th:each="folder: ${folders}">
                 <form th:action="@{/imageview}" method="get">
-                    <div class="context-menu-folder-selected" th:title="${folder.getName()}">
+                    <div class="folder-div context-menu-folder-selected" th:title="${folder.getName()}" th:attr="data-folder-date=${folder.getDateModified()} ">
                         <i class="fas fa-folder"></i>
                         <b class="folder-name" th:text="${folder.getName()}"></b>
                     </div>

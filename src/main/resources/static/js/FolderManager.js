@@ -152,7 +152,7 @@ $(document).on("click", '[data-sort="folder-name"]', function () {
 
 var dateOrder = 'asc';
 function sortByDate(){
-    tinysort('ul#folders > li',{selector : '.last-modified-date', attr:'value', order : dateOrder});
+    tinysort('ul#folders > li',{selector : '.folder-div', data:'folder-date', order : dateOrder});
     if (dateOrder === 'asc') {
         dateOrder = 'desc'
     }
