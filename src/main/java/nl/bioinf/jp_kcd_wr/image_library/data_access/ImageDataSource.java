@@ -15,8 +15,6 @@ import java.util.List;
 public interface ImageDataSource {
     void insertImage(Image image);
 
-    Image getOrigNamebyHashName(String hash);
-
     List<Image> getImagesInDirectory(String directory);
 
     List<Image> returnAllImages();

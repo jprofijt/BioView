@@ -10,12 +10,11 @@
  * Fills each table with the correct Regions of interest
  */
 $(document).ready(function () {
-        $('.tag-table').each(function () {
-            let id = $(this).attr('id').replace("ImageRois-", "");
-            new LoadRoiTable(id)
-        });
-
+    $('.tag-table').each(function () {
+        let id = $(this).attr('id').replace("ImageRois-", "");
+        new LoadRoiTable(id)
     });
+});
 
 /**
  * Pre-existing Tags the user can choose from

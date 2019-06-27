@@ -14,9 +14,8 @@ public class ImageAttribute {
     private String path;
     private String filePath;
     private long imageSize;
-    private String dateCreated; //Not sure if it should be a string
+    private String dateCreated; //or modified
     private ImageFileType fileType;
-//    private ImageMetadata imageMetadata;
 
     public int getId() {
         return id;

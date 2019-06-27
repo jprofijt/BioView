@@ -169,7 +169,7 @@ public class FileSystemStorageService implements StorageService {
                 Files.copy(inputStream, filePath, // 'copies' file to upload-dir using the rootLocation and filename
                         StandardCopyOption.REPLACE_EXISTING);                // file of same name in upload-dir will be overwritten
 
-                Image image = createImageData(filename, newFilename, filePath);
+                Image image = createImageData(filename, newFilename, directory.toPath().resolve(newFilename));
                 filePath.toFile().setExecutable(true, false);
                 filePath.toFile().setReadable(true, false);
                 filePath.toFile().setWritable(true, false);
@@ -200,23 +200,24 @@ public class FileSystemStorageService implements StorageService {
     }
     private void createMetaData(Image image, String date) {
 
-        String path = image.getPath();
+        String path = rootLocation.relativize(Paths.get(image.getPath())).toString();
         String name = image.getNewFilename();
         int id = imageDataSource.getImageIdFromPath(path);
         File imageFile = new File(path);
         long size = imageFile.length();
         ImageFileType fileType = getFileTypeEnum(FilenameUtils.getExtension(path));
 
-        imageDataSource.insertImageMetaData(new ImageAttribute(id, image.getNewFilename(),imageFile.getParent(), path, size, date, fileType));
+        imageDataSource.insertImageMetaData(new ImageAttribute(id, name,imageFile.getParent(), path, size, date, fileType));
     }
 
     private void indexImageAttributes(File directory){
         for (File image : directory.listFiles(File::isFile)){
             ImageAttribute attribute = new ImageAttribute();
+            File relativeImage = rootLocation.relativize(image.toPath()).toFile();
             attribute.setImageName(image.getName());
-            attribute.setPath(image.getParent());
-            attribute.setFilePath(image.getPath());
-            int id = imageDataSource.getImageIdFromPath(image.getPath());
+            attribute.setPath(relativeImage.getParent());
+            attribute.setFilePath(relativeImage.getPath());
+            int id = imageDataSource.getImageIdFromPath(relativeImage.getPath());
             attribute.setId(id);
             attribute.setImageSize(image.length());
             attribute.setDateCreated(getDateModified(image));
@@ -470,7 +471,7 @@ public class FileSystemStorageService implements StorageService {
         for (File image : directory.listFiles(File::isFile)) {
 
             Image anotatedImage = new Image();
-            anotatedImage.setPath(image.getPath());
+            anotatedImage.setPath(String.valueOf(rootLocation.relativize(Paths.get(image.getPath()))));
             anotatedImage.setOrigName(image.getName());
             anotatedImage.setNewFilename(image.getName());
             imageDataSource.insertImage(anotatedImage);
@@ -488,7 +489,7 @@ public class FileSystemStorageService implements StorageService {
         String fileExtension = getFileExtension(image);
         String cacheImage = image.getName().replace(fileExtension, ".jpg");
 
-        int imageId = imageDataSource.getImageIdFromPath(image.getPath());
+        int imageId = imageDataSource.getImageIdFromPath(rootLocation.relativize(image.toPath()).toString());
         File cacheLocation = new File(this.cacheLocation.toString() + "/"+ imageId + ".jpg");
 
         if (imageDataSource.checkThumbnailStatus(imageId)) {

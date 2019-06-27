@@ -54,10 +54,13 @@
     -moz-user-select: none; /* Firefox 2+ */
     -ms-user-select: none; /* IE 10+ */
     width: 100%;
-    cursor: -webkit-zoom-in;
-    cursor: zoom-in;
+    cursor: pointer;
     transform: scale(1);
     transition: transform 0.1s linear;
+}
+
+.image-manager{
+    padding: 0 0;
 }
 
 .img-gallery {
@@ -103,4 +106,38 @@
 .img-navbar-selected > li > .dropdown-menu > .div:hover {
     background: #343a4026;
     cursor:pointer;
+}
+
+.property-table{
+    width: 100%;
+    table-layout: fixed;
+    margin: 0 auto;
+}
+.property-table tr{
+    width: 100%;
+}
+
+.property-table td {
+    padding: auto 1vh;
+    word-wrap:break-word
+}
+.property-table td:nth-child(2){
+    width: 70%;
+}
+
+.h-divider{
+    margin-top:5px;
+    margin-bottom:5px;
+    height:1px;
+    width:100%;
+    border-top:1px solid #DEE2E6;
+}
+
+.property-template .bootstrap-tagsinput span span[data-role="remove"] {
+    margin-left: 0px;
+}
+
+.property-template .bootstrap-tagsinput span span[data-role="remove"]:after {
+    content: none;
+    padding: 0px 2px;
 }

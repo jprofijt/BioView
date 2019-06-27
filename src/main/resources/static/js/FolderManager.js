@@ -81,6 +81,11 @@ function pickContextCommand(key) {
             $('.select').parents('form').submit();
         }
     }
+    else if (key == "properties") {
+        if ($('.select').length < 2) {
+            $('#folderPropertyModal').modal('toggle');
+        }
+    }
 }
 
 $(function() {
@@ -109,7 +114,8 @@ $(function() {
             "move": {name: "Move", icon: "fas fa-cut"},
             "copy": {name: "Copy", icon: "fas fa-copy"},
             "delete": {name: "Delete", icon: "fas fa-trash-alt"},
-            "rename": {name: "Rename", icon: "fas fa-edit"}
+            "rename": {name: "Rename", icon: "fas fa-edit"},
+            "properties": {name: "Properties", icon: "fas fa-info"}
         }
     });
 });
@@ -152,7 +158,7 @@ $(document).on("click", '[data-sort="folder-name"]', function () {
 
 var dateOrder = 'asc';
 function sortByDate(){
-    tinysort('ul#folders > li',{selector : '.last-modified-date', attr:'value', order : dateOrder});
+    tinysort('ul#folders > li',{selector : '.folder-div', data:'folder-date', order : dateOrder});
     if (dateOrder === 'asc') {
         dateOrder = 'desc'
     }
@@ -176,6 +182,7 @@ $(function () {
 
 function deleteSelected() {
     $('.select').each(function (index) {
+        var selectedList = $(this);
         var directoryname = $(this).find('b').text();
         var directory = $(this).siblings('[name = "location"]').val();
         $.ajax({
@@ -185,13 +192,13 @@ function deleteSelected() {
             data: {'directory' : directory},
             success: function (data) {
                 toastr["success"]("Successfully deleted " + directoryname + "!");
+                $(selectedList).parents('li').remove();
             },
             error: function(xhr, desc, err) {
                 toastr["error"]("Could not delete " + directoryname + "!");
             }
         });
         });
-    $('.select').parents('li').remove();
     $('.select').removeClass("select");
     showFolderUnselectNav();
 }
@@ -216,3 +223,68 @@ $(document).on('show.bs.modal','#renameModal', function (e) {
 $(document).on('shown.bs.modal','#renameModal', function () {
     $('input[name="newFolderName"]').select().focus();
 });
+
+$(document).on("click", '[data-function="rename-folder"]', function () {
+    if ($('.select').length < 2) {
+        $('#renameModal').modal('toggle');
+    }
+});
+
+
+function loadFolderProperties(){
+    var path = $('.select').siblings('[name = "location"]').val();
+    var name = $('.select').attr('title');
+    var date = $('.select').attr('data-folder-date');
+    var size = $('.select').attr('data-folder-size');
+
+    $('.folder-property-name').text(name);
+    $('.folder-property-location').text(path);
+    $('.folder-property-size').text(formatBytes(size));
+    $('.folder-property-date').text(date);
+}
+
+$(document).on('show.bs.modal','#folderPropertyModal', function (e) {
+    if ($('.pic-select').length > 1){
+        e.preventDefault();
+    } else {
+        loadFolderProperties();
+        loadUniqueFolderTags()
+    }
+});
+
+$(document).on("click", '[data-function="folder-properties"]', function (e) {
+    if ($('.pic-select').length > 1){
+        e.preventDefault();
+    } else {
+        $('#folderPropertyModal').modal('toggle');
+    }
+});
+
+
+
+
+function addFolderTag(data) {
+    $.each(data, function (i, tag) {
+        $('#unique-folder-tags').tagsinput('add',tag);
+    })
+}
+
+// Unique Folder Tags in properties modal
+function loadUniqueFolderTags(){
+    $('#unique-folder-tags').tagsinput('removeAll');
+    var path = $('.select').siblings('[name = "location"]').val();
+    var url = "http://" + document.location.hostname + ":8081/api/metadata/directory/tags";
+    $.ajax({
+        type: "GET",
+        url: url,
+        dataType: "json",
+        data: {path: path},
+        success: function (data) {
+            addFolderTag(data);
+        },
+        error: function(xhr, desc, err) {
+            toastr["error"]("Could not find folder tags!");
+        }
+    });
+    $('.property-template .bootstrap-tagsinput input[type=text]').prop("readonly", true);
+}

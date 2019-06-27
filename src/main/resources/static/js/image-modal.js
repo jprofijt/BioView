@@ -7,8 +7,8 @@
 
 
 $(document).on('dblclick', '.images li .image-surrounding a', function(){
-    let count = $(this).siblings('.image-iter').val();
-    let path = $(this).siblings('.image-path').val();
+    let count = $(this).attr('data-image-iter');
+    let path = $(this).attr('data-image-path');
     loadDynamicModal(count, path);
 });
 

@@ -4,6 +4,8 @@ import nl.bioinf.jp_kcd_wr.image_library.folder_manager.DirectoryExistsException
 import nl.bioinf.jp_kcd_wr.image_library.folder_manager.FolderHandler;
 import nl.bioinf.jp_kcd_wr.image_library.ui_commands.UICommandService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -67,12 +69,12 @@ public class DirectoryController {
      */
     @PostMapping("/deletefolder")
     @ResponseBody
-    public String deleteFolder(@RequestParam String directory, RedirectAttributes redirectAttributes) throws IOException {
+    public ResponseEntity deleteFolder(@RequestParam String directory, RedirectAttributes redirectAttributes) throws IOException {
         logger.log(Level.INFO, "Deleting folder...");
         if (uiCommandService.removeFile(directory)){
-            return "success";
+            return new ResponseEntity(HttpStatus.OK);
         } else {
-            return "failed";
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }
 
