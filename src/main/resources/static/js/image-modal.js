@@ -1,3 +1,11 @@
+/**
+ * this script is for loading and editing images in the editing modal
+ *
+ * @author Wietse Reitsma
+ */
+
+
+
 $(document).on('dblclick', '.images li .image-surrounding a', function(){
     let count = $(this).siblings('.image-iter').val();
     let path = $(this).siblings('.image-path').val();
@@ -72,6 +80,7 @@ function loadImageIntoCanvas(id, path){
 
 /**
  * Functions for moving and pan zooming the image
+ * @author Wietse Reitsma
  */
 function canvasAnimation(){
     window.canvas.on('mouse:down', function(opt) {
@@ -113,7 +122,7 @@ function canvasAnimation(){
 
 }
 /**
- * Function for drawing of polygons, by getting coordinates from the cursor on a canvas element.
+ * a collection of functions for drawing polygons, by getting coordinates from the cursor on a canvas element.
  *
  * @param id
  *
@@ -275,28 +284,28 @@ function drawPolygons(id){
         }
         return Math.abs(result);
     }
-
-    const save = $('.save-button');
-
-    save.on("click", function () {
-        var EditingId = $(this).parent().attr('id');
-        var editingRow = $('#editing-row');
-        var inputs = editingRow.find('input');
-        var InputData = {
-            id: id,
-            pointlist: roiPointsList
-        };
-
-    $.ajax({
-        url: url,
-        type: "POST",
-        data: JSON.stringify(InputData),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function () {
-            toastr["success"]("Successfully Added Region of Interest!");
-            ReloadTable(EditingId);
-        }
-    });
-    });
+    //Need to check the JSON properly
+    // var save = $('.save-button');
+    //
+    // save.on("click", function () {
+    //     var EditingId = $(this).parent().attr('id');
+    //     var editingRow = $('#editing-row');
+    //     var inputs = editingRow.find('input');
+    //     var InputData = {
+    //         id: id,
+    //         pointlist: roiPointsList
+    //     };
+    //
+    //     var url = "http://"+document.location.hostname + ":8081/api/image/roi/add/";
+    //     $.ajax({
+    //         url: url,
+    //         type: "POST",
+    //         data: JSON.stringify(InputData),
+    //         contentType: "application/json; charset=utf-8",
+    //         dataType: "json",
+    //         success: function () {
+    //             ReloadTable(EditingId);
+    //         }
+    //     });
+    // });
 }
