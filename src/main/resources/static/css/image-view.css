@@ -139,3 +139,12 @@
     width:100%;
     border-top:1px solid #DEE2E6;
 }
+
+.property-template .bootstrap-tagsinput span span[data-role="remove"] {
+    margin-left: 0px;
+}
+
+.property-template .bootstrap-tagsinput span span[data-role="remove"]:after {
+    content: none;
+    padding: 0px 2px;
+}

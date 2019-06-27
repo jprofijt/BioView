@@ -119,24 +119,28 @@ function assignImageProperties(data){
     $('.img-property-date').text(properties.dateCreated);
 }
 
+function loadImageProperties(){
+    var path = $('.pic-select').parent().attr('data-image-path').replace(/\\/g, "/");
+    var url = "http://" + document.location.hostname + ":8081/api/metadata/filepath";
+    $.ajax({
+        type: "GET",
+        url: url,
+        dataType: "json",
+        data: {path: path},
+        success: function (data) {
+            assignImageProperties(data);
+        },
+        error: function(xhr, desc, err) {
+            toastr["error"]("Could not find image properties!");
+        }
+    });
+}
 $(document).on('show.bs.modal','#imgPropertyModal', function (e) {
     if ($('.pic-select').length > 1){
         e.preventDefault();
     } else {
-        var path = $('.pic-select').parent().attr('data-image-path').replace(/\\/g, "/");
-        var url = "http://" + document.location.hostname + ":8081/api/metadata/filepath";
-        $.ajax({
-            type: "GET",
-            url: url,
-            dataType: "json",
-            data: {path: path},
-            success: function (data) {
-                assignImageProperties(data);
-            },
-            error: function(xhr, desc, err) {
-                toastr["error"]("Could not find image properties!");
-            }
-        });
+        loadImageProperties();
+        loadUniqueImageTags()
     }
 });
 
@@ -255,8 +259,8 @@ $(document).on("click", '[data-function="delete-image"]', function () {
 });
 
 function openImageModal() {
-    let count = $('.pic-select').parent().siblings('.image-iter').val();
-    let path = $('.pic-select').parent().siblings('.image-path').val();
+    let count = $('.pic-select').parent().attr('data-image-iter');
+    let path = $('.pic-select').parent().attr('data-image-path');
     loadDynamicModal(count, path);
 }
 
@@ -267,3 +271,29 @@ $(document).on("click", '[data-function="edit-image"]', function (e) {
         openImageModal(e)
     }
 });
+
+function addImageTag(data) {
+    $.each(data, function (i, tag) {
+        $('#unique-image-tags').tagsinput('add',tag);
+    })
+}
+
+// Unique Image Tags in properties modal
+function loadUniqueImageTags(){
+    $('#unique-image-tags').tagsinput('removeAll');
+    var id = $('.pic-select').parent().attr('data-image-id');
+    var url = "http://" + document.location.hostname + ":8081/api/metadata/image/tags";
+    $.ajax({
+        type: "GET",
+        url: url,
+        dataType: "json",
+        data: {id: id},
+        success: function (data) {
+            addImageTag(data);
+        },
+        error: function(xhr, desc, err) {
+            toastr["error"]("Could not find image tags!");
+        }
+    });
+    $('.bootstrap-tagsinput input[type=text]').prop("readonly", true);
+}
