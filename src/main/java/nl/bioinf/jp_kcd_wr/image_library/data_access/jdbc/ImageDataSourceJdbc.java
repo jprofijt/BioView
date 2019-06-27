@@ -76,10 +76,6 @@ public class ImageDataSourceJdbc implements ImageDataSource {
 
     }
 
-    @Override
-    public Image getOrigNamebyHashName(String hash) {
-        return null;
-    }
 
     /**
      * gets all images in the given directory

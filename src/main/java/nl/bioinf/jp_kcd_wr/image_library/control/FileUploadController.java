@@ -51,32 +51,6 @@ public class FileUploadController {
         return "upload-form";
     }
 
-    /*
-     * Post request that handles file uploads
-     *
-     * @param file the file to be uploaded
-     * @param redirectAttributes
-     * @return
-     */
-    /*@PostMapping("/upload")
-    public String handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam(name="directory", required=false, defaultValue="") File directory,
-                                   RedirectAttributes redirectAttributes) {
-        String filename = file.getOriginalFilename();
-        String fileContentType = file.getContentType();
-        if(contentTypes.contains(fileContentType)){
-            storageService.store(file, directory);
-            logger.log(Level.INFO, "Succesfully uploaded {0} in {1}", new Object[]{filename, directory.toString()});
-            redirectAttributes.addFlashAttribute("upload_message",
-                    "You successfully uploaded " + file.getOriginalFilename() + "!");
-        } else {
-            logger.log(Level.WARNING, "Incompatible fileupload, file = {0}", new Object[]{filename});
-            redirectAttributes.addFlashAttribute("upload_message",
-                    file.getOriginalFilename() +
-                            " is of an incorrect file type. Please provide an image file with a .png, .jpeg or .tiff extension!");
-        }
-        return "redirect:/upload";*/
-    //}
-
     /**
      * handles multiple file uploads
      * @param directory directory where uploads are taking place
