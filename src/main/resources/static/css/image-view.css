@@ -61,8 +61,7 @@
     -moz-user-select: none; /* Firefox 2+ */
     -ms-user-select: none; /* IE 10+ */
     width: 100%;
-    cursor: -webkit-zoom-in;
-    cursor: zoom-in;
+    cursor: pointer;
     transform: scale(1);
     transition: transform 0.1s linear;
 }
