@@ -66,6 +66,10 @@
     transition: transform 0.1s linear;
 }
 
+.image-manager{
+    padding: 0 0;
+}
+
 .img-gallery {
     padding: 0 0;
 }

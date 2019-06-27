@@ -85,7 +85,7 @@ $(document).on("click contextmenu", ".picture-img a img", function(e) {
     showImageSelectNav()
 });
 
-$(document).on("click dblclick", ".img-gallery", function() {
+$(document).on("click", ".img-gallery", function() {
     $(".picture-img a img")
         .removeClass("pic-select");
     showImageUnselectNav()
@@ -162,7 +162,7 @@ $(function () {
 // Uses placeholder .image-path that doesnt work.
 var imageNameOrder = 'asc';
 function sortImageByName(){
-    tinysort('ul.images > li',{selector : '.image-path', order : imageNameOrder});
+    tinysort('ul.images > li',{selector : '.modal-link', attr:'data-image-path', order : imageNameOrder});
     if (imageNameOrder === 'asc') {
         imageNameOrder = 'desc'
     }
@@ -177,7 +177,7 @@ $(document).on("click", '[data-sort="image-name"]', function () {
 // !! Still no existing date parameter so selector is a placeholder
 var imageDateOrder = 'asc';
 function sortImageByDate(){
-    tinysort('ul.images > li',{selector : '.image-path', attr:'value', order : imageDateOrder});
+    tinysort('ul.images > li',{selector : '.modal-link', attr:'data-image-path', order : imageDateOrder});
     if (imageDateOrder === 'asc') {
         imageDateOrder = 'desc'
     }
@@ -209,7 +209,7 @@ function deleteSelectedImages() {
         });
     });
     $('.pic-select').parents('li').remove();
-    $('.pic-select').removeClass("select");
+    $('.pic-select').removeClass("pic-select");
     showImageUnselectNav()
 }
 
@@ -218,15 +218,16 @@ $(document).on("click", '[data-function="delete-image"]', function () {
 });
 
 function openImageModal() {
+    let count = $('.pic-select').parent().siblings('.image-iter').val();
+    let path = $('.pic-select').parent().siblings('.image-path').val();
+    loadDynamicModal(count, path);
+}
+
+$(document).on("click", '[data-function="edit-image"]', function (e) {
     if ($('.pic-select').length > 1){
         e.preventDefault();
     } else {
-        let count = $('.pic-select').parent().siblings('.image-iter').val();
-        let path = $('.pic-select').parent().siblings('.image-path').val();
-        loadDynamicModal(count, path);
+        openImageModal(e)
     }
-}
 
-$(document).on("click", '[data-function="edit-image"]', function () {
-    openImageModal()
 });
