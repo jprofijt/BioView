@@ -295,5 +295,5 @@ function loadUniqueImageTags(){
             toastr["error"]("Could not find image tags!");
         }
     });
-    $('.bootstrap-tagsinput input[type=text]').prop("readonly", true);
+    $('.property-template .bootstrap-tagsinput input[type=text]').prop("readonly", true);
 }

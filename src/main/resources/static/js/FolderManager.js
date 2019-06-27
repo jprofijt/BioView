@@ -248,7 +248,7 @@ $(document).on('show.bs.modal','#folderPropertyModal', function (e) {
         e.preventDefault();
     } else {
         loadFolderProperties();
-        // loadUniqueFolderTags()
+        loadUniqueFolderTags()
     }
 });
 
@@ -263,28 +263,28 @@ $(document).on("click", '[data-function="folder-properties"]', function (e) {
 
 
 
-// function addImageTag(data) {
-//     $.each(data, function (i, tag) {
-//         $('#unique-image-tags').tagsinput('add',tag);
-//     })
-// }
-//
-// // Unique Folder Tags in properties modal
-// function loadUniqueFolderTags(){
-//     $('#unique-image-tags').tagsinput('removeAll');
-//     var id = $('.pic-select').parent().attr('data-image-id');
-//     var url = "http://" + document.location.hostname + ":8081/api/metadata/image/tags";
-//     $.ajax({
-//         type: "GET",
-//         url: url,
-//         dataType: "json",
-//         data: {id: id},
-//         success: function (data) {
-//             addImageTag(data);
-//         },
-//         error: function(xhr, desc, err) {
-//             toastr["error"]("Could not find image tags!");
-//         }
-//     });
-//     $('.bootstrap-tagsinput input[type=text]').prop("readonly", true);
-// }
+function addFolderTag(data) {
+    $.each(data, function (i, tag) {
+        $('#unique-folder-tags').tagsinput('add',tag);
+    })
+}
+
+// Unique Folder Tags in properties modal
+function loadUniqueFolderTags(){
+    $('#unique-folder-tags').tagsinput('removeAll');
+    var path = $('.select').siblings('[name = "location"]').val();
+    var url = "http://" + document.location.hostname + ":8081/api/metadata/directory/tags";
+    $.ajax({
+        type: "GET",
+        url: url,
+        dataType: "json",
+        data: {path: path},
+        success: function (data) {
+            addFolderTag(data);
+        },
+        error: function(xhr, desc, err) {
+            toastr["error"]("Could not find folder tags!");
+        }
+    });
+    $('.property-template .bootstrap-tagsinput input[type=text]').prop("readonly", true);
+}
