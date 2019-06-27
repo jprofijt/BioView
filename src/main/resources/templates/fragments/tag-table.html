@@ -24,7 +24,7 @@
 
 
 <div>
-    <span th:id="${image.getId()}" class="button-span"><button id="add-button" class="btn btn-primary add-button"><i class="fas fa-plus"></i> Add New</button><button class="btn-primary btn save-button" id="save-button" hidden>Save</button> <button class="btn-primary btn cancel-button" id="cancel-button" hidden>Cancel</button></span>
+    <span th:id="${image.getId()}" class="button-span"><button id="add-button" th:onclick="drawPolygons([[${iterStat.count}]])" class="btn btn-primary add-button"><i class="fas fa-plus"></i> Add New</button><button class="btn-primary btn save-button" id="save-button" hidden>Save</button> <button class="btn-primary btn cancel-button" id="cancel-button" hidden>Cancel</button></span>
 </div>
 <br>
 <div class="alert alert-danger fade show" th:id="${'InputError-' + image.getId()}" hidden="">
