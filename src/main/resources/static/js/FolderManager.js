@@ -216,3 +216,9 @@ $(document).on('show.bs.modal','#renameModal', function (e) {
 $(document).on('shown.bs.modal','#renameModal', function () {
     $('input[name="newFolderName"]').select().focus();
 });
+
+$(document).on("click", '[data-function="rename-folder"]', function () {
+    if ($('.select').length < 2) {
+        $('#renameModal').modal('toggle');
+    }
+});
