@@ -19,8 +19,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.FileTime;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,9 +84,14 @@ public class ImageViewController {
             ImageRequest imageRequest = new ImageRequest();
 
             imageRequest.setThumbnail(this.imageDataSource.getThumbnailPathFromImagePath(image.toString()));
-            imageRequest.setActual(
-                    Paths.get(FilenameUtils.separatorsToUnix(image.toString()).replace(FilenameUtils.separatorsToUnix(storageService.getRootLocation().toString()) + "/", "")));
+            Path path = Paths.get(FilenameUtils.separatorsToUnix(image.toString()).replace(FilenameUtils.separatorsToUnix(storageService.getRootLocation().toString()) + "/", ""));
+            imageRequest.setActual(path);
             imageRequest.setId(this.imageDataSource.getImageIdFromPath(image.toString()));
+            imageRequest.setName(image.getFileName());
+            long lastModified = image.toFile().lastModified();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            imageRequest.setDate(sdf.format(lastModified));
+
 
             cacheLocations.add(imageRequest);
         }

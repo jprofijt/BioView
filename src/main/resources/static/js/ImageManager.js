@@ -162,7 +162,7 @@ $(function () {
 // Uses placeholder .image-path that doesnt work.
 var imageNameOrder = 'asc';
 function sortImageByName(){
-    tinysort('ul.images > li',{selector : '.modal-link', attr:'data-image-path', order : imageNameOrder});
+    tinysort('ul.images > li',{selector : '.modal-link', attr:'title', order : imageNameOrder});
     if (imageNameOrder === 'asc') {
         imageNameOrder = 'desc'
     }
@@ -177,7 +177,7 @@ $(document).on("click", '[data-sort="image-name"]', function () {
 // !! Still no existing date parameter so selector is a placeholder
 var imageDateOrder = 'asc';
 function sortImageByDate(){
-    tinysort('ul.images > li',{selector : '.modal-link', attr:'data-image-path', order : imageDateOrder});
+    tinysort('ul.images > li',{selector : '.modal-link', attr:'data-image-date', order : imageDateOrder});
     if (imageDateOrder === 'asc') {
         imageDateOrder = 'desc'
     }
