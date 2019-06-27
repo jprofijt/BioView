@@ -16,20 +16,15 @@ drawingObject.border = "";
 
 function loadDynamicModal(id, path){
     var modalImage = $(this).attr('id');
-    $("#myImgModal").modal({backdrop: 'static', keyboard: false});
+    $("#myModal"+ id).modal({backdrop: 'static', keyboard: false});
     loadImageIntoCanvas(id, path)
 }
 
 
 function loadImageIntoCanvas(id, path){
-    // if ($("#image-canvas-holder"+id ).find(".canvas-container").length <= 0){
-    if ($(".canvas-container").length <= 0){
-        canvas = new fabric.Canvas('canvas-img');
-    }
-        canvas.clear();
-
-
-        $('canvas-img').fabric = canvas;
+    if ($("#image-canvas-holder"+id ).find(".canvas-container").length <= 0){
+        canvas = new fabric.Canvas('canvas' + id);
+        document.getElementById('canvas' + id).fabric = canvas;
         var image = new Image();
         image.src = 'files/' + path;
         canvas.setHeight(window.innerHeight/2);
@@ -51,13 +46,13 @@ function loadImageIntoCanvas(id, path){
             // imgInstance.lockScalingY=true;
             // imgInstance.lockScalingX=true;
             imgInstance.hasControls=false;
-        };
+        }
 
-    // }
-    // else{
-    //     $('#canvas-img').fabric;
-    //     window.canvas = canvas
-    // }
+    }
+    else{
+        canvas = document.getElementById("canvas" + id).fabric;
+        window.canvas = canvas
+    }
     canvasAnimation()
 }
 
@@ -83,7 +78,22 @@ function canvasAnimation(){
         opt.e.preventDefault();
         opt.e.stopPropagation();
     });
-
+    // canvas.on('object:modified', function (opt) {
+    //     var object = opt.target;
+    //     var boundingRect = object.getBoundingRect(true);
+    //     if (boundingRect.left < 0
+    //         || boundingRect.top < 0
+    //         || boundingRect.left + boundingRect.width > canvas.getWidth()
+    //         || boundingRect.top + boundingRect.height > canvas.getHeight()) {
+    //         object.top = object._stateProperties.top;
+    //         object.left = object._stateProperties.left;
+    //         object.angle = object._stateProperties.angle;
+    //         object.scaleX = object._stateProperties.scaleX;
+    //         object.scaleY = object._stateProperties.scaleY;
+    //         object.setCoords();
+    //         object.saveState();
+    //     }
+    // });
     window.canvas.on('mouse:up', function() {
         this.isDragging = false;
         this.selection = true;
@@ -101,8 +111,49 @@ function canvasAnimation(){
         }});
 
 }
+//
+//
+//there is a bug in fabric that causes bounding rects to not be transformed by viewport matrix
+//this code should compensate for the bug for now
+//
+//
+// // this.viewportTransform[4] += e.clientX - this.lastPosX;
+// // this.viewportTransform[5] += e.clientY - this.lastPosY;
+// // this.requestRenderAll();
+// // this.lastPosX = e.clientX;
+// // this.lastPosY = e.clientY;
+// boundingRect.top = (boundingRect.top - viewportMatrix[5]) / zoom;
+// boundingRect.left = (boundingRect.left - viewportMatrix[4]) / zoom;
+// boundingRect.width /= zoom;
+// boundingRect.height /= zoom;
+//
+//
+// // if object is too big ignore
+//
+// // if (object.currentHeight * zoom > object.canvas.height * zoom || object.currentWidth * zoom > object.canvas.width * zoom) {
+// //     return;
+// // }
+//
+// var canvasHeight = object.canvas.height / zoom,
+//     canvasWidth = object.canvas.width / zoom,
+//     rTop = boundingRect.top + boundingRect.height,
+//     rLeft = boundingRect.left + boundingRect.width;
+//
+// // top-left  corner
+// if (rTop < canvasHeight || rLeft < canvasWidth) {
+//     object.top = Math.max(object.top, canvasHeight - boundingRect.height);
+//     object.left = Math.max(object.left, canvasWidth - boundingRect.width);
+// }
+//
+//
+// // bot-right corner
+// if (boundingRect.top + boundingRect.height > object.canvas.height || boundingRect.left + boundingRect.width > object.canvas.width) {
+//
+//     object.top = Math.min(object.top, object.canvas.height - boundingRect.height + object.top - boundingRect.top);
+//     object.left = Math.min(object.left, object.canvas.width - boundingRect.width + object.left - boundingRect.left);
+// }
 
-function drawPolygons(){
+function drawPolygons(name, id){
     var roiPointsList = [];
 
     function Point(x, y) {
@@ -209,7 +260,7 @@ function drawPolygons(){
     });
 
     function setStartingPoint(options) {
-        var offset = $('#canvas-img').offset();
+        var offset = $('#'+name + id).offset();
         x = options.e.pageX - offset.left;
         y = options.e.pageY - offset.top;
     }

@@ -9,16 +9,12 @@
 /**
  * Fills each table with the correct Regions of interest
  */
-$(document).on('show.bs.modal','#myImgModal', function () {
+$(document).ready(function () {
     $('.tag-table').each(function () {
-        let id = $(".pic-select").parent().attr('data-id');
+        let id = $(this).attr('id').replace("ImageRois-", "");
         new LoadRoiTable(id)
     });
 });
-// $(document).ready(function () {
-//
-//
-//     });
 
 /**
  * Pre-existing Tags the user can choose from
@@ -37,14 +33,14 @@ $.getJSON(url, function (result) {
  * @param id    Image id
  */
 function ReloadTable(id) {
-    $('#ImageRois-img').find('tbody').find('tr').remove();
+    $('#ImageRois-' + id).find('tbody').find('tr').remove();
     LoadRoiTable(id);
 }
 
 /**
  * Handles Adding of regions of interest
  */
-$(document).on('show.bs.modal','#myImgModal', function () {
+$(document).ready(function () {
     const add = $('.add-button');
     const save = $('.save-button');
     const cancel = $('.cancel-button');
@@ -53,8 +49,8 @@ $(document).on('show.bs.modal','#myImgModal', function () {
         save.attr('hidden', false);
         cancel.attr('hidden', false);
         add.attr('hidden', true);
-        let EditingId = $(".pic-select").parent().attr('data-id');
-        $('#ImageRois-img').append("<tr class='image-roi-row' id='editing-row'>" +
+        let EditingId = $(this).parent().attr('id');
+        $('#ImageRois-' + EditingId).append("<tr class='image-roi-row' id='editing-row'>" +
             "<td>#</td>" +
             "<td><input type='number' id='ph' name='ph' min='0' max='14' placeholder='pH' step='0.01'></td>" +
             "<td><input type='number' id='t' name='t' min='-273.15' placeholder='Temperature (C)' step='0.01'></td>" +
@@ -64,7 +60,7 @@ $(document).on('show.bs.modal','#myImgModal', function () {
     });
 
     cancel.on("click", function () {
-        let EditingId = $(".pic-select").parent().attr('data-id');
+        let EditingId = $(this).parent().attr('id');
         let error = $('#InputError-'+EditingId);
         $('#editing-row').remove();
         save.attr('hidden', true);
@@ -74,7 +70,7 @@ $(document).on('show.bs.modal','#myImgModal', function () {
     });
 
     save.on("click", function () {
-        let EditingId = $(".pic-select").parent().attr('data-id');
+        let EditingId = $(this).parent().attr('id');
         let editingRow = $('#editing-row');
         let inputs = editingRow.find('input');
         let InputData = {
@@ -217,7 +213,6 @@ function AddTag(element, user, id) {
 
 function LoadRoiTable(id) {
     const url = "http://"+document.location.hostname + ":8081/api/roi/state/?image=" + id.toString();
-    console.log(url)
 
     $.ajax({
         url: url,
