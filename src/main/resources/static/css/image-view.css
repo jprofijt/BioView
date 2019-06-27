@@ -114,3 +114,28 @@
     background: #343a4026;
     cursor:pointer;
 }
+
+.property-table{
+    width: 100%;
+    table-layout: fixed;
+    margin: 0 auto;
+}
+.property-table tr{
+    width: 100%;
+}
+
+.property-table td {
+    padding: auto 1vh;
+    word-wrap:break-word
+}
+.property-table td:nth-child(2){
+    width: 70%;
+}
+
+.h-divider{
+    margin-top:5px;
+    margin-bottom:5px;
+    height:1px;
+    width:100%;
+    border-top:1px solid #DEE2E6;
+}

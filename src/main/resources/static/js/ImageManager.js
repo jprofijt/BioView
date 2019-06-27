@@ -41,9 +41,9 @@ $(function() {
             "img-edit": {name: "Edit", icon: "fas fa-pencil-alt"},
             "img-move": {name: "Move", icon: "fas fa-cut"},
             "img-copy": {name: "Copy", icon: "fas fa-copy"},
-            "img-delete": {name: "Delete", icon: "fas fa-trash-alt"}
+            "img-delete": {name: "Delete", icon: "fas fa-trash-alt"},
             // "img-rename": {name: "Rename", icon: "fas fa-edit"},
-            // "img-properties": {name: "Properties", icon: "fas fa-info"}
+            "img-properties": {name: "Properties", icon: "fas fa-info"}
         }
     });
     $.contextMenu({
@@ -98,17 +98,53 @@ $(document).on("click", ".picture-img a img", function(e) {
     e.stopPropagation();
 });
 
+function formatBytes(bytes, decimals = 2) {
+    if (bytes === 0) return '0 Bytes';
+
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
+
+function assignImageProperties(data){
+    var properties = data[0];
+    $('.img-property-name').text(properties.imageName);
+    $('.img-property-type').text(properties.fileType);
+    $('.img-property-location').text(properties.path);
+    $('.img-property-size').text(formatBytes(properties.imageSize));
+    $('.img-property-date').text(properties.dateCreated);
+}
 
 $(document).on('show.bs.modal','#imgPropertyModal', function (e) {
     if ($('.pic-select').length > 1){
-        console.log($('.select').length);
         e.preventDefault();
     } else {
-        var path = $('.pic-select').parent().siblings('.image-path').val().replace("\\", "/");
+        var path = $('.pic-select').parent().attr('data-image-path').replace(/\\/g, "/");
         var url = "http://" + document.location.hostname + ":8081/api/metadata/filepath";
-        $.getJSON(url, {path: path}, function (data) {
-            console.log(data);
-        })
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType: "json",
+            data: {path: path},
+            success: function (data) {
+                assignImageProperties(data);
+            },
+            error: function(xhr, desc, err) {
+                toastr["error"]("Could not find image properties!");
+            }
+        });
+    }
+});
+
+$(document).on("click", '[data-function="image-properties"]', function (e) {
+    if ($('.pic-select').length > 1){
+        e.preventDefault();
+    } else {
+        $('#imgPropertyModal').modal('toggle');
     }
 });
 
@@ -193,7 +229,7 @@ $(document).on("click", '[data-sort="image-date"]', function () {
 function deleteSelectedImages() {
     $('.pic-select').each(function (index) {
         var selectedImage = $(this);
-        var image = $(this).parent().attr('data-image-path').replace("\\", "/");
+        var image = $(this).parent().attr('data-image-path').replace(/\\/g, "/");
         var imageName = image.lastIndexOf('/');
 
         $.ajax({
@@ -230,5 +266,4 @@ $(document).on("click", '[data-function="edit-image"]', function (e) {
     } else {
         openImageModal(e)
     }
-
 });

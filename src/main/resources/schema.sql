@@ -60,9 +60,9 @@ CREATE TABLE images(
 
 create table image_attributes(
   id          INT                 not null    AUTO_INCREMENT,
-  name        VARCHAR(500)        NOT NULL,
-  path        varchar(200)        not null,
-  filepath    varchar(200)        not null UNIQUE,
+  name        VARCHAR(600)        NOT NULL,
+  path        varchar(1000)        not null,
+  filepath    varchar(1000)        not null UNIQUE,
   date        datetime            not null,
   size        long,
   type        enum('TIFF', 'PNG', 'JPG'),
