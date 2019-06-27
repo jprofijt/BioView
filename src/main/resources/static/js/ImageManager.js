@@ -192,7 +192,8 @@ $(document).on("click", '[data-sort="image-date"]', function () {
 
 function deleteSelectedImages() {
     $('.pic-select').each(function (index) {
-        var image = $(this).parent().siblings('.image-path').val().replace("\\", "/");
+        var selectedImage = $(this);
+        var image = $(this).parent().attr('data-image-path').replace("\\", "/");
         var imageName = image.lastIndexOf('/');
 
         $.ajax({
@@ -202,13 +203,13 @@ function deleteSelectedImages() {
             data: {'image' : image},
             success: function (data) {
                 toastr["success"]("Successfully deleted " + imageName + "!");
+                selectedImage.parents('li').remove();
             },
             error: function(xhr, desc, err) {
                 toastr["error"]("Could not delete " + imageName + "!");
             }
         });
     });
-    $('.pic-select').parents('li').remove();
     $('.pic-select').removeClass("pic-select");
     showImageUnselectNav()
 }

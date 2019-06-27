@@ -176,6 +176,7 @@ $(function () {
 
 function deleteSelected() {
     $('.select').each(function (index) {
+        var selectedList = $(this);
         var directoryname = $(this).find('b').text();
         var directory = $(this).siblings('[name = "location"]').val();
         $.ajax({
@@ -185,13 +186,14 @@ function deleteSelected() {
             data: {'directory' : directory},
             success: function (data) {
                 toastr["success"]("Successfully deleted " + directoryname + "!");
+                $(selectedList).parents('li').remove();
             },
             error: function(xhr, desc, err) {
                 toastr["error"]("Could not delete " + directoryname + "!");
             }
         });
         });
-    $('.select').parents('li').remove();
+    // $('.select').parents('li').remove();
     $('.select').removeClass("select");
     showFolderUnselectNav();
 }
