@@ -1,3 +1,11 @@
+/**
+ * this script is for loading and editing images in the editing modal
+ *
+ * @author Wietse Reitsma
+ */
+
+
+
 $(document).on('dblclick', '.images li .image-surrounding a', function(){
     let count = $(this).siblings('.image-iter').val();
     let path = $(this).siblings('.image-path').val();
@@ -9,11 +17,15 @@ var roofPoints = [];
 var lines = [];
 var lineCounter = 0;
 var drawingObject = {};
-drawingObject.type = "";
-drawingObject.border = "";
 
 
-
+/**
+ * creates the editing modal for the selected image.
+ * @param id image id
+ * @param path path of the image
+ *
+ * @author Wietse Reitsma
+ */
 function loadDynamicModal(id, path){
     var modalImage = $(this).attr('id');
     $("#myModal"+ id).modal({backdrop: 'static', keyboard: false});
@@ -21,6 +33,13 @@ function loadDynamicModal(id, path){
 }
 
 
+/**
+ * loads the image into the canvas.
+ * @param id image id
+ * @param path path of the image
+ *
+ * @author Wietse Reitsma
+ */
 function loadImageIntoCanvas(id, path){
     if ($("#image-canvas-holder"+id ).find(".canvas-container").length <= 0){
         canvas = new fabric.Canvas('canvas' + id);
@@ -41,6 +60,8 @@ function loadImageIntoCanvas(id, path){
             });
             canvas.add(imgInstance);
             window.canvas = canvas;
+            //fixes bug where cursor is offset on the canvas
+            window.canvas.on("after:render", function(){ window.canvas.calcOffset() });
             imgInstance.lockRotation=true;
             // imgInstance.lockUniScaling=true;
             // imgInstance.lockScalingY=true;
@@ -51,11 +72,16 @@ function loadImageIntoCanvas(id, path){
     }
     else{
         canvas = document.getElementById("canvas" + id).fabric;
-        window.canvas = canvas
+        window.canvas = canvas;
+        window.canvas.on("after:render", function(){ window.canvas.calcOffset() });
     }
     canvasAnimation()
 }
 
+/**
+ * Functions for moving and pan zooming the image
+ * @author Wietse Reitsma
+ */
 function canvasAnimation(){
     window.canvas.on('mouse:down', function(opt) {
         var element = opt.e;
@@ -78,22 +104,6 @@ function canvasAnimation(){
         opt.e.preventDefault();
         opt.e.stopPropagation();
     });
-    // canvas.on('object:modified', function (opt) {
-    //     var object = opt.target;
-    //     var boundingRect = object.getBoundingRect(true);
-    //     if (boundingRect.left < 0
-    //         || boundingRect.top < 0
-    //         || boundingRect.left + boundingRect.width > canvas.getWidth()
-    //         || boundingRect.top + boundingRect.height > canvas.getHeight()) {
-    //         object.top = object._stateProperties.top;
-    //         object.left = object._stateProperties.left;
-    //         object.angle = object._stateProperties.angle;
-    //         object.scaleX = object._stateProperties.scaleX;
-    //         object.scaleY = object._stateProperties.scaleY;
-    //         object.setCoords();
-    //         object.saveState();
-    //     }
-    // });
     window.canvas.on('mouse:up', function() {
         this.isDragging = false;
         this.selection = true;
@@ -111,49 +121,15 @@ function canvasAnimation(){
         }});
 
 }
-//
-//
-//there is a bug in fabric that causes bounding rects to not be transformed by viewport matrix
-//this code should compensate for the bug for now
-//
-//
-// // this.viewportTransform[4] += e.clientX - this.lastPosX;
-// // this.viewportTransform[5] += e.clientY - this.lastPosY;
-// // this.requestRenderAll();
-// // this.lastPosX = e.clientX;
-// // this.lastPosY = e.clientY;
-// boundingRect.top = (boundingRect.top - viewportMatrix[5]) / zoom;
-// boundingRect.left = (boundingRect.left - viewportMatrix[4]) / zoom;
-// boundingRect.width /= zoom;
-// boundingRect.height /= zoom;
-//
-//
-// // if object is too big ignore
-//
-// // if (object.currentHeight * zoom > object.canvas.height * zoom || object.currentWidth * zoom > object.canvas.width * zoom) {
-// //     return;
-// // }
-//
-// var canvasHeight = object.canvas.height / zoom,
-//     canvasWidth = object.canvas.width / zoom,
-//     rTop = boundingRect.top + boundingRect.height,
-//     rLeft = boundingRect.left + boundingRect.width;
-//
-// // top-left  corner
-// if (rTop < canvasHeight || rLeft < canvasWidth) {
-//     object.top = Math.max(object.top, canvasHeight - boundingRect.height);
-//     object.left = Math.max(object.left, canvasWidth - boundingRect.width);
-// }
-//
-//
-// // bot-right corner
-// if (boundingRect.top + boundingRect.height > object.canvas.height || boundingRect.left + boundingRect.width > object.canvas.width) {
-//
-//     object.top = Math.min(object.top, object.canvas.height - boundingRect.height + object.top - boundingRect.top);
-//     object.left = Math.min(object.left, object.canvas.width - boundingRect.width + object.left - boundingRect.left);
-// }
+/**
+ * a collection of functions for drawing polygons, by getting coordinates from the cursor on a canvas element.
+ *
+ * @param id
+ *
+ * @author Wietse Reitsma
+ */
+function drawPolygons(id){
 
-function drawPolygons(name, id){
     var roiPointsList = [];
 
     function Point(x, y) {
@@ -197,32 +173,26 @@ function drawPolygons(name, id){
         lines.forEach(function(value, index, ar){
             window.canvas.remove(value);
         });
-        //canvas.remove(lines[lineCounter - 1]);
         roiPointsList.pop();
         roiPointsList.push(roiPointsList[0]);
         console.log(roiPointsList);
         roiPointsList = [];
         roof = makeRoof(roofPoints);
         window.canvas.add(roof);
+
+        // groups polygon to image
+        selectAllObjects();
+        var activegroup = window.canvas.getActiveGroup();
+        var objectsInGroup = activegroup.getObjects();
+        activegroup.clone(function(newgroup) {
+            window.canvas.discardActiveGroup();
+            objectsInGroup.forEach(function (object) {
+                window.canvas.remove(object);
+            });
+            window.canvas.add(newgroup);
+            newgroup.hasControls=false;
+        });
         window.canvas.renderAll();
-        // var objs = [];
-        // // get all the objects into an array
-        // objs = canvas._objects.filter(function(obj){
-        //     return obj;
-        // });
-        //
-        // //group all the objects
-        // var alltogetherObj = new fabric.Group(objs);
-        //
-        //
-        // //clear previous objects
-        // canvas._objects.forEach(function(obj){
-        //     obj.remove();
-        // });
-        //
-        // canvas.add(alltogetherObj);
-        // alltogether.setCoords();
-        // canvas.renderAll();
 
         console.log("double click");
         //clear arrays
@@ -230,6 +200,19 @@ function drawPolygons(name, id){
         lines = [];
         lineCounter = 0;
     });
+
+
+    function selectAllObjects() {
+        var objects = window.canvas.getObjects().map(function(object) {
+            return object.set('active', true);
+        });
+        var group = new fabric.Group(objects, {
+            originX: 'center',
+            originY: 'center'
+        });
+        window.canvas._activeObject = null;
+        window.canvas.setActiveGroup(group.setCoords()).renderAll();
+    }
     window.canvas.on('mouse:down', function (options) {
         if (drawingObject.type == "roof") {
             window.canvas.selection = false;
@@ -255,12 +238,12 @@ function drawPolygons(name, id){
                 x2: x,
                 y2: y
             });
-            canvas.renderAll();
+            window.canvas.renderAll();
         }
     });
 
     function setStartingPoint(options) {
-        var offset = $('#'+name + id).offset();
+        var offset = $('#'+'canvas' + id).offset();
         x = options.e.pageX - offset.left;
         y = options.e.pageY - offset.top;
     }
@@ -276,13 +259,9 @@ function drawPolygons(name, id){
             strokeWidth: 2
         });
         roof.set({
-
             left: left,
-            top: top,
-
+            top: top
         });
-
-
         return roof;
     }
 
@@ -305,148 +284,28 @@ function drawPolygons(name, id){
         }
         return Math.abs(result);
     }
+    //Need to check the JSON properly
+    // var save = $('.save-button');
+    //
+    // save.on("click", function () {
+    //     var EditingId = $(this).parent().attr('id');
+    //     var editingRow = $('#editing-row');
+    //     var inputs = editingRow.find('input');
+    //     var InputData = {
+    //         id: id,
+    //         pointlist: roiPointsList
+    //     };
+    //
+    //     var url = "http://"+document.location.hostname + ":8081/api/image/roi/add/";
+    //     $.ajax({
+    //         url: url,
+    //         type: "POST",
+    //         data: JSON.stringify(InputData),
+    //         contentType: "application/json; charset=utf-8",
+    //         dataType: "json",
+    //         success: function () {
+    //             ReloadTable(EditingId);
+    //         }
+    //     });
+    // });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//     var roof = null;
-//     var roofPoints = [];
-//     var lines = [];
-//     var lineCounter = 0;
-//     var drawingObject = {};
-//     drawingObject.type = "";
-//     drawingObject.background = "";
-//     drawingObject.border = "";
-
-//     function Point(x, y) {
-//         this.x = x;
-//         this.y = y;
-//     }
-
-
-//     $("#poly").click(function () {
-//         if (drawingObject.type == "roof") {
-//             drawingObject.type = "";
-//             lines.forEach(function(value, index, ar){
-//                  canvas.remove(value);
-//             });
-//             //canvas.remove(lines[lineCounter - 1]);
-//             roof = makeRoof(roofPoints);
-//             canvas.add(roof);
-//             canvas.renderAll();
-//         } else {
-//             drawingObject.type = "roof"; // roof type
-//         }
-//     });
-
-
-//     // canvas Drawing
-
-//     fabric.util.addListener(window,'dblclick', function(){
-//             drawingObject.type = "";
-//             lines.forEach(function(value, index, ar){
-//                  canvas.remove(value);
-//             });
-//             //canvas.remove(lines[lineCounter - 1]);
-//             roof = makeRoof(roofPoints);
-//             canvas.add(roof);
-//             canvas.renderAll();
-
-//         console.log("double click");
-//         //clear arrays
-//          roofPoints = [];
-//          lines = [];
-//          lineCounter = 0;
-
-//     });
-
-//     canvas.on('mouse:down', function (options) {
-//         if (drawingObject.type == "roof") {
-//             canvas.selection = false;
-//             setStartingPoint(options); // set x,y
-//             roofPoints.push(new Point(x, y));
-//             var points = [x, y, x, y];
-//             lines.push(new fabric.Line(points, {
-//                 strokeWidth: 3,
-//                 selectable: false,
-//                 stroke: 'red'
-//             }).setOriginX(x).setOriginY(y));
-//             canvas.add(lines[lineCounter]);
-//             lineCounter++;
-//             canvas.on('mouse:up', function (options) {
-//                 canvas.selection = true;
-//             });
-//         }
-//     });
-//     canvas.on('mouse:move', function (options) {
-//         if (lines[0] !== null && lines[0] !== undefined && drawingObject.type == "roof") {
-//             setStartingPoint(options);
-//             lines[lineCounter - 1].set({
-//                 x2: x,
-//                 y2: y
-//             });
-//             canvas.renderAll();
-//         }
-//     });
-
-//     function setStartingPoint(options) {
-//         var offset = $('#canvas-tools').offset();
-//         x = options.e.pageX - offset.left;
-//         y = options.e.pageY - offset.top;
-//     }
-
-//     function makeRoof(roofPoints) {
-
-//         var left = findLeftPaddingForRoof(roofPoints);
-//         var top = findTopPaddingForRoof(roofPoints);
-//         roofPoints.push(new Point(roofPoints[0].x,roofPoints[0].y))
-//         var roof = new fabric.Polyline(roofPoints, {
-//         fill: 'rgba(0,0,0,0)',
-//         stroke:'#58c'
-//         });
-//         roof.set({
-
-//             left: left,
-//             top: top,
-
-//         });
-
-
-//         return roof;
-//     }
-
-//     function findTopPaddingForRoof(roofPoints) {
-//         var result = 999999;
-//         for (var f = 0; f < lineCounter; f++) {
-//             if (roofPoints[f].y < result) {
-//                 result = roofPoints[f].y;
-//             }
-//         }
-//         return Math.abs(result);
-//     }
-
-//     function findLeftPaddingForRoof(roofPoints) {
-//         var result = 999999;
-//         for (var i = 0; i < lineCounter; i++) {
-//             if (roofPoints[i].x < result) {
-//                 result = roofPoints[i].x;
-//             }
-//         }
-//         return Math.abs(result);
-//     }
