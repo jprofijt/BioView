@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -65,8 +64,9 @@ public class FolderHandler implements FolderStructureProvider {
         String relativeDirectory = getRelativePath(directory.getPath()).toString().replace("\\", "/");
         String directoryName = directory.getName();
         String dateModified = getDateModified(directory);
+        long size = FileUtils.sizeOfDirectory(directory);
 
-        return new Directory(relativeDirectory, directoryName, dateModified);
+        return new Directory(relativeDirectory, directoryName, dateModified, size);
     }
 
     /**

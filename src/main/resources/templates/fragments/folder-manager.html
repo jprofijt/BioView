@@ -15,12 +15,11 @@
         <ul id="folders" class="">
             <li data-file-icon="folder" class="existing-folder" th:each="folder: ${folders}">
                 <form th:action="@{/imageview}" method="get">
-                    <div class="folder-div context-menu-folder-selected" th:title="${folder.getName()}" th:attr="data-folder-date=${folder.getDateModified()} ">
+                    <div class="folder-div context-menu-folder-selected" th:title="${folder.getName()}" th:attr="data-folder-date=${folder.getDateModified()}, data-folder-size=${folder.getSize()}">
                         <i class="fas fa-folder"></i>
                         <b class="folder-name" th:text="${folder.getName()}"></b>
                     </div>
                     <input name="location" type="hidden" th:value="${folder.getPath()}">
-                    <input class="last-modified-date" type="hidden" th:value="${ folder.getDateModified()}">
                 </form><br/>
 
             </li>

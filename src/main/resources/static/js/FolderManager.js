@@ -81,6 +81,11 @@ function pickContextCommand(key) {
             $('.select').parents('form').submit();
         }
     }
+    else if (key == "properties") {
+        if ($('.select').length < 2) {
+            $('#folderPropertyModal').modal('toggle');
+        }
+    }
 }
 
 $(function() {
@@ -109,7 +114,8 @@ $(function() {
             "move": {name: "Move", icon: "fas fa-cut"},
             "copy": {name: "Copy", icon: "fas fa-copy"},
             "delete": {name: "Delete", icon: "fas fa-trash-alt"},
-            "rename": {name: "Rename", icon: "fas fa-edit"}
+            "rename": {name: "Rename", icon: "fas fa-edit"},
+            "properties": {name: "Properties", icon: "fas fa-info"}
         }
     });
 });
@@ -223,3 +229,62 @@ $(document).on("click", '[data-function="rename-folder"]', function () {
         $('#renameModal').modal('toggle');
     }
 });
+
+
+function loadFolderProperties(){
+    var path = $('.select').siblings('[name = "location"]').val();
+    var name = $('.select').attr('title');
+    var date = $('.select').attr('data-folder-date');
+    var size = $('.select').attr('data-folder-size');
+
+    $('.folder-property-name').text(name);
+    $('.folder-property-location').text(path);
+    $('.folder-property-size').text(formatBytes(size));
+    $('.folder-property-date').text(date);
+}
+
+$(document).on('show.bs.modal','#folderPropertyModal', function (e) {
+    if ($('.pic-select').length > 1){
+        e.preventDefault();
+    } else {
+        loadFolderProperties();
+        // loadUniqueFolderTags()
+    }
+});
+
+$(document).on("click", '[data-function="folder-properties"]', function (e) {
+    if ($('.pic-select').length > 1){
+        e.preventDefault();
+    } else {
+        $('#folderPropertyModal').modal('toggle');
+    }
+});
+
+
+
+
+// function addImageTag(data) {
+//     $.each(data, function (i, tag) {
+//         $('#unique-image-tags').tagsinput('add',tag);
+//     })
+// }
+//
+// // Unique Folder Tags in properties modal
+// function loadUniqueFolderTags(){
+//     $('#unique-image-tags').tagsinput('removeAll');
+//     var id = $('.pic-select').parent().attr('data-image-id');
+//     var url = "http://" + document.location.hostname + ":8081/api/metadata/image/tags";
+//     $.ajax({
+//         type: "GET",
+//         url: url,
+//         dataType: "json",
+//         data: {id: id},
+//         success: function (data) {
+//             addImageTag(data);
+//         },
+//         error: function(xhr, desc, err) {
+//             toastr["error"]("Could not find image tags!");
+//         }
+//     });
+//     $('.bootstrap-tagsinput input[type=text]').prop("readonly", true);
+// }

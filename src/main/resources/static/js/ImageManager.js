@@ -99,7 +99,7 @@ $(document).on("click", ".picture-img a img", function(e) {
 });
 
 function formatBytes(bytes, decimals = 2) {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0 || bytes === '0') return '0 Bytes';
 
     const k = 1024;
     const dm = decimals < 0 ? 0 : decimals;
