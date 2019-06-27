@@ -234,7 +234,7 @@ function deleteSelectedImages() {
     $('.pic-select').each(function (index) {
         var selectedImage = $(this);
         var image = $(this).parent().attr('data-image-path').replace(/\\/g, "/");
-        var imageName = image.lastIndexOf('/');
+        var imageName = $(this).parent().attr('title');
 
         $.ajax({
             type: "POST",
