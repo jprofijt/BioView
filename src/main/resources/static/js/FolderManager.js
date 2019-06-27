@@ -193,7 +193,6 @@ function deleteSelected() {
             }
         });
         });
-    // $('.select').parents('li').remove();
     $('.select').removeClass("select");
     showFolderUnselectNav();
 }
