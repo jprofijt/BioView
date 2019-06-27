@@ -22,15 +22,8 @@
 }
 .img-div{
     height: 80vh;
-    /*max-height: 1080px;*/
-    /*min-width: 600px;*/
-    /*min-height: 600px;*/
-    /*max-width: 1440px;*/
     overflow: auto;
     cursor: grab;
-    cursor: -o-grab;
-    cursor: -moz-grab;
-    cursor: -webkit-grab;
 
 }
 
