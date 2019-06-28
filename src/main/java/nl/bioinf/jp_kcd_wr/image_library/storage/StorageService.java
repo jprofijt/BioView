@@ -14,10 +14,7 @@ import java.util.stream.Stream;
  */
 public interface StorageService {
 
-    //weg
-    void init();
-
-    void store(MultipartFile file, File directory);
+    void storeFile(MultipartFile file, File directory);
 
     //rename
 //    String getNewName(String origFilename);

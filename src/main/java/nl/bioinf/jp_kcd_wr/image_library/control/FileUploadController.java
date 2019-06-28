@@ -51,7 +51,7 @@ public class FileUploadController {
                 String filename = multipartFile.getOriginalFilename();
                 String fileContentType = multipartFile.getContentType();
                 if (contentTypes.contains(fileContentType)) {
-                    storageService.store(multipartFile, directory);
+                    storageService.storeFile(multipartFile, directory);
                     logger.log(Level.INFO, "Succesfully uploaded {0} in {1}", new Object[]{filename, directory.toString()});
                     successMessages.add("Successfully uploaded " + filename + "!");
                 } else {

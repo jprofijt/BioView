@@ -64,11 +64,13 @@ public class FileSystemStorageService implements StorageService {
         rootLocation = Paths.get(environment.getProperty("library.sym"));
         this.cacheLocation = Paths.get(environment.getProperty("library.sym.thumbnails"));
 
+        makeLibraryLocations();
+        processLibrary();
+
         File rootDirectory = new File(rootLocation + "/HeadDirectory");
         if (!rootDirectory.exists()){
             rootDirectory.mkdirs();
         }
-
         logger.log(Level.INFO, "Starting FileSystemStorage service using {0} as imageDataSource, and {1} as root location", new Object[] {this.imageDataSource, this.rootLocation});
 
         checkParameters();
@@ -165,7 +167,7 @@ public class FileSystemStorageService implements StorageService {
      * @author Kim Chau Duong, Jouke Profijt
      */
     @Override
-    public void store(MultipartFile file, File directory) {
+    public void storeFile(MultipartFile file, File directory) {
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
         try {
             if (file.isEmpty()) {
@@ -569,14 +571,14 @@ public class FileSystemStorageService implements StorageService {
         return this.rootLocation;
     }
 
-    /**
-     * Initializes the file storage
-     *
-     * @author Kim Chau Duong
-     */
-    @Override
-    public void init() {
-            makeLibraryLocations();
-            processLibrary();
-    }
+//    /**
+//     * Initializes the file storage
+//     *
+//     * @author Kim Chau Duong
+//     */
+//    @Override
+//    public void init() {
+//            makeLibraryLocations();
+//            processLibrary();
+//    }
 }
