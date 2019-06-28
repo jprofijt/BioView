@@ -16,19 +16,7 @@ import java.util.List;
 public class ImageDataSourceMock implements ImageDataSource {
     @Override
     public void insertImage(Image image) {
-
     }
-
-    @Override
-    public List<Image> getImagesInDirectory(String directory) {
-        return null;
-    }
-
-    @Override
-    public List<Image> returnAllImages() {
-        return null;
-    }
-
     @Override
     public int getImageIdFromPath(String path) {
         return 0;
@@ -42,11 +30,6 @@ public class ImageDataSourceMock implements ImageDataSource {
     @Override
     public boolean checkThumbnailStatus(int ImageId) {
         return false;
-    }
-
-    @Override
-    public Path getThumbnailPath(int ImageId) {
-        return null;
     }
 
     @Override
