@@ -4,6 +4,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+/**
+ * Model object for multiple file upload
+ *
+ * @auhtor Jouke Profijt
+ */
 public class fileUploadForm {
     private List<MultipartFile> files;
 
