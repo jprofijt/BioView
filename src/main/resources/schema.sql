@@ -60,7 +60,7 @@ CREATE TABLE images(
 
 create table image_attributes(
   id          INT                 not null    AUTO_INCREMENT,
-  name        VARCHAR(600)        NOT NULL,
+  name        VARCHAR(500)        NOT NULL,
   path        varchar(700)        not null,
   filepath    varchar(700)        not null UNIQUE,
   date        datetime            not null,
