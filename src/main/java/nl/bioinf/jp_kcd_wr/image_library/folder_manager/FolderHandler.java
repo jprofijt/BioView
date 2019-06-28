@@ -125,12 +125,5 @@ public class FolderHandler implements FolderStructureProvider {
             logger.log(Level.WARNING, "Could not create {0}", newDir);
             throw new DirectoryExistsException("Directory " + directoryName + " already exists");
         }
-
-        }
-
-
-
-
-
-
+    }
 }
