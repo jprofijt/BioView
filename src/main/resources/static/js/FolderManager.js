@@ -273,6 +273,8 @@ function addFolderTag(data) {
 // Unique Folder Tags in properties modal
 function loadUniqueFolderTags(){
     $('#unique-folder-tags').tagsinput('removeAll');
+    $('.folder-tag-previous').attr('data-url', '');
+    $('.folder-tag-next').attr('data-url', '');
     var path = $('.select').siblings('[name = "location"]').val();
     var url = "http://" + document.location.hostname + ":8081/api/metadata/directory/tags";
     $.ajax({
@@ -295,9 +297,7 @@ function loadUniqueFolderTags(){
 
 $(document).on("click", ".folder-tag-previous", function () {
     var url = $('.folder-tag-previous').attr('data-url');
-    if (!isEmpty(url)){
-        getPaginationFolderTags(url);
-    }
+    getPaginationFolderTags(url);
 });
 
 $(document).on("click", ".folder-tag-next", function () {
@@ -306,19 +306,21 @@ $(document).on("click", ".folder-tag-next", function () {
 });
 
 function getPaginationFolderTags(url){
-    $.ajax({
-        type: "GET",
-        url: url,
-        dataType: "json",
-        success: function (data) {
-            if(data.content.length > 0){
-                addFolderTag(data.content);
-                $('.folder-tag-previous').attr('data-url', data.links[2].href);
-                $('.folder-tag-next').attr('data-url', data.links[1].href);
+    if (!isEmpty(url)){
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType: "json",
+            success: function (data) {
+                if(data.content.length > 0){
+                    addFolderTag(data.content);
+                    $('.folder-tag-previous').attr('data-url', data.links[2].href);
+                    $('.folder-tag-next').attr('data-url', data.links[1].href);
+                }
+            },
+            error: function(xhr, desc, err) {
+                toastr["error"]("Could not find folder tags!");
             }
-        },
-        error: function(xhr, desc, err) {
-            toastr["error"]("Could not find folder tags!");
-        }
-    });
+        });
+    }
 }
