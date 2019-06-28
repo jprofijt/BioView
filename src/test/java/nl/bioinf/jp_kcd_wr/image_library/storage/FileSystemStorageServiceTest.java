@@ -70,7 +70,7 @@ class FileSystemStorageServiceTest {
      * @author Jouke Profijt
      */
     @Test
-    void storejpg() {
+    void storeJPG() {
         storageService.storeFile(getImageFromUrl("https://image.shutterstock.com/z/stock-photo--d-illustration-of-t-cells-or-cancer-cells-433526728.jpg"), new File("HeadDirectory"));
         Path testimage = Paths.get(environment.getProperty("library.sym") + "/HeadDirectory/test-img.png");
 
@@ -78,14 +78,4 @@ class FileSystemStorageServiceTest {
 
     }
 
-    /**
-     * simple test to find root location
-     *
-     * @author Jouke Profijt
-     */
-    @Test
-    void getRootLocationSunny() {
-        Path rootLocation = Paths.get("test_directory/symupload");
-        assertEquals(storageService.getRootLocation(), rootLocation);
-    }
 }

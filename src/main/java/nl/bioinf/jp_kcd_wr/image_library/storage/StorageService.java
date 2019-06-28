@@ -14,39 +14,29 @@ import java.util.stream.Stream;
  */
 public interface StorageService {
 
+    /**
+     * Stores the file in the directory and the data in database
+     * @param file uploaded file
+     *
+     * @author Kim Chau Duong, Jouke Profijt
+     */
     void storeFile(MultipartFile file, File directory);
 
-    //rename
-//    String getNewName(String origFilename);
+    /**
+     * loads absolute file paths of image
+     * @param currentFolder folder to search
+     * @return stream of paths
+     *
+     * @author Jouke Profijt
+     */
+    Stream<Path> loadAbsoluteStoredImagePaths(String currentFolder);
 
-    //split and rename
-    Image createImageData(String origFilename, String hash, Path filePath);
-
-//    Stream<Path> loadAll();
-
-
-    //rename
-    Stream<Path> loadAll(String currentFolder);
-
-    //rename
-    Stream<Path> loadAbsolute(String currentFolder);
-
-    //rename
-    Path loadImage(String filename);
-
-    //hoort dit hier? naam is onduidelijk
-    Resource loadAsResource(String filename, String directory);
-
-    //weg?
-    void deleteAll();
-
-    //rename and split to other class?
-    void processExistingImageLibrary(File Directory);
-
-    //
-    Resource loadThumbnailAsResource(String filename);
-
-    //?
-    Path getRootLocation();
+    /**
+     * For each image in existing image library will create a cached image if it doesn't exist and makes a database insert
+     * @param Directory
+     *
+     * @author Jouke Profijt
+     */
+    void storeExistingImageLibrary(File Directory);
 
 }

@@ -79,7 +79,7 @@ public class FileUICommandService implements UICommandService {
             try{
                 logger.log(Level.INFO,"Moving {0} from {1} to {2}", new Object[]{new File(source).getName(),source, destination});
                 Files.move(pathFrom, pathTo, StandardCopyOption.REPLACE_EXISTING);
-                storageService.processExistingImageLibrary(new File(String.valueOf(getFullPath(destination))));
+                storageService.storeExistingImageLibrary(new File(String.valueOf(getFullPath(destination))));
 //                storageService.processDirectory(new File(String.valueOf(pathFrom.getParent()));
                 return true;
             } catch (IOException e) {
@@ -111,7 +111,7 @@ public class FileUICommandService implements UICommandService {
                 } else {
                     FileUtils.copyFile(pathFrom.toFile(), pathTo.toFile());
                 }
-                storageService.processExistingImageLibrary(new File(String.valueOf(getFullPath(destination))));
+                storageService.storeExistingImageLibrary(new File(String.valueOf(getFullPath(destination))));
                 return true;
             } catch (IOException e) {
                 logger.log(Level.WARNING, "{0} could not be copied", source);
@@ -137,7 +137,7 @@ public class FileUICommandService implements UICommandService {
             try{
                 logger.log(Level.INFO, "Renaming {0} to {1} in {2}", new Object[]{new File(source).getName(), renamedFileName, new File(source).getParent()});
                 Files.move(oldPath, renamedPath, StandardCopyOption.REPLACE_EXISTING);
-                storageService.processExistingImageLibrary(new File(String.valueOf(renamedPath)));
+                storageService.storeExistingImageLibrary(new File(String.valueOf(renamedPath)));
                 return true;
             } catch (IOException e) {
                 logger.log(Level.WARNING, "{0} could not be renamed", source);
