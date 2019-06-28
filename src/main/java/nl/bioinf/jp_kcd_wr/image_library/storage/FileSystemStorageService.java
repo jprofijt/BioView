@@ -200,7 +200,7 @@ public class FileSystemStorageService implements StorageService {
     }
     private void createMetaData(Image image, String date) {
 
-        String path = rootLocation.relativize(Paths.get(image.getPath())).toString();
+        String path = image.getPath();
         String name = image.getNewFilename();
         int id = imageDataSource.getImageIdFromPath(path);
         File imageFile = new File(path);
