@@ -1,5 +1,7 @@
 package nl.bioinf.jp_kcd_wr.image_library.ui_commands;
 
+import nl.bioinf.jp_kcd_wr.image_library.folder_manager.DirectoryExistsException;
+
 /**
  * Interface for file commands
  *
@@ -32,4 +34,12 @@ public interface UICommandService {
      * @param renamedFileName new name for the source
      */
     boolean renameFile(String source, String renamedFileName);
+
+    /**
+     * Creates a new directory in th current directory
+     * @param directoryName name of new directory
+     *
+     * @author Jouke Profijt
+     */
+    void createNewFolder(String directoryName, String currentPath) throws DirectoryExistsException;
 }

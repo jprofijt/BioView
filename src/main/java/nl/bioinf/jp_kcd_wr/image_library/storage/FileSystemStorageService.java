@@ -73,40 +73,6 @@ public class FileSystemStorageService implements StorageService {
     }
 
     /**
-     * Checks rootlocation properties
-     * @param environment Environment properties
-     * @return root location
-     *
-     * @author Jouke Profijt
-     */
-    private Path getVerifiedRootLocation(Environment environment){
-        String Location = environment.getProperty("library.upload");
-        if (Location == null || Location.isEmpty()){
-            throw new IllegalArgumentException("library.upload parameter is empty");
-        }
-        else{
-            return Paths.get(Location);
-        }
-    }
-
-    /**
-     * Checks thumbnail properties
-     * @param environment Environment properties
-     * @return Thumbnail locations
-     *
-     * @author Jouke Profijt
-     */
-    private Path getVerifiedThumbnailLocation(Environment environment){
-        String Location = environment.getProperty("cache-location");
-        if (Location == null || Location.isEmpty()){
-            throw new IllegalArgumentException("cache-location parameter is empty");
-        }
-        else{
-            return Paths.get(Location);
-        }
-    }
-
-    /**
      * Simple function that checks storage related parameters for errors.
      *
      *
@@ -362,48 +328,6 @@ public class FileSystemStorageService implements StorageService {
     public Path getFullImagePath(String filename) {
         return rootLocation.resolve(filename);
     }
-
-    /**
-     * Builds full thumbnail path from the root location and the provided thumbnail file name
-     * @param filename name of thumbnail file
-     * @return full thumbnail path
-     */
-    private Path getFullThumbnailPath(String filename) {return cacheLocation.resolve(filename);}
-
-
-    /**
-     * loads resource if resource is accessible
-     * @param resource the new resource
-     * @return return correct resource
-     * @author Kim Chau Duong
-     */
-    private Resource loadResource(Resource resource) {
-        if (resource.exists() || resource.isReadable()) {
-            return resource;
-        }
-        else {
-            throw new StorageFileNotFoundException(
-                    "Could not read file: " + resource.getFilename());
-
-        }
-    }
-
-//    /**
-//     * Separate resource loader for thumbnails
-//     * @param filename thumbnail filename
-//     * @return Resource
-//     * @author Jouke Profijt
-//     */
-//    @Override
-//    public Resource loadThumbnailAsResource(String filename) {
-//        try {
-//            Path thumbnail = getFullThumbnailPath(filename);
-//            return loadResource(new UrlResource(thumbnail.toUri()));
-//        } catch (MalformedURLException e) {
-//            logger.log(Level.WARNING, "Could not read file {0}", filename);
-//            throw new StorageFileNotFoundException("Could not read file: " + filename, e);
-//        }
-//    }
 
     /**
      * For each image in existing image library will create a cached image if it doesn't exist and makes a database insert

@@ -1,5 +1,6 @@
 package nl.bioinf.jp_kcd_wr.image_library.ui_commands;
 
+import nl.bioinf.jp_kcd_wr.image_library.folder_manager.DirectoryExistsException;
 import nl.bioinf.jp_kcd_wr.image_library.storage.FileSystemStorageService;
 import nl.bioinf.jp_kcd_wr.image_library.storage.StorageService;
 import org.apache.commons.io.FileUtils;
@@ -22,7 +23,7 @@ public class FileUICommandService implements UICommandService {
     private static final Logger logger = Logger.getLogger(FileSystemStorageService.class.getName());
 
     public FileUICommandService(Environment environment, StorageService storageService) {
-        rootLocation = Paths.get("upload/upload");
+        this.rootLocation = Paths.get(environment.getProperty("library.sym"));
         this.storageService = storageService;
         logger.log(Level.INFO, "Starting FileCommandService service using {0} as root location", this.rootLocation);
     }
@@ -80,7 +81,6 @@ public class FileUICommandService implements UICommandService {
                 logger.log(Level.INFO,"Moving {0} from {1} to {2}", new Object[]{new File(source).getName(),source, destination});
                 Files.move(pathFrom, pathTo, StandardCopyOption.REPLACE_EXISTING);
                 storageService.storeExistingImageLibrary(new File(String.valueOf(getFullPath(destination))));
-//                storageService.processDirectory(new File(String.valueOf(pathFrom.getParent()));
                 return true;
             } catch (IOException e) {
                 logger.log(Level.WARNING, "{0} could not be moved", source);
@@ -143,6 +143,32 @@ public class FileUICommandService implements UICommandService {
                 logger.log(Level.WARNING, "{0} could not be renamed", source);
                 return false;
             }
+        }
+    }
+
+    /**
+     * Create a new directory
+     * @param directoryName name of the new directory
+     * @param currentPath path where directory should be located
+     * @throws DirectoryExistsException when directory already exists
+     *
+     * @author Jouke Profijt
+     */
+    @Override
+    public void createNewFolder(String directoryName, String currentPath) throws DirectoryExistsException {
+        Path path = getFullPath(currentPath).resolve(directoryName);
+        File newDir = new File(String.valueOf(path));
+        try {
+            logger.log(Level.INFO, "Creating {0}", newDir);
+            Files.createDirectory(newDir.toPath());
+            newDir.setWritable(true, false);
+            newDir.setReadable(true, false);
+            newDir.setExecutable(true, false);
+
+        } catch (IOException e){
+            e.printStackTrace();
+            logger.log(Level.WARNING, "Could not create {0}", newDir);
+            throw new DirectoryExistsException("Directory " + directoryName + " already exists");
         }
     }
 }

@@ -101,29 +101,5 @@ public class FolderHandler implements FolderStructureProvider {
         return directoryList;
     }
 
-    /**
-     * Create a new directory
-     * @param directoryName name of the new directory
-     * @param currentPath path where directory should be located
-     * @throws DirectoryExistsException when directory already exists
-     *
-     * @author Jouke Profijt
-     */
-    @Override
-    public void createNewFolder(String directoryName, String currentPath) throws DirectoryExistsException {
-        Path path = getFullPath(currentPath).resolve(directoryName);
-        File newDir = new File(String.valueOf(path));
-        try {
-            logger.log(Level.INFO, "Creating {0}", newDir);
-            Files.createDirectory(newDir.toPath());
-            newDir.setWritable(true, false);
-            newDir.setReadable(true, false);
-            newDir.setExecutable(true, false);
 
-        } catch (IOException e){
-            e.printStackTrace();
-            logger.log(Level.WARNING, "Could not create {0}", newDir);
-            throw new DirectoryExistsException("Directory " + directoryName + " already exists");
-        }
-    }
 }
