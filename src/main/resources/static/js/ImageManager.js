@@ -272,15 +272,17 @@ $(document).on("click", '[data-function="edit-image"]', function (e) {
     }
 });
 
+
+
+// Unique Image Tags in properties modal
 function addImageTag(data) {
+    $('#unique-image-tags').tagsinput('removeAll');
     $.each(data, function (i, tag) {
         $('#unique-image-tags').tagsinput('add',tag);
     })
 }
 
-// Unique Image Tags in properties modal
 function loadUniqueImageTags(){
-    $('#unique-image-tags').tagsinput('removeAll');
     var id = $('.pic-select').parent().attr('data-image-id');
     var url = "http://" + document.location.hostname + ":8081/api/metadata/image/tags";
     $.ajax({
@@ -289,11 +291,44 @@ function loadUniqueImageTags(){
         dataType: "json",
         data: {id: id},
         success: function (data) {
-            addImageTag(data);
+            if(data.content.length > 0){
+                addImageTag(data.content);
+                $('.image-tag-next').attr('data-url', data.links[1].href);
+            }
         },
         error: function(xhr, desc, err) {
             toastr["error"]("Could not find image tags!");
         }
     });
     $('.property-template .bootstrap-tagsinput input[type=text]').prop("readonly", true);
+}
+
+$(document).on("click", ".image-tag-previous", function () {
+    var url = $('.image-tag-previous').attr('data-url');
+    if (!isEmpty(url)){
+        getPaginationImageTags(url);
+    }
+});
+
+$(document).on("click", ".image-tag-next", function () {
+    var url = $('.image-tag-next').attr('data-url');
+    getPaginationImageTags(url)
+});
+
+function getPaginationImageTags(url){
+    $.ajax({
+        type: "GET",
+        url: url,
+        dataType: "json",
+        success: function (data) {
+            if(data.content.length > 0){
+                addImageTag(data.content);
+                $('.image-tag-previous').attr('data-url', data.links[2].href);
+                $('.image-tag-next').attr('data-url', data.links[1].href);
+            }
+        },
+        error: function(xhr, desc, err) {
+            toastr["error"]("Could not find image tags!");
+        }
+    });
 }
