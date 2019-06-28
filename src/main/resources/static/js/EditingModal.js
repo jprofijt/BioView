@@ -139,16 +139,16 @@ function drawPolygons(id){
 
     if (drawingObject.type == "roof") {
         drawingObject.type = "";
-        lines.forEach(function(value, index, ar){
+        lines.forEach(function(value){
             window.canvas.remove(value);
         });
-        //canvas.remove(lines[lineCounter - 1]);
         roof = makeRoof(roofPoints);
         window.canvas.add(roof);
         canvas.renderAll();
     } else {
-        drawingObject.type = "roof"; // roof type
+        drawingObject.type = "roof";
     }
+    // creates and fixes a line to the cursor, creates static line between last point and cursor if clicked again.
     window.canvas.on('mouse:down', function (options) {
         if (drawingObject.type == "roof") {
             window.canvas.selection = false;
@@ -168,9 +168,10 @@ function drawPolygons(id){
             });
         }
     });
+    // finishes the polygon with double click
     fabric.util.addListener(window,'dblclick', function(){
         drawingObject.type = "";
-        lines.forEach(function(value, index, ar){
+        lines.forEach(function(value){
             window.canvas.remove(value);
         });
         roiPointsList.pop();
@@ -180,7 +181,6 @@ function drawPolygons(id){
         roof = makeRoof(roofPoints);
         window.canvas.add(roof);
 
-        // groups polygon to image
         selectAllObjects();
         var activegroup = window.canvas.getActiveGroup();
         var objectsInGroup = activegroup.getObjects();
@@ -201,7 +201,9 @@ function drawPolygons(id){
         lineCounter = 0;
     });
 
-
+    /**
+     * groups the region of interest to the image
+     */
     function selectAllObjects() {
         var objects = window.canvas.getObjects().map(function(object) {
             return object.set('active', true);
@@ -242,11 +244,22 @@ function drawPolygons(id){
         }
     });
 
+    /**
+     * calculates and sets the startpoint for the region of interest drawing.
+     * @param options
+     */
     function setStartingPoint(options) {
         var offset = $('#'+'canvas' + id).offset();
         x = options.e.pageX - offset.left;
         y = options.e.pageY - offset.top;
     }
+
+    /**
+     * Finishes the polygon by drawing the lines between all the points.
+     *
+     * @param roofPoints the possitions between clicks
+     * @returns {*}
+     */
 
     function makeRoof(roofPoints) {
 
@@ -265,6 +278,11 @@ function drawPolygons(id){
         return roof;
     }
 
+    /**
+     * this function is nessesary for preventing the drawn region of interest to be offset
+     * @param roofPoints
+     * @returns {number}
+     */
     function findTopPaddingForRoof(roofPoints) {
         var result = 999999;
         for (var f = 0; f < lineCounter; f++) {
@@ -274,6 +292,11 @@ function drawPolygons(id){
         }
         return Math.abs(result);
     }
+    /**
+     * this function is nessesary for preventing the drawn region of interest to be offset
+     * @param roofPoints
+     * @returns {number}
+     */
 
     function findLeftPaddingForRoof(roofPoints) {
         var result = 999999;
