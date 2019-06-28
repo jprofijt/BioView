@@ -1,17 +1,16 @@
 package nl.bioinf.jp_kcd_wr.image_library.breadcrumbs;
 
-import nl.bioinf.jp_kcd_wr.image_library.model.Breadcrumb;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Class to create breadcrumbs manually given a (relative) directory path
@@ -22,7 +21,7 @@ import java.util.List;
  */
 @Service
 public class DirectoryBreadcrumbBuilder implements BreadcrumbBuilder{
-
+    private static final Logger logger = Logger.getLogger(DirectoryBreadcrumbBuilder.class.getName());
     /**
      * constructor
      */
@@ -40,6 +39,7 @@ public class DirectoryBreadcrumbBuilder implements BreadcrumbBuilder{
     public List<Breadcrumb> getBreadcrumbs(String directory) throws IllegalArgumentException{
         final List<Breadcrumb> breadcrumbs = new ArrayList<>();
         if (directory != null) {
+            logger.log(Level.INFO, "Building breadcrumbs...");
             Iterator<Path> pathIterator = buildPathIterator(directory);
             StringBuilder crumbPath = new StringBuilder();
             while (pathIterator.hasNext()){
@@ -47,9 +47,13 @@ public class DirectoryBreadcrumbBuilder implements BreadcrumbBuilder{
                     crumbPath.append("/");
                 }
                 crumbPath.append(pathIterator.next());
-                Breadcrumb breadcrumb = getFolderBreadCrumb(crumbPath);
+                Breadcrumb breadcrumb = getFolderBreadCrumb(crumbPath.toString());
                 breadcrumbs.add(breadcrumb);
             }
+            logger.log(Level.INFO, "Finished building breadcrumbs!");
+        } else{
+            logger.log(Level.INFO, "No directory specified");
+            throw new IllegalArgumentException("No directory specified");
         }
         return breadcrumbs;
     }
@@ -66,11 +70,11 @@ public class DirectoryBreadcrumbBuilder implements BreadcrumbBuilder{
 
     /**
      * Creates breadcrumb object
-     * @param crumbPath relative directory of the breadcrumb
+     * @param crumbPath (relative) directory of the breadcrumb
      * @return breadcrumb object
      */
 
-    private Breadcrumb getFolderBreadCrumb(StringBuilder crumbPath){
+    private Breadcrumb getFolderBreadCrumb(String crumbPath){
         final String directoryURL = "/imageview?location=" + crumbPath;
         File folder = new File(String.valueOf(crumbPath));
         return new Breadcrumb(folder.getName(), directoryURL);

@@ -63,45 +63,5 @@ class FolderHandlerTest {
         }
 
         assertEquals(testNames, directoryNames);
-
-
     }
-
-    /**
-     * Tests if directory creation functionality works
-     * @throws DirectoryExistsException If the directory exists throws error
-     * @throws IOException IF there are other problems like permissions
-     * @author Jouke Profijt
-     */
-    @Test
-    void createNewFolder() throws DirectoryExistsException, IOException {
-        File testDir = new File(environment.getProperty("library.sym") + "/HeadDirectory/MadeAtestDir");
-        testDir.delete();
-        provider.createNewFolder("MadeAtestDir", "HeadDirectory");
-        assertTrue(testDir.isDirectory());
-
-    }
-
-    /**
-     * Checks If a folder exists an exception is thrown
-     * @throws DirectoryExistsException If the directory exists throws error
-     * @throws IOException IF there are other problems like permissions
-     * @author Jouke Profijt
-     */
-    @Test
-    void createNewFolderThatExists() throws DirectoryExistsException, IOException {
-        File testDir = new File(environment.getProperty("library.sym") + "/HeadDirectory/existingDirectory");
-        testDir.delete();
-
-        provider.createNewFolder("existingDirectory", "HeadDirectory");
-
-        assertThrows(DirectoryExistsException.class,
-                () -> provider.createNewFolder(
-                        "existingDirectory",
-                        "HeadDirectory"));
-
-
-    }
-
-
 }

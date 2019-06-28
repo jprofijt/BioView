@@ -1,7 +1,5 @@
 package nl.bioinf.jp_kcd_wr.image_library;
 
-import nl.bioinf.jp_kcd_wr.image_library.storage.StorageService;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -22,13 +20,4 @@ public class ImageLibraryApplication {
         templateEngine.addDialect(sec); // Enable use of "sec"
         return templateEngine;
     }
-
-    @Bean
-    CommandLineRunner init(StorageService storageService) {
-        return (args) -> {
-//            storageService.deleteAll(); //Deletes all files in 'upload-dir' folder on Spring run. Remove once no longer needed
-            storageService.init();
-        };
-    }
-
 }

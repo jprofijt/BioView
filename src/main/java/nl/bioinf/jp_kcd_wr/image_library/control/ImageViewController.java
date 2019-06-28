@@ -6,8 +6,10 @@ import nl.bioinf.jp_kcd_wr.image_library.folder_manager.FolderHandler;
 import nl.bioinf.jp_kcd_wr.image_library.model.ImageRequest;
 import nl.bioinf.jp_kcd_wr.image_library.storage.StorageService;
 import nl.bioinf.jp_kcd_wr.image_library.ui_commands.UICommandService;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,10 +21,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.FileTime;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -44,22 +44,24 @@ public class ImageViewController {
     private final FolderHandler folderHandler;
     private final BreadcrumbBuilder breadcrumbBuilder;
     private final UICommandService uiCommandService;
+    private final Path rootLocation;
 
     @Autowired
-    public ImageViewController(StorageService storageService, ImageDataSource imageDataSourceJdbc, FolderHandler folderHandler, BreadcrumbBuilder breadcrumbBuilder, UICommandService uiCommandService) {
+    public ImageViewController(StorageService storageService, ImageDataSource imageDataSourceJdbc, FolderHandler folderHandler, BreadcrumbBuilder breadcrumbBuilder, UICommandService uiCommandService, Environment environment) {
         this.storageService = storageService;
         this.imageDataSource = imageDataSourceJdbc;
         this.folderHandler = folderHandler;
         this.breadcrumbBuilder = breadcrumbBuilder;
         this.uiCommandService = uiCommandService;
+        this.rootLocation = Paths.get(environment.getProperty("library.sym"));
     }
 
     /**
-     *
-     * @param location
-     * @param model
-     * @return
-     * @author Jouke Profijt
+     * Handles all items required to load the main page
+     * @param location destination folder containing items that need to load up
+     * @param model model containing all item attributes
+     * @return main image viewer page
+     * @author Jouke Profijt, Kim Chau Duong
      */
     @GetMapping("/imageview")
     public String getImages(@RequestParam(name="location", required = false, defaultValue = "HeadDirectory") String location, Model model) {
@@ -68,7 +70,7 @@ public class ImageViewController {
         model.addAttribute("date", LocalDate.now().toString());
 
         logger.log(Level.INFO, "Creating Image view for images in {0}", location.replace("\\", "/"));
-        List<Path> list = storageService.loadAbsolute(location).collect(Collectors.toList());
+        List<Path> list = storageService.loadAbsoluteStoredImagePaths(location).collect(Collectors.toList());
         model.addAttribute("Images", loadCaches(list));
         model.addAttribute("cache_path", "../cache/");
         model.addAttribute("location", location);
@@ -80,7 +82,7 @@ public class ImageViewController {
 
     /**
      * Creates imageRequest object list for displaying images in directory
-     * @param image_paths
+     * @param image_paths path to image file
      * @return List of ImageRequest Objects
      * @author Jouke Profijt
      *
@@ -89,7 +91,7 @@ public class ImageViewController {
         ArrayList<ImageRequest> cacheLocations = new ArrayList<>();
         for (Path image: image_paths) {
             ImageRequest imageRequest = new ImageRequest();
-            Path path = storageService.getRootLocation().relativize(image);
+            Path path = this.rootLocation.relativize(image);
             imageRequest.setThumbnail(this.imageDataSource.getThumbnailPathFromImagePath(path.toString()));
 
             imageRequest.setActual(path);
@@ -174,12 +176,12 @@ public class ImageViewController {
      */
     @PostMapping("/deleteimage")
     @ResponseBody
-    public String deleteFolder(@RequestParam String image) throws IOException {
+    public ResponseEntity deleteFolder(@RequestParam String image) throws IOException {
         logger.log(Level.INFO, "Deleting image...");
         if (uiCommandService.removeFile(image.replace("\\", "/"))){
-            return "success";
+            return new ResponseEntity(HttpStatus.OK);
         } else {
-            return "failed";
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }
 }

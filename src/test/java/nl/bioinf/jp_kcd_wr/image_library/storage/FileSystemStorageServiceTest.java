@@ -1,15 +1,11 @@
 package nl.bioinf.jp_kcd_wr.image_library.storage;
 
 import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageDataSource;
-import nl.bioinf.jp_kcd_wr.image_library.data_access.jdbc.ImageDataSourceJdbc;
 import nl.bioinf.jp_kcd_wr.image_library.data_access.mock.ImageDataSourceMock;
 import org.apache.commons.io.IOUtils;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.mockito.Mockito;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.mock.env.MockEnvironment;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,7 +15,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -75,22 +70,12 @@ class FileSystemStorageServiceTest {
      * @author Jouke Profijt
      */
     @Test
-    void storejpg() {
-        storageService.store(getImageFromUrl("https://image.shutterstock.com/z/stock-photo--d-illustration-of-t-cells-or-cancer-cells-433526728.jpg"), new File("HeadDirectory"));
+    void storeJPG() {
+        storageService.storeFile(getImageFromUrl("https://image.shutterstock.com/z/stock-photo--d-illustration-of-t-cells-or-cancer-cells-433526728.jpg"), new File("HeadDirectory"));
         Path testimage = Paths.get(environment.getProperty("library.sym") + "/HeadDirectory/test-img.png");
 
         assertTrue(testimage.toFile().isFile());
 
     }
 
-    /**
-     * simple test to find root location
-     *
-     * @author Jouke Profijt
-     */
-    @Test
-    void getRootLocationSunny() {
-        Path rootLocation = Paths.get("test_directory/symupload");
-        assertEquals(storageService.getRootLocation(), rootLocation);
-    }
 }
