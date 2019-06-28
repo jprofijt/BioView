@@ -230,7 +230,7 @@ $(document).on("click", '[data-function="rename-folder"]', function () {
     }
 });
 
-
+/*---Folder properties modal functions---*/
 function loadFolderProperties(){
     var path = $('.current-path').val();
     var name = $('.select').attr('title');
@@ -261,8 +261,7 @@ $(document).on("click", '[data-function="folder-properties"]', function (e) {
 });
 
 
-
-
+/*---Folder property tags preview----*/
 function addFolderTag(data) {
     $('#unique-folder-tags').tagsinput('removeAll');
     $.each(data, function (i, tag) {
@@ -295,6 +294,8 @@ function loadUniqueFolderTags(){
     $('.property-template .bootstrap-tagsinput input[type=text]').prop("readonly", true);
 }
 
+
+/*---Pagination functions---*/
 $(document).on("click", ".folder-tag-previous", function () {
     var url = $('.folder-tag-previous').attr('data-url');
     getPaginationFolderTags(url);
