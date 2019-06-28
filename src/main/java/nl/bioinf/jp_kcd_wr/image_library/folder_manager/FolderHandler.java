@@ -73,6 +73,7 @@ public class FolderHandler implements FolderStructureProvider {
      * Gets the 'last modified' date of a directory'
      * @param directory
      * @return date String in yyyy-MM-dd HH:mm:ss
+     * @auhtor Jouke Profijt
      */
     private String getDateModified(File directory) {
         long lastModified = directory.lastModified();

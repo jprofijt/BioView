@@ -54,8 +54,14 @@ public class ImageViewController {
         this.uiCommandService = uiCommandService;
     }
 
+    /**
+     *
+     * @param location
+     * @param model
+     * @return
+     * @author Jouke Profijt
+     */
     @GetMapping("/imageview")
-
     public String getImages(@RequestParam(name="location", required = false, defaultValue = "HeadDirectory") String location, Model model) {
         model.addAttribute("folders", folderHandler.getNextFolders(location));
         model.addAttribute("currentPath", new File(location.replace("\\", "/")));
@@ -76,6 +82,7 @@ public class ImageViewController {
      * Creates imageRequest object list for displaying images in directory
      * @param image_paths
      * @return List of ImageRequest Objects
+     * @author Jouke Profijt
      *
      */
     private List<ImageRequest> loadCaches(List<Path> image_paths){
