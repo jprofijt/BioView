@@ -211,6 +211,13 @@ public class ImageDataSourceJdbc implements ImageDataSource {
     }
 
 
+    /**
+     * Checks if image attribute is contained in the database
+     * @param imageAttribute Image Attribute object to check for
+     * @return True if db contains attributes
+     *
+     * @author Jouke Profijt
+     */
     private boolean checkImageAttributeIndex(ImageAttribute imageAttribute) {
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("filepath", imageAttribute.getFilePath().replace("\\", "/"));

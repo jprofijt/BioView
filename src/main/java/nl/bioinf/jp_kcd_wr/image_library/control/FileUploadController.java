@@ -57,6 +57,7 @@ public class FileUploadController {
      * @param uploadForm uploaded form data list
      *
      * @return redirect to main page
+     * @author Kim Chau Duong(initial file upload), Jouke Profijt(Multi file implementation)
      */
     @PostMapping("/multiFileUpload")
     public String save(@RequestParam(name = "directory", required = false, defaultValue = "") File directory, @RequestParam("file") List<MultipartFile> uploadForm, RedirectAttributes redirectAttributes) {
@@ -87,6 +88,7 @@ public class FileUploadController {
      * Handles file not found error
      * @param exc
      * @return
+     * @author Kim Chau Duong
      */
     @ExceptionHandler(StorageFileNotFoundException.class)
     public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
