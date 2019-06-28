@@ -8,6 +8,11 @@ import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageFileType;
 
 import java.util.Date;
 
+/**
+ * Model class for image attributes
+ *
+ * @auhor Kim Chau Duong
+ */
 public class ImageAttribute {
     private int id;
     private String imageName;

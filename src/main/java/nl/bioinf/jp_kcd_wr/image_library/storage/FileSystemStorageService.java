@@ -64,7 +64,7 @@ public class FileSystemStorageService implements StorageService {
         rootLocation = Paths.get(environment.getProperty("library.sym"));
         this.cacheLocation = Paths.get(environment.getProperty("library.sym.thumbnails"));
 
-        File rootDirectory = new File(String.valueOf(rootLocation.resolve("/HeadDirectory")));
+        File rootDirectory = new File(rootLocation + "/HeadDirectory");
         if (!rootDirectory.exists()){
             rootDirectory.mkdirs();
         }
@@ -74,6 +74,13 @@ public class FileSystemStorageService implements StorageService {
         checkParameters();
     }
 
+    /**
+     * Checks rootlocation properties
+     * @param environment Environment properties
+     * @return root location
+     *
+     * @author Jouke Profijt
+     */
     private Path getVerifiedRootLocation(Environment environment){
         String Location = environment.getProperty("library.upload");
         if (Location == null || Location.isEmpty()){
@@ -86,6 +93,13 @@ public class FileSystemStorageService implements StorageService {
 
 
 
+    /**
+     * Checks thumbnail properties
+     * @param environment Environment properties
+     * @return Thumbnail locations
+     *
+     * @author Jouke Profijt
+     */
     private Path getVerifiedThumbnailLocation(Environment environment){
         String Location = environment.getProperty("cache-location");
         if (Location == null || Location.isEmpty()){
@@ -120,6 +134,7 @@ public class FileSystemStorageService implements StorageService {
 
     /**
      * creates new library locations if they don't already exist
+     * @auhtor Jouke Profijt
      */
     private void makeLibraryLocations(){
         File Root = this.rootLocation.toFile();
@@ -187,6 +202,13 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 
+    /**
+     * converts filetype to ENUM storage medium
+     * @param extension file extention
+     * @return return correct enum type
+     *
+     * @author Jouke Profijt
+     */
     private ImageFileType getFileTypeEnum(String extension){
         if (extension.toLowerCase().equals("jpg")){
             return ImageFileType.JPG;
@@ -198,6 +220,14 @@ public class FileSystemStorageService implements StorageService {
             return ImageFileType.PNG;
         }
     }
+
+    /**
+     * Creates uploaded image metadata
+     * @param image image to generate metadata
+     * @param date current date
+     *
+     * @auhor Jouke Profijt
+     */
     private void createMetaData(Image image, String date) {
 
         String path = image.getPath();
@@ -210,6 +240,13 @@ public class FileSystemStorageService implements StorageService {
         imageDataSource.insertImageMetaData(new ImageAttribute(id, name,imageFile.getParent(), path, size, date, fileType));
     }
 
+    /**
+     * Creates image attribute data for images in directory
+     *
+     * @param directory location to be indexed
+     *
+     * @auhtor Kim Chau Duong
+     */
     private void indexImageAttributes(File directory){
         for (File image : directory.listFiles(File::isFile)){
             ImageAttribute attribute = new ImageAttribute();
@@ -226,6 +263,13 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 
+    /**
+     * Modified date indexing
+     * @param directory directory to be indexed
+     * @return modified date
+     *
+     * @author Kim Chau Duong
+     */
     private String getDateModified(File directory) {
         long lastModified = directory.lastModified();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

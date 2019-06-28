@@ -56,6 +56,6 @@ public class ImageDataSourceMock implements ImageDataSource {
 
     @Override
     public void insertImageMetaData(ImageAttribute imageAttribute) {
-
     }
+
 }
