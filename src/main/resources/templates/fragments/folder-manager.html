@@ -6,7 +6,6 @@
 
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <meta name="_current_location" th:content="${currentPath}"/>
 </head>
 <body>
 <div class="folder-container container col-md-4" th:fragment="folder-manager">
@@ -29,7 +28,7 @@
                         <i class="fas fa-folder"></i>
                         <b class="created-title"><input id="dirInput" name="directoryName" type="text" th:required="true" th:value="${date}"></b>
                     </div>
-                    <input name="currentPath" type="hidden" th:value="${currentPath}">
+                    <input class="current-path" name="currentPath" type="hidden" th:value="${currentPath}">
 
                 </form>
             </li>

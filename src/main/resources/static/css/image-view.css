@@ -141,3 +141,7 @@
     content: none;
     padding: 0px 2px;
 }
+
+.image-tags-pagination {
+    text-align: center;
+}
