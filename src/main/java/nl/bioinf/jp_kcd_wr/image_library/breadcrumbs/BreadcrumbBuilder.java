@@ -5,13 +5,8 @@ package nl.bioinf.jp_kcd_wr.image_library.breadcrumbs;
  * All rights reserved
  */
 
-import nl.bioinf.jp_kcd_wr.image_library.model.Breadcrumb;
-
-import java.io.File;
 import java.util.List;
 
 public interface BreadcrumbBuilder {
     List<Breadcrumb> getBreadcrumbs(String directory);
-
-
 }
