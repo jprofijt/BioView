@@ -5,8 +5,10 @@
 package nl.bioinf.jp_kcd_wr.image_library.model;
 
 /**
- * Copyright (c) 2019 Kim Chau Duong
- * All rights reserved
+ * Directory object model
+ * Object gets used to retrieve data on the html page with thymeleaf
+ *
+ * @author Kim Chau Duong
  */
 public class Directory {
     private String path;
@@ -18,16 +20,8 @@ public class Directory {
         return path;
     }
 
-    public void setPath(String path) {
-        this.path = path;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDateModified() {
