@@ -232,7 +232,7 @@ $(document).on("click", '[data-function="rename-folder"]', function () {
 
 
 function loadFolderProperties(){
-    var path = $('.select').siblings('[name = "location"]').val();
+    var path = $('.current-path').val();
     var name = $('.select').attr('title');
     var date = $('.select').attr('data-folder-date');
     var size = $('.select').attr('data-folder-size');
