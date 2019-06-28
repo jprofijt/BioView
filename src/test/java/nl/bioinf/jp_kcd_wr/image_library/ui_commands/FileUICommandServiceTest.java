@@ -5,6 +5,8 @@ import nl.bioinf.jp_kcd_wr.image_library.data_access.mock.ImageDataSourceMock;
 import nl.bioinf.jp_kcd_wr.image_library.folder_manager.DirectoryExistsException;
 import nl.bioinf.jp_kcd_wr.image_library.storage.FileSystemStorageService;
 import nl.bioinf.jp_kcd_wr.image_library.storage.StorageService;
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.env.MockEnvironment;
@@ -51,6 +53,17 @@ class FileUICommandServiceTest {
      * @throws IOException IF there are other problems like permissions
      * @author Jouke Profijt
      */
+
+    @AfterEach
+    void cleanUp() throws IOException {
+        if (Files.exists(Paths.get("test_directory/symupload/HeadDirectory/fake-folder/unexisting"))){
+            FileUtils.deleteDirectory(new File("test_directory/symupload/HeadDirectory/fake-folder"));
+        } else if (Files.exists(Paths.get("test_directory/symupload/HeadDirectory/fake-folder"))) {
+            FileUtils.deleteDirectory(new File("test_directory/symupload/HeadDirectory/fake-folder"));
+        }else if (Files.exists(Paths.get("test_directory/symupload/HeadDirectory/unexisting"))) {
+            FileUtils.deleteDirectory(new File("test_directory/symupload/HeadDirectory/unexisting"));
+        }
+    }
 
     @Test
     void createNewFolder() throws DirectoryExistsException {
