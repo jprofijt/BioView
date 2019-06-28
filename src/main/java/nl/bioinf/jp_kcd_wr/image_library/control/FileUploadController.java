@@ -1,18 +1,15 @@
 package nl.bioinf.jp_kcd_wr.image_library.control;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import nl.bioinf.jp_kcd_wr.image_library.model.fileUploadForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,20 +32,6 @@ public class FileUploadController {
     @Autowired
     public FileUploadController(StorageService storageService) {
         this.storageService = storageService;
-    }
-
-
-    /**
-     * Get request that loads the initial page
-     *
-     * @param model
-     * @return
-     * @throws IOException
-     */
-    @GetMapping("/upload")
-    public String listUploadedFiles(Model model) throws IOException {
-
-        return "upload-form";
     }
 
     /**
@@ -81,8 +64,6 @@ public class FileUploadController {
         }
         return "redirect:/imageview?location=" + directory.toString().replace("\\", "/");
     }
-
-
 
     /**
      * Handles file not found error

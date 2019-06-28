@@ -5,15 +5,16 @@ import nl.bioinf.jp_kcd_wr.image_library.model.Directory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
-@Controller
+/**
+ * REST Controller for APIs responding to ajax requests
+ *
+ * @author Jouke Profijt, Kim Chau Duong
+ */
+@RestController
 @RequestMapping("/api")
 public class apiController {
     private final FolderHandler folderHandler;
@@ -23,13 +24,13 @@ public class apiController {
         this.folderHandler = folderHandler;
     }
 
-    @GetMapping("/tags/{image}")
-    public String test(@PathVariable("image") int image_id){
-        System.out.println(image_id);
-        return "";
-    }
-
-
+    /**
+     * Looks up all the subdirectories present in a directory
+     * @param parent parent directory that contains subdirectories
+     * @return a list os subdirectories of the given directory
+     *
+     * @author Kim Chau Duong
+     */
     @GetMapping("/folder/branch")
     public ResponseEntity<ArrayList<Directory>> getFolderBranches(@RequestParam String parent){
         try {

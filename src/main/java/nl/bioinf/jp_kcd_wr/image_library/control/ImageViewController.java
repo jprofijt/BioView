@@ -6,8 +6,9 @@ import nl.bioinf.jp_kcd_wr.image_library.folder_manager.FolderHandler;
 import nl.bioinf.jp_kcd_wr.image_library.model.ImageRequest;
 import nl.bioinf.jp_kcd_wr.image_library.storage.StorageService;
 import nl.bioinf.jp_kcd_wr.image_library.ui_commands.UICommandService;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,10 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.attribute.FileTime;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -55,11 +53,11 @@ public class ImageViewController {
     }
 
     /**
-     *
-     * @param location
-     * @param model
-     * @return
-     * @author Jouke Profijt
+     * Handles all items required to load the main page
+     * @param location destination folder containing items that need to load up
+     * @param model model containing all item attributes
+     * @return main image viewer page
+     * @author Jouke Profijt, Kim Chau Duong
      */
     @GetMapping("/imageview")
     public String getImages(@RequestParam(name="location", required = false, defaultValue = "HeadDirectory") String location, Model model) {
@@ -80,7 +78,7 @@ public class ImageViewController {
 
     /**
      * Creates imageRequest object list for displaying images in directory
-     * @param image_paths
+     * @param image_paths path to image file
      * @return List of ImageRequest Objects
      * @author Jouke Profijt
      *
@@ -174,12 +172,12 @@ public class ImageViewController {
      */
     @PostMapping("/deleteimage")
     @ResponseBody
-    public String deleteFolder(@RequestParam String image) throws IOException {
+    public ResponseEntity deleteFolder(@RequestParam String image) throws IOException {
         logger.log(Level.INFO, "Deleting image...");
         if (uiCommandService.removeFile(image.replace("\\", "/"))){
-            return "success";
+            return new ResponseEntity(HttpStatus.OK);
         } else {
-            return "failed";
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }
 }
