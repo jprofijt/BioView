@@ -1,3 +1,11 @@
+/**
+ * Scripts that manage the basic image manager actions
+ *
+ * @author Kim Chau Duong
+ * @version 1.0
+ */
+
+/*---Image manger context menu---*/
 function pickPicContextCommand(key) {
     if (key == "img-sort-by-name"){
         sortImageByName()
@@ -74,6 +82,7 @@ function showImageUnselectNav(){
     $('.img-navbar-unselected').show();
 }
 
+// Image select
 $(document).on("click contextmenu", ".picture-img a img", function(e) {
     if (e.ctrlKey) {
         $(this).addClass("pic-select");
@@ -98,6 +107,7 @@ $(document).on("click", ".picture-img a img", function(e) {
     e.stopPropagation();
 });
 
+// Formats bytes to proper readable file sizes
 function formatBytes(bytes, decimals = 2) {
     if (bytes === 0 || bytes === '0') return '0 Bytes';
 
@@ -110,6 +120,7 @@ function formatBytes(bytes, decimals = 2) {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
+/*---Loads image properties with ajax requests---*/
 function assignImageProperties(data){
     var properties = data[0];
     $('.img-property-name').text(properties.imageName);
@@ -199,7 +210,6 @@ $(function () {
 });
 
 /*---Image sort by buttons---*/
-// Uses placeholder .image-path that doesnt work.
 var imageNameOrder = 'asc';
 function sortImageByName(){
     tinysort('ul.images > li',{selector : '.modal-link', attr:'title', order : imageNameOrder});
@@ -214,7 +224,6 @@ $(document).on("click", '[data-sort="image-name"]', function () {
     sortImageByName()
 });
 
-// !! Still no existing date parameter so selector is a placeholder
 var imageDateOrder = 'asc';
 function sortImageByDate(){
     tinysort('ul.images > li',{selector : '.modal-link', attr:'data-image-date', order : imageDateOrder});
@@ -229,7 +238,7 @@ $(document).on("click", '[data-sort="image-date"]', function () {
     sortImageByDate()
 });
 
-
+/*---Delete selected images---*/
 function deleteSelectedImages() {
     $('.pic-select').each(function (index) {
         var selectedImage = $(this);
@@ -258,6 +267,7 @@ $(document).on("click", '[data-function="delete-image"]', function () {
     deleteSelectedImages()
 });
 
+/*---Opens image editing window when clicked on---*/
 function openImageModal() {
     let count = $('.pic-select').parent().attr('data-image-iter');
     let path = $('.pic-select').parent().attr('data-image-path');
@@ -306,6 +316,7 @@ function loadUniqueImageTags(){
     $('.property-template .bootstrap-tagsinput input[type=text]').prop("readonly", true);
 }
 
+/*---Image tag preview pagination---*/
 $(document).on("click", ".image-tag-previous", function () {
     var url = $('.image-tag-previous').attr('data-url');
     getPaginationImageTags(url);
