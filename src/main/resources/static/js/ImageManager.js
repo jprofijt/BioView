@@ -283,6 +283,9 @@ function addImageTag(data) {
 }
 
 function loadUniqueImageTags(){
+    $('#unique-image-tags').tagsinput('removeAll');
+    $('.image-tag-previous').attr('data-url', '');
+    $('.image-tag-next').attr('data-url', '');
     var id = $('.pic-select').parent().attr('data-image-id');
     var url = "http://" + document.location.hostname + ":8081/api/metadata/image/tags";
     $.ajax({
@@ -305,9 +308,7 @@ function loadUniqueImageTags(){
 
 $(document).on("click", ".image-tag-previous", function () {
     var url = $('.image-tag-previous').attr('data-url');
-    if (!isEmpty(url)){
-        getPaginationImageTags(url);
-    }
+    getPaginationImageTags(url);
 });
 
 $(document).on("click", ".image-tag-next", function () {
@@ -316,19 +317,21 @@ $(document).on("click", ".image-tag-next", function () {
 });
 
 function getPaginationImageTags(url){
-    $.ajax({
-        type: "GET",
-        url: url,
-        dataType: "json",
-        success: function (data) {
-            if(data.content.length > 0){
-                addImageTag(data.content);
-                $('.image-tag-previous').attr('data-url', data.links[2].href);
-                $('.image-tag-next').attr('data-url', data.links[1].href);
+    if (!isEmpty(url)){
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType: "json",
+            success: function (data) {
+                if(data.content.length > 0){
+                    addImageTag(data.content);
+                    $('.image-tag-previous').attr('data-url', data.links[2].href);
+                    $('.image-tag-next').attr('data-url', data.links[1].href);
+                }
+            },
+            error: function(xhr, desc, err) {
+                toastr["error"]("Could not find image tags!");
             }
-        },
-        error: function(xhr, desc, err) {
-            toastr["error"]("Could not find image tags!");
-        }
-    });
+        });
+    }
 }
