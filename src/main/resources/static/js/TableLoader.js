@@ -8,6 +8,7 @@
 
 /**
  * Fills each table with the correct Regions of interest
+ * @author Jouke Profijt
  */
 $(document).ready(function () {
     $('.tag-table').each(function () {
@@ -19,6 +20,8 @@ $(document).ready(function () {
 /**
  * Pre-existing Tags the user can choose from
  * @type {Array}
+ *
+ * @author Jouke Profijt
  */
 let available = [];
 const url = "http://"+document.location.hostname + ":8081/api/tags/all/";
@@ -31,6 +34,8 @@ $.getJSON(url, function (result) {
 /**
  * Reloads Regions of interest for given id
  * @param id    Image id
+ *
+ * @author Jouke Profijt
  */
 function ReloadTable(id) {
     $('#ImageRois-' + id).find('tbody').find('tr').remove();
@@ -39,11 +44,14 @@ function ReloadTable(id) {
 
 /**
  * Handles Adding of regions of interest
+ *
+ * @author Jouke Profijt
  */
 $(document).ready(function () {
     const add = $('.add-button');
     const save = $('.save-button');
     const cancel = $('.cancel-button');
+    //Add button creates new form fields
     add.on("click", function () {
         $('.image-roi-row').removeClass("bg-primary selected");
         save.attr('hidden', false);
@@ -59,6 +67,7 @@ $(document).ready(function () {
             "</tr>");
     });
 
+    //cancel cancels adding of new ROI
     cancel.on("click", function () {
         let EditingId = $(this).parent().attr('id');
         let error = $('#InputError-'+EditingId);
@@ -69,6 +78,7 @@ $(document).ready(function () {
         error.attr('hidden', true);
     });
 
+    //Sends the new roi data to api
     save.on("click", function () {
         let EditingId = $(this).parent().attr('id');
         let editingRow = $('#editing-row');
@@ -82,7 +92,10 @@ $(document).ready(function () {
         };
 
         /**
+         * Checks the user entered fields
+         *
          * @return {boolean}
+         * @author Jouke Profijt
          */
         function CheckInputs(InputData) {
             if (isNaN(InputData.ph) || InputData.ph > 14 || InputData.ph < 0) {
@@ -131,14 +144,11 @@ $(document).ready(function () {
 });
 
 
-$(document).ready(function () {
-
-});
-
 /**
  * inserts the tags of an image using BioView Api
  * @param id id of image
  *
+ * @deprecated Tag table implementation removed.
  * @author Jouke Profijt
  */
 function LoadTagTable(id) {
@@ -163,7 +173,9 @@ function LoadTagTable(id) {
  * Appends a new tag to the existing tag table for user only
  * @param id image id
  * @param tag tag to be added
- * @constructor
+ * @deprecated tag table implementation removed
+ *
+ * @author Jouke Profijt
  */
 function AppendNewTagToTable(id, tag) {
     $('#ImageTags-' + id).append("<tr><td>" + tag + "</td></tr>")
@@ -176,6 +188,7 @@ function AppendNewTagToTable(id, tag) {
  * @param user the user that added the new tag
  * @param id image id
  *
+ * @deprecated Tag table implementation removed
  * @author Jouke Profijt
  */
 function AddTag(element, user, id) {
@@ -211,6 +224,12 @@ function AddTag(element, user, id) {
 
 }
 
+/**
+ * Loads regions of interest from api call
+ *
+ * @param id
+ * @author Jouke Profijt
+ */
 function LoadRoiTable(id) {
     const url = "http://"+document.location.hostname + ":8081/api/roi/state/?image=" + id.toString();
 
@@ -233,6 +252,13 @@ let selected;
 let SelectedImage;
 let Ready = true;
 
+/**
+ * Adds new Region of interest with given json data
+ * @param id
+ * @param roi
+ *
+ * @author Jouke Profijt
+ */
 function AppendNewRoiToTable(id, roi) {
     const RowID = "image-" + id + "-roi-" + roi.id;
     $('#ImageRois-' + id).append("<tr class='image-roi-row' id='"+ RowID + "'>" +
@@ -243,6 +269,7 @@ function AppendNewRoiToTable(id, roi) {
         "<td>" + roi.co2 + "</td>" +
         "</tr>");
 
+    //adds event listener for new row
     $('.image-roi-row').on("click", function () {
         Ready = false;
         $('.image-roi-row').removeClass("bg-primary selected");
@@ -256,6 +283,7 @@ function AppendNewRoiToTable(id, roi) {
 
         selected = $(this).attr('id').replace(new RegExp("image-[0-9]+-roi-"), "");
         SelectedImage = $(this).attr('id').replace("image-", "").replace(new RegExp("-roi-[0-9]+"), "");
+
         $.getJSON("http://"+document.location.hostname + ":8081/api/roi/tags/get/?roi=" + selected, function (result) {
             //let remainingTags = $('#tag-input-roi-' + id).tagsinput('items');
             //checkRemain(remainingTags, id);
@@ -267,8 +295,13 @@ function AppendNewRoiToTable(id, roi) {
     });
 }
 
+/**
+ * event listener for tag
+ * @author Jouke Profijt
+ */
 $(document).ready(function () {
     const TagInput = $('.TagInput');
+    //on item added
     TagInput.on('itemAdded', function(event) {
         if (Ready) {
             let data = {
@@ -292,6 +325,7 @@ $(document).ready(function () {
         }
     });
 
+    //on item remove
     TagInput.on('beforeItemRemove', function (event) {
         let tag = event.item;
         let removeData = {
@@ -314,6 +348,7 @@ $(document).ready(function () {
 
     });
 
+    //typeahead, should work but doesn't.
     TagInput.tagsinput({
         typeahead: {
             highlight: true,
