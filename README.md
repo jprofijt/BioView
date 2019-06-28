@@ -14,6 +14,8 @@ git clone https://bitbucket.org/JoukeProfijt/image-library/src/master/
 Clone the project, open gradle project in Intellij
 
 And select Java version 8
+
+
 ### Prerequisites
 
 For this library to work you need the Bioview metadata API to also be installed
@@ -52,6 +54,7 @@ Set the following application properties:
 
 * spring.datasource.password: mysql database user password
 
+* spring.datasource.initialization-mode: needs to be `always` for the first run of the application then set to `never` to prevent data loss
 * spring.profiles.active: uses diffrent application.properties file e.g.:
 `spring.profiles.active=dev` uses `application-dev.properties`
 
@@ -62,6 +65,14 @@ use gradle for building
 
 and run jar file.
 ```
+
+## Testing
+
+Running the development version of the application you can login using:
+
+* username: `piet`
+* password: `password`
+
 
 ## Built With
 
