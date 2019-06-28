@@ -10,6 +10,7 @@ import java.util.Date;
 
 /**
  * Model class for image attributes
+ * Used to store image attributes in the database
  *
  * @auhor Kim Chau Duong
  */
@@ -78,13 +79,6 @@ public class ImageAttribute {
         this.fileType = fileType;
     }
 
-//    public ImageMetadata getImageMetadata() {
-//        return imageMetadata;
-//    }
-//
-//    public void setImageMetadata(ImageMetadata imageMetadata) {
-//        this.imageMetadata = imageMetadata;
-//    }
     public ImageAttribute() {
     }
 

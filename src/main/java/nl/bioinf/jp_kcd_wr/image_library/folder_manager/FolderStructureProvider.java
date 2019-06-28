@@ -16,14 +16,10 @@ public interface FolderStructureProvider {
      * Get the folders containing directorty the user specified
      * @param nextFolder directory to search
      * @return arraylist of directories
+     *
+     * @author Jouke Profijt, Kim Chau Duong
      */
     ArrayList<Directory> getNextFolders(String nextFolder);
-
-    /**
-     * Creates a new directory in th current directory
-     * @param directoryName name of new directory
-     */
-    void createNewFolder(String directoryName, String currentPath) throws DirectoryExistsException, IOException;
 
 
 

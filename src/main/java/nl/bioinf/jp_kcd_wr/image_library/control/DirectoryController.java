@@ -27,12 +27,10 @@ import java.util.logging.Logger;
  */
 @Controller
 public class DirectoryController {
-    private final FolderHandler folderHandler;
     private final UICommandService uiCommandService;
 
     @Autowired
-    public DirectoryController(FolderHandler folderHandler, UICommandService uiCommandService) {
-        this.folderHandler = folderHandler;
+    public DirectoryController(UICommandService uiCommandService) {
         this.uiCommandService = uiCommandService;
     }
 
@@ -50,7 +48,7 @@ public class DirectoryController {
     public String createFolder(@RequestParam(name="directoryName", required=true) String directoryName, @RequestParam(name="currentPath", required=true) String currentPath, RedirectAttributes redirectAttributes) {
         try {
             logger.log(Level.INFO, "Creating directory");
-            folderHandler.createNewFolder(directoryName, currentPath);
+            uiCommandService.createNewFolder(directoryName, currentPath);
             logger.log(Level.INFO, "Folder was created successfully!");
             redirectAttributes.addFlashAttribute("success_messages","[Successfully created " + directoryName + "!]");
         } catch (DirectoryExistsException e) {
