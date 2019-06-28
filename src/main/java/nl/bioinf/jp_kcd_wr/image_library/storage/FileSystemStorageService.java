@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,7 +13,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,9 +28,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -64,36 +60,16 @@ public class FileSystemStorageService implements StorageService {
         rootLocation = Paths.get(environment.getProperty("library.sym"));
         this.cacheLocation = Paths.get(environment.getProperty("library.sym.thumbnails"));
 
-        File rootDirectory = new File(String.valueOf(rootLocation.resolve("/HeadDirectory")));
+        makeLibraryLocations();
+        processLibrary();
+
+        File rootDirectory = new File(rootLocation + "/HeadDirectory");
         if (!rootDirectory.exists()){
             rootDirectory.mkdirs();
         }
-
         logger.log(Level.INFO, "Starting FileSystemStorage service using {0} as imageDataSource, and {1} as root location", new Object[] {this.imageDataSource, this.rootLocation});
 
         checkParameters();
-    }
-
-    private Path getVerifiedRootLocation(Environment environment){
-        String Location = environment.getProperty("library.upload");
-        if (Location == null || Location.isEmpty()){
-            throw new IllegalArgumentException("library.upload parameter is empty");
-        }
-        else{
-            return Paths.get(Location);
-        }
-    }
-
-
-
-    private Path getVerifiedThumbnailLocation(Environment environment){
-        String Location = environment.getProperty("cache-location");
-        if (Location == null || Location.isEmpty()){
-            throw new IllegalArgumentException("cache-location parameter is empty");
-        }
-        else{
-            return Paths.get(Location);
-        }
     }
 
     /**
@@ -120,6 +96,7 @@ public class FileSystemStorageService implements StorageService {
 
     /**
      * creates new library locations if they don't already exist
+     * @auhtor Jouke Profijt
      */
     private void makeLibraryLocations(){
         File Root = this.rootLocation.toFile();
@@ -150,7 +127,7 @@ public class FileSystemStorageService implements StorageService {
      * @author Kim Chau Duong, Jouke Profijt
      */
     @Override
-    public void store(MultipartFile file, File directory) {
+    public void storeFile(MultipartFile file, File directory) {
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
         try {
             if (file.isEmpty()) {
@@ -166,19 +143,14 @@ public class FileSystemStorageService implements StorageService {
                 Path directoryPath = this.rootLocation.resolve(directory.toPath());
                 String newFilename = getNewName(filename, directoryPath);
                 Path filePath = directoryPath.resolve(newFilename);
-                Files.copy(inputStream, filePath, // 'copies' file to upload-dir using the rootLocation and filename
-                        StandardCopyOption.REPLACE_EXISTING);                // file of same name in upload-dir will be overwritten
 
-                Image image = createImageData(filename, newFilename, filePath);
-                filePath.toFile().setExecutable(true, false);
-                filePath.toFile().setReadable(true, false);
-                filePath.toFile().setWritable(true, false);
-
+                storeImage(inputStream, filePath);
+                Image image = createImageData(filename, newFilename, directory.toPath().resolve(newFilename));
                 imageDataSource.insertImage(image);
                 createThumbnails(directoryPath.toFile());
+
                 String sqlDate = "yyyy-MM-dd HH:mm:ss";
                 createMetaData(image, LocalDateTime.now().format(DateTimeFormatter.ofPattern(sqlDate)));
-
             }
         }
         catch (IOException e) {
@@ -187,6 +159,29 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 
+    /**
+     * Stores the actual file in the designated directory
+     * @param inputStream image file
+     * @param filePath destination directory
+     * @throws IOException
+     *
+     * @author Kim Chau Duong, Jouke Profijt
+     */
+    private void storeImage(InputStream inputStream, Path filePath) throws IOException {
+        Files.copy(inputStream, filePath,
+                StandardCopyOption.REPLACE_EXISTING);
+        filePath.toFile().setExecutable(true, false);
+        filePath.toFile().setReadable(true, false);
+        filePath.toFile().setWritable(true, false);
+    }
+
+    /**
+     * converts filetype to ENUM storage medium
+     * @param extension file extention
+     * @return return correct enum type
+     *
+     * @author Jouke Profijt
+     */
     private ImageFileType getFileTypeEnum(String extension){
         if (extension.toLowerCase().equals("jpg")){
             return ImageFileType.JPG;
@@ -198,6 +193,14 @@ public class FileSystemStorageService implements StorageService {
             return ImageFileType.PNG;
         }
     }
+
+    /**
+     * Creates uploaded image metadata
+     * @param image image to generate metadata
+     * @param date current date
+     *
+     * @auhor Jouke Profijt
+     */
     private void createMetaData(Image image, String date) {
 
         String path = image.getPath();
@@ -207,16 +210,24 @@ public class FileSystemStorageService implements StorageService {
         long size = imageFile.length();
         ImageFileType fileType = getFileTypeEnum(FilenameUtils.getExtension(path));
 
-        imageDataSource.insertImageMetaData(new ImageAttribute(id, image.getNewFilename(),imageFile.getParent(), path, size, date, fileType));
+        imageDataSource.insertImageMetaData(new ImageAttribute(id, name,imageFile.getParent(), path, size, date, fileType));
     }
 
+    /**
+     * Creates image attribute data for images in directory
+     *
+     * @param directory location to be indexed
+     *
+     * @auhtor Kim Chau Duong
+     */
     private void indexImageAttributes(File directory){
         for (File image : directory.listFiles(File::isFile)){
             ImageAttribute attribute = new ImageAttribute();
+            File relativeImage = rootLocation.relativize(image.toPath()).toFile();
             attribute.setImageName(image.getName());
-            attribute.setPath(image.getParent());
-            attribute.setFilePath(image.getPath());
-            int id = imageDataSource.getImageIdFromPath(image.getPath());
+            attribute.setPath(relativeImage.getParent());
+            attribute.setFilePath(relativeImage.getPath());
+            int id = imageDataSource.getImageIdFromPath(relativeImage.getPath());
             attribute.setId(id);
             attribute.setImageSize(image.length());
             attribute.setDateCreated(getDateModified(image));
@@ -225,6 +236,13 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 
+    /**
+     * Modified date indexing
+     * @param directory directory to be indexed
+     * @return modified date
+     *
+     * @author Kim Chau Duong
+     */
     private String getDateModified(File directory) {
         long lastModified = directory.lastModified();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -260,52 +278,31 @@ public class FileSystemStorageService implements StorageService {
     }
 
     /**
-     * Creates image object with data to be stored in the database
+     * Creates Image object with data to be stored in the database
      * @param origFilename original uploaded file name
      * @param newName new file name
      * @param filePath directory path that the file is stored in
-     * @return
+     * @return new Image object
      *
      * @author Kim Chau Duong
      */
-    @Override
     public Image createImageData(String origFilename, String newName, Path filePath) {
         Image newImage = new Image();
         newImage.setOrigName(origFilename);
         newImage.setNewFilename(newName);
         newImage.setPath(filePath.toString());
-
         return newImage;
     }
 
     /**
-     * Loads all stored file in that particular directory
-     * @param currentFolder directory that contains the stored files
-     * @return stream of file paths of the files
-     *
-     * @author Kim Chau Duong
-     */
-    @Override
-    public Stream<Path> loadAll(String currentFolder) {
-        try {
-            return walkThroughFiles(currentFolder)
-                    .map(this.rootLocation::relativize);
-        }
-        catch (IOException e) {
-            logger.log(Level.SEVERE, "Storage service could not read stored files");
-            throw new StorageException("Failed to read stored files", e);
-        }
-    }
-
-    /**
-     * loads absolute file path
+     * loads absolute file paths of image
      * @param currentFolder folder to search
      * @return stream of paths
      *
      * @author Jouke Profijt
      */
     @Override
-    public Stream<Path> loadAbsolute(String currentFolder) {
+    public Stream<Path> loadAbsoluteStoredImagePaths(String currentFolder) {
         try {
             return walkThroughFiles(currentFolder);
         }
@@ -316,8 +313,8 @@ public class FileSystemStorageService implements StorageService {
     }
 
     private Stream<Path> walkThroughFiles(String currentFolder) throws IOException {
-        return Files.walk(this.rootLocation.resolve(currentFolder), 1)
-                .filter(path -> !path.equals(this.rootLocation.resolve(currentFolder)) && path.toFile().isFile());
+        return Files.walk(getFullImagePath(currentFolder), 1)
+                .filter(path -> !path.equals(getFullImagePath(currentFolder)) && path.toFile().isFile());
 
     }
 
@@ -328,80 +325,8 @@ public class FileSystemStorageService implements StorageService {
      *
      * @author Kim Chau Duong
      */
-    @Override
-    public Path loadImage(String filename) {
+    public Path getFullImagePath(String filename) {
         return rootLocation.resolve(filename);
-    }
-
-    private Path loadThumbnail(String filename) {return cacheLocation.resolve(filename);}
-
-    /**
-     * Loads file as a resource
-     * @param filename name of file
-     * @param directory directory path of the file
-     * @return file resource
-     *
-     * @author Kim Chau Duong
-     */
-    @Override
-    public Resource loadAsResource(String filename, String directory) {
-        try {
-            if(directory != null && !directory.isEmpty()) {
-                filename = directory + '/' + filename;
-            }
-            Path file = loadImage(filename);
-            return loadResource(new UrlResource(file.toUri()));
-        }
-        catch (MalformedURLException e) {
-            logger.log(Level.WARNING, "Could not read file {0}", filename);
-            throw new StorageFileNotFoundException("Could not read file: " + filename, e);
-        }
-    }
-
-
-    /**
-     * loads resource if resource is accessible
-     * @param resource the new resource
-     * @return return correct resource
-     * @author Kim Chau Duong
-     */
-    private Resource loadResource(Resource resource) {
-        if (resource.exists() || resource.isReadable()) {
-            return resource;
-        }
-        else {
-            throw new StorageFileNotFoundException(
-                    "Could not read file: " + resource.getFilename());
-
-        }
-    }
-
-    /**
-     * Separate resource loader for thumbnails
-     * @param filename thumbnail filename
-     * @return Resource
-     * @author Jouke Profijt
-     */
-    @Override
-    public Resource loadThumbnailAsResource(String filename) {
-        try {
-            Path thumbnail = loadThumbnail(filename);
-            return loadResource(new UrlResource(thumbnail.toUri()));
-        } catch (MalformedURLException e) {
-            logger.log(Level.WARNING, "Could not read file {0}", filename);
-            throw new StorageFileNotFoundException("Could not read file: " + filename, e);
-        }
-    }
-
-
-
-    /**
-     * Deletes all existing files
-     */
-    @Override
-    public void deleteAll() {
-        FileSystemUtils.deleteRecursively(rootLocation.toFile());
-        logger.log(Level.WARNING, "Deleting ALL library contents");
     }
 
     /**
@@ -411,9 +336,9 @@ public class FileSystemStorageService implements StorageService {
      * @author Jouke Profijt
      */
     @Override
-    public void processExistingImageLibrary(File directory) {
+    public void storeExistingImageLibrary(File directory) {
         for (File contentDirectory : listDirectories(directory)){
-            processExistingImageLibrary(contentDirectory);
+            storeExistingImageLibrary(contentDirectory);
         }
         processDirectory(directory);
 
@@ -435,7 +360,7 @@ public class FileSystemStorageService implements StorageService {
     private void processLibrary() {
         File Directory = this.rootLocation.toFile();
         logger.log(Level.INFO, "processing Image library...");
-        processExistingImageLibrary(Directory);
+        storeExistingImageLibrary(Directory);
         logger.log(Level.INFO, "processing complete!");
     }
 
@@ -470,7 +395,7 @@ public class FileSystemStorageService implements StorageService {
         for (File image : directory.listFiles(File::isFile)) {
 
             Image anotatedImage = new Image();
-            anotatedImage.setPath(image.getPath());
+            anotatedImage.setPath(String.valueOf(rootLocation.relativize(Paths.get(image.getPath()))));
             anotatedImage.setOrigName(image.getName());
             anotatedImage.setNewFilename(image.getName());
             imageDataSource.insertImage(anotatedImage);
@@ -488,7 +413,7 @@ public class FileSystemStorageService implements StorageService {
         String fileExtension = getFileExtension(image);
         String cacheImage = image.getName().replace(fileExtension, ".jpg");
 
-        int imageId = imageDataSource.getImageIdFromPath(image.getPath());
+        int imageId = imageDataSource.getImageIdFromPath(rootLocation.relativize(image.toPath()).toString());
         File cacheLocation = new File(this.cacheLocation.toString() + "/"+ imageId + ".jpg");
 
         if (imageDataSource.checkThumbnailStatus(imageId)) {
@@ -517,21 +442,5 @@ public class FileSystemStorageService implements StorageService {
             return "";
         }
         return name.substring(lastIndexOf);
-    }
-
-    @Override
-    public Path getRootLocation(){
-        return this.rootLocation;
-    }
-
-    /**
-     * Initializes the file storage
-     *
-     * @author Kim Chau Duong
-     */
-    @Override
-    public void init() {
-            makeLibraryLocations();
-            processLibrary();
     }
 }

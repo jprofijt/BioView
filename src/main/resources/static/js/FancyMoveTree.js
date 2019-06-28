@@ -137,7 +137,7 @@ $(function () {
         // Render hidden <input> elements for active and selected nodes
         var imagePathArray = [];
         $('.pic-select').each(function(){
-            var imagePath = $(this).parents('.image-surrounding').find('.image-path').val();
+            var imagePath = $(this).parent().attr('data-image-path').replace(/\\/g, "/");
             imagePathArray.push(imagePath);
         });
         $('input[name="movedImages"]').val(imagePathArray);
@@ -178,7 +178,7 @@ $(function () {
         // Render hidden <input> elements for active and selected nodes
         var imagePathArray = [];
         $('.pic-select').each(function(){
-            var imagePath = $(this).parents('.image-surrounding').find('.image-path').val();
+            var imagePath = $(this).parent().attr('data-image-path').replace(/\\/g, "/");
             imagePathArray.push(imagePath);
         });
         $('input[name="copiedImages"]').val(imagePathArray);

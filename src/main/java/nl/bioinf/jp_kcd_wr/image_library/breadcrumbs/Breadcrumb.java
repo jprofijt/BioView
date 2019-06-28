@@ -1,8 +1,10 @@
-package nl.bioinf.jp_kcd_wr.image_library.model;
+package nl.bioinf.jp_kcd_wr.image_library.breadcrumbs;
 
 /**
- * Copyright (c) 2019 Kim Chau Duong
- * All rights reserved
+ * Breadcrumb model to build a breadcrumb object
+ * Gets used with thymeleaf in html pages
+ *
+ * @author Kim Chau Duong
  */
 public class Breadcrumb {
     private String name;
@@ -12,16 +14,8 @@ public class Breadcrumb {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getUrl() {
         return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public Breadcrumb(String name, String url) {

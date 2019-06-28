@@ -8,15 +8,20 @@ import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageFileType;
 
 import java.util.Date;
 
+/**
+ * Model class for image attributes
+ * Used to store image attributes in the database
+ *
+ * @auhor Kim Chau Duong
+ */
 public class ImageAttribute {
     private int id;
     private String imageName;
     private String path;
     private String filePath;
     private long imageSize;
-    private String dateCreated; //Not sure if it should be a string
+    private String dateCreated; //or modified
     private ImageFileType fileType;
-//    private ImageMetadata imageMetadata;
 
     public int getId() {
         return id;
@@ -74,13 +79,6 @@ public class ImageAttribute {
         this.fileType = fileType;
     }
 
-//    public ImageMetadata getImageMetadata() {
-//        return imageMetadata;
-//    }
-//
-//    public void setImageMetadata(ImageMetadata imageMetadata) {
-//        this.imageMetadata = imageMetadata;
-//    }
     public ImageAttribute() {
     }
 

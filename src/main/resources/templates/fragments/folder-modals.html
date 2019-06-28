@@ -69,6 +69,52 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="folderPropertyModal" tabindex="-1" role="dialog" aria-labelledby="folderPropertyModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="folderPropertyModalLabel">Properties</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="property-template">
+                        <table class="property-table">
+                            <tr>
+                                <td>Name:</td>
+                                <td class="folder-property-name">N/A</td>
+                            </tr>
+                            <tr class="h-divider">
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Location:</td>
+                                <td class="folder-property-location">N/A</td>
+                            </tr>
+                            <tr>
+                                <td>Size:</td>
+                                <td class="folder-property-size">N/A</td>
+                            </tr>
+                            <tr>
+                                <td>Date Modified:</td>
+                                <td class="folder-property-date">N/A</td>
+                            </tr>
+                        </table>
+                        <div class="h-divider"></div>
+                        <label for="unique-folder-tags">Tags</label><br>
+                        <div class="bootstrap-tagsinput.static">
+                            <input id="unique-folder-tags" class="unique-folder-tags-input" data-role="tagsinput" type="text">
+                        </div>
+                        <div class="folder-tags-pagination">
+                            <a class="folder-tag-previous" href="#" data-url=""><i class="fas fa-angle-left fa-lg"></i></a>  <a class="folder-tag-next" href="#" data-url=""><i class="fas fa-angle-right fa-lg"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 

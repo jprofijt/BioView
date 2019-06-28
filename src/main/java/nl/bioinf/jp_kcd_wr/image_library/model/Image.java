@@ -1,11 +1,13 @@
 package nl.bioinf.jp_kcd_wr.image_library.model;
 
 /**
- * Copyright (c) 2019 Kim Chau Duong
- * All rights reserved
+ * Image model
+ * Stored image data such as the image id, old image name preupload, new name post upload and image path
+ * Used to store information in the database
+ *
+ * @author Kim Chau Duong
  */
 public class Image {
-    // id, orig_name, NewFilename, path
     private int id;
     private String origName;
     private String NewFilename;

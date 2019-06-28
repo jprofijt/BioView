@@ -18,25 +18,23 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Class that handles all DAO processes
+ * Class that handles all image DAO processes
  *
  * @author Kim Chau Duong, Jouke Profijt
  * @version 1.0
  */
 @Component
 public class ImageDataSourceJdbc implements ImageDataSource {
-
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
     private static final Logger logger = Logger.getLogger(ImageDataSourceJdbc.class.getName());
 
     /**
      * Constructor creates Jdbc template
-     * @param namedJdbcTemplate
-     * @param
+     * @param namedJdbcTemplate jdbc template that uses custom names to assign values
      * @author Kim Chau Duong
      */
     @Autowired
-    public ImageDataSourceJdbc(NamedParameterJdbcTemplate namedJdbcTemplate, Environment environment) {
+    public ImageDataSourceJdbc(NamedParameterJdbcTemplate namedJdbcTemplate) {
         this.namedJdbcTemplate = namedJdbcTemplate;
         logger.log(Level.INFO, "Instantiated new Jdbc");
 
@@ -73,39 +71,6 @@ public class ImageDataSourceJdbc implements ImageDataSource {
         int result = namedJdbcTemplate.queryForObject(query, parameterSource, Integer.class);
 
         return result >= 1;
-
-    }
-
-    @Override
-    public Image getOrigNamebyHashName(String hash) {
-        return null;
-    }
-
-    /**
-     * gets all images in the given directory
-     * @param directory path to directory
-     * @return
-     * @author Jouke Profijt
-     */
-    @Override
-    public List<Image> getImagesInDirectory(String directory) {
-        String sql = "SELECT * FROM images WHERE path = :path";
-        SqlParameterSource parameter = new MapSqlParameterSource()
-                .addValue("path", directory);
-        logger.log(Level.INFO, "Querying all images in {0}", directory);
-        return namedJdbcTemplate.query(sql, parameter, new ImageRowMapper());
-    }
-
-    /**
-     * returns all images stored in database
-     * @return List of image objects
-     * @author Jouke Profijt
-     */
-    @Override
-    public List<Image> returnAllImages() {
-        String query = "SELECT * FROM images";
-
-        return namedJdbcTemplate.query(query, new ImageRowMapper());
     }
 
     /**
@@ -154,25 +119,7 @@ public class ImageDataSourceJdbc implements ImageDataSource {
 
         int result = namedJdbcTemplate.queryForObject(query, parameterSource, Integer.class);
 
-
-
-
         return result < 1;
-    }
-
-    /**
-     * gets cache path for image id
-     * @param ImageId image id
-     * @return cache path
-     * @author Jouke Profijt
-     */
-    @Override
-    public Path getThumbnailPath(int ImageId) {
-        SqlParameterSource parameterSource = new MapSqlParameterSource()
-                .addValue("image_id", ImageId);
-        String query = "SELECT cache_path FROM cache WHERE image_id = :image_id";
-
-        return namedJdbcTemplate.queryForObject(query, parameterSource, Path.class);
     }
 
     /**
@@ -192,8 +139,7 @@ public class ImageDataSourceJdbc implements ImageDataSource {
 
     /**
      * Inserts new image attribute data
-     *
-     * @param imageAttribute
+     * @param imageAttribute object containing all image attributes
      *
      * @author Jouke Profijt, Kim Chau Duong
      */
@@ -214,16 +160,19 @@ public class ImageDataSourceJdbc implements ImageDataSource {
         }
     }
 
-
+    /**
+     * Checks if image attribute is contained in the database
+     * @param imageAttribute Image Attribute object to check for
+     * @return True if db contains attributes
+     *
+     * @author Jouke Profijt
+     */
     private boolean checkImageAttributeIndex(ImageAttribute imageAttribute) {
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("filepath", imageAttribute.getFilePath().replace("\\", "/"));
         String query = "SELECT count(*) FROM image_attributes WHERE filepath = :filepath";
-
         int result = namedJdbcTemplate.queryForObject(query, parameterSource, Integer.class);
 
         return result >= 1;
     }
-
-
 }

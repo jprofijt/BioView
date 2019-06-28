@@ -54,15 +54,15 @@ CREATE TABLE images(
   id          INT           NOT NULL    AUTO_INCREMENT,
   orig_name   VARCHAR(500)  NOT NULL,
   new_name    VARCHAR(500)  NOT NULL,
-  path        VARCHAR(260)  NOT NULL    UNIQUE,
+  path        VARCHAR(700)  NOT NULL    UNIQUE,
   PRIMARY KEY (id)
 );
 
 create table image_attributes(
   id          INT                 not null    AUTO_INCREMENT,
   name        VARCHAR(500)        NOT NULL,
-  path        varchar(200)        not null,
-  filepath    varchar(200)        not null UNIQUE,
+  path        varchar(700)        not null,
+  filepath    varchar(700)        not null UNIQUE,
   date        datetime            not null,
   size        long,
   type        enum('TIFF', 'PNG', 'JPG'),

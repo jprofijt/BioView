@@ -2,6 +2,7 @@ package nl.bioinf.jp_kcd_wr.image_library.data_access.mock;
 
 import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageDataSource;
 import nl.bioinf.jp_kcd_wr.image_library.model.Image;
+import nl.bioinf.jp_kcd_wr.image_library.model.ImageAttribute;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -15,24 +16,7 @@ import java.util.List;
 public class ImageDataSourceMock implements ImageDataSource {
     @Override
     public void insertImage(Image image) {
-
     }
-
-    @Override
-    public Image getOrigNamebyHashName(String hash) {
-        return null;
-    }
-
-    @Override
-    public List<Image> getImagesInDirectory(String directory) {
-        return null;
-    }
-
-    @Override
-    public List<Image> returnAllImages() {
-        return null;
-    }
-
     @Override
     public int getImageIdFromPath(String path) {
         return 0;
@@ -49,12 +33,12 @@ public class ImageDataSourceMock implements ImageDataSource {
     }
 
     @Override
-    public Path getThumbnailPath(int ImageId) {
+    public Path getThumbnailPathFromImagePath(String PathToImage) {
         return null;
     }
 
     @Override
-    public Path getThumbnailPathFromImagePath(String PathToImage) {
-        return null;
+    public void insertImageMetaData(ImageAttribute imageAttribute) {
     }
+
 }
