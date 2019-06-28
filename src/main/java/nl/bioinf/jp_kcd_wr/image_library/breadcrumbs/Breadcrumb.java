@@ -1,4 +1,4 @@
-package nl.bioinf.jp_kcd_wr.image_library.model;
+package nl.bioinf.jp_kcd_wr.image_library.breadcrumbs;
 
 /**
  * Copyright (c) 2019 Kim Chau Duong

@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 @Service
 public class FolderHandler implements FolderStructureProvider {
     private final Path rootLocation;
-    private static final Logger logger = Logger.getLogger(FileSystemStorageService.class.getName());
+    private static final Logger logger = Logger.getLogger(FolderHandler.class.getName());
 
 
     @Autowired
