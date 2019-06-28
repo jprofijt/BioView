@@ -31,9 +31,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
     private final DataSource dataSource;
 
-//    @Value("${remember.me}")
-//    private static int rememberMe;
-
     @Autowired
     public WebSecurityConfig(Environment environment, DataSource dataSource) {
         this.environment = environment;
