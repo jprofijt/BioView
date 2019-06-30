@@ -78,8 +78,24 @@ Running the development version of the application you can login using:
 
 * [Gradle](https://gradle.org/) - Dependency Management
 * [Spring](https://spring.io/) - Java Web framework
-* [Bootstrap](https://getbootstrap.com/) - html, css, js framework
 * [thymeleaf](https://www.thymeleaf.org) - templating framework
+
+#### JS libraries
+```
+| Library              | Version |
+|----------------------|---------|
+| Bootstrap            | 4.3.1   |
+| Bootstrap-tagsinput  | 0.8.0   |
+| Fabric.js            | 3.0.0   |
+| Fancytree            | 2.30.2  |
+| jQuery               | 3.3.1   |
+| jQuery contextMenu   | 2.8.0   |
+| jQuery UI - position | 1.12.1  |
+| Popper.js            | 1.14.6  |
+| TinySort             | 3.1.4   |
+| toastr               | 2.1.3   |
+| typeahead.js         | 0.11.1  |
+```
 
 ## Authors
 
