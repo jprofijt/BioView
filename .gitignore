@@ -41,3 +41,4 @@ log/
 upload/
 src/main/resources/static/upload/
 test-img.png
+*application.properties
