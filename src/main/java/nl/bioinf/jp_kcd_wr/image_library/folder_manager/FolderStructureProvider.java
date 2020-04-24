@@ -1,8 +1,7 @@
 package nl.bioinf.jp_kcd_wr.image_library.folder_manager;
 
-import nl.bioinf.jp_kcd_wr.image_library.model.Directory;
+import nl.bioinf.jp_kcd_wr.image_library.Model.Directory;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**

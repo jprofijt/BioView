@@ -2,17 +2,14 @@ package nl.bioinf.jp_kcd_wr.image_library.folder_manager;
 
 import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageDataSource;
 import nl.bioinf.jp_kcd_wr.image_library.data_access.mock.ImageDataSourceMock;
-import nl.bioinf.jp_kcd_wr.image_library.model.Directory;
+import nl.bioinf.jp_kcd_wr.image_library.Model.Directory;
 import nl.bioinf.jp_kcd_wr.image_library.storage.FileSystemStorageService;
 import nl.bioinf.jp_kcd_wr.image_library.storage.StorageService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.core.env.Environment;
 import org.springframework.mock.env.MockEnvironment;
 
-import javax.validation.constraints.AssertTrue;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

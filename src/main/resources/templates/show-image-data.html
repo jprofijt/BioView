@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>path</th>
+        <th>size</th>
+        <th>type</th>
+    </tr>
+<tr th:each="imagedata : ${ImageData}">
+    <td th:text="${imagedata.id}">id</td>
+    <td th:text="${imagedata.path}">path</td>
+    <td th:text="${imagedata.imageSize}">size</td>
+    <td th:text="${imagedata.fileType}">type</td>
+</tr>
+</table>
+</body>
+</html>

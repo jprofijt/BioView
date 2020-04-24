@@ -1,11 +1,10 @@
 package nl.bioinf.jp_kcd_wr.image_library.data_access.mock;
 
 import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageDataSource;
-import nl.bioinf.jp_kcd_wr.image_library.model.Image;
-import nl.bioinf.jp_kcd_wr.image_library.model.ImageAttribute;
+import nl.bioinf.jp_kcd_wr.image_library.Model.Image;
+import nl.bioinf.jp_kcd_wr.image_library.Model.ImageAttribute;
 
 import java.nio.file.Path;
-import java.util.List;
 
 
 /**

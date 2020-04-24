@@ -3,7 +3,7 @@ package nl.bioinf.jp_kcd_wr.image_library.control;
 import nl.bioinf.jp_kcd_wr.image_library.breadcrumbs.BreadcrumbBuilder;
 import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageDataSource;
 import nl.bioinf.jp_kcd_wr.image_library.folder_manager.FolderHandler;
-import nl.bioinf.jp_kcd_wr.image_library.model.ImageRequest;
+import nl.bioinf.jp_kcd_wr.image_library.Model.ImageRequest;
 import nl.bioinf.jp_kcd_wr.image_library.storage.StorageService;
 import nl.bioinf.jp_kcd_wr.image_library.ui_commands.UICommandService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +59,7 @@ public class ImageViewController {
     /**
      * Handles all items required to load the main page
      * @param location destination folder containing items that need to load up
-     * @param model model containing all item attributes
+     * @param model Model containing all item attributes
      * @return main image viewer page
      * @author Jouke Profijt, Kim Chau Duong
      */

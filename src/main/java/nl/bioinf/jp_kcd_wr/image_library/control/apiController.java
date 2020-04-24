@@ -1,7 +1,7 @@
 package nl.bioinf.jp_kcd_wr.image_library.control;
 
 import nl.bioinf.jp_kcd_wr.image_library.folder_manager.FolderHandler;
-import nl.bioinf.jp_kcd_wr.image_library.model.Directory;
+import nl.bioinf.jp_kcd_wr.image_library.Model.Directory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

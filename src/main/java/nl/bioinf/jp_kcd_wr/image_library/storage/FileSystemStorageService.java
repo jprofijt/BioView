@@ -22,12 +22,11 @@ import java.util.stream.Stream;
 
 import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageDataSource;
 import nl.bioinf.jp_kcd_wr.image_library.data_access.ImageFileType;
-import nl.bioinf.jp_kcd_wr.image_library.model.Image;
-import nl.bioinf.jp_kcd_wr.image_library.model.ImageAttribute;
+import nl.bioinf.jp_kcd_wr.image_library.Model.Image;
+import nl.bioinf.jp_kcd_wr.image_library.Model.ImageAttribute;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;

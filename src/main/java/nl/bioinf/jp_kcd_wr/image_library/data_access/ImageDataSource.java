@@ -1,9 +1,9 @@
 package nl.bioinf.jp_kcd_wr.image_library.data_access;
 
-import nl.bioinf.jp_kcd_wr.image_library.model.Image;
-import nl.bioinf.jp_kcd_wr.image_library.model.ImageAttribute;
+import nl.bioinf.jp_kcd_wr.image_library.Model.*;
 
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -61,4 +61,66 @@ public interface ImageDataSource {
      * @author Jouke Profijt, Kim Chau Duong
      */
     void insertImageMetaData(ImageAttribute imageAttribute);
+
+    /**
+     * Retrieves image attributes of all images in a given folder path
+     * @param path folder location
+     * @return ImageAttribute list
+     *
+     * @author Kim Chau Duong
+     */
+    List<ImageAttribute> showDataFromPath(String path);
+
+    ImageTags getTaggedImage(int id);
+
+    List<String> getAvailableTags();
+
+    void insertNewTag(int Image, String tag, String user);
+
+    void addNewRoiState(regionOfInterestState regionOfInterestState, int roiId);
+
+    int addNewRoi(int imageId);
+
+    List<regionOfInterestState> getRoiStatesOfImage(int image_id);
+
+
+    List getPointsForRoi(int roi_id);
+
+    List<String> getRoiTags(int roiID);
+
+    void addNewRoiTag(RoiTag roiTag);
+
+    /**
+     * Retrieved image attributes of file with given path
+     * @param path file path of the image
+     * @return List of ImageAttribute
+     *
+     * @author Kim Chau Duong
+     */
+    List<ImageAttribute> showDataFromFilePath(String path);
+
+
+    void removeRoiTag(int id, String tag);
+
+
+    List<CompleteRoi> searchRegionOfInterest(HashMap<String, Range> searchRanges, List<String> tags, int page, int size);
+
+    /**
+     * Retrieves all unique tags from all ROIs of an image
+     * @param id image id
+     * @return List of tags
+     *
+     * @author Kim Chau Duong
+     */
+    List<String> getUniqueImageTags(int id, int page, int size);
+
+    /**
+     * Retrieves all unique tags from all ROIs of all images residing in the given directory
+     * @param path path to directory
+     * @return List of tags
+     *
+     * @author Kim Chau Duong
+     */
+    List<String> getUniqueFolderTags(String path, int page, int size);
+
 }

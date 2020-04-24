@@ -1,0 +1,71 @@
+= Region Of interest Search API Documentation
+:doctype: book
+:icons: font
+:toc:
+
+This Search API is able to search through different parameters and ranges to find very specific Regions of interest
+
+
+= REST API
+
+default search REST API Location: http://localhost:8081/api/roi/search/
+
+[[overview]]
+== Overview
+
+[[overview-search-parameters]]
+=== Search Parameters
+
+include::{snippets}/searchApi/test-simple-search/request-parameters.adoc[]
+
+=== Normal Response Parameters
+
+include::{snippets}/searchApi/test-simple-search/response-fields.adoc[]
+
+The sucessfull search sends a list of Regions of interest with the searched for parameters
+
+=== Example Request
+
+Using `curl`:
+
+include::{snippets}/searchApi/test-simple-search/curl-request.adoc[]
+
+Using `http`:
+
+include::{snippets}/searchApi/test-simple-search/http-request.adoc[]
+
+=== Example Response
+
+include::{snippets}/searchApi/test-simple-search/http-response.adoc[]
+
+== Error Messages
+
+=== Incorrect Parameters
+
+include::{snippets}/searchApi/test-bad-ph/request-parameters.adoc[]
+
+include::{snippets}/searchApi/test-bad-ph/http-request.adoc[]
+
+==== Error Message Response
+
+include::{snippets}/searchApi/test-bad-ph/response-fields.adoc[]
+
+include::{snippets}/searchApi/test-bad-ph/http-response.adoc[]
+
+==== Mismatch of parameters (min > max, etc)
+
+include::{snippets}/searchApi/test-temp-mismatch/http-request.adoc[]
+
+include::{snippets}/searchApi/test-bad-ph/http-response.adoc[]
+
+
+=== Empty result
+
+==== Error message
+
+include::{snippets}/searchApi/test-no-result/http-request.adoc[]
+
+include::{snippets}/searchApi/test-no-result/http-response.adoc[]
+
+
+

@@ -1,7 +1,7 @@
 package nl.bioinf.jp_kcd_wr.image_library.breadcrumbs;
 
 /**
- * Breadcrumb model to build a breadcrumb object
+ * Breadcrumb Model to build a breadcrumb object
  * Gets used with thymeleaf in html pages
  *
  * @author Kim Chau Duong
