@@ -1,6 +1,6 @@
 package nl.bioinf.jp_kcd_wr.image_library.data_access.jdbc;
 
-import nl.bioinf.jp_kcd_wr.image_library.model.Image;
+import nl.bioinf.jp_kcd_wr.image_library.Model.Image;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

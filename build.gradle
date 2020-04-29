@@ -9,9 +9,15 @@ group = 'nl.bioinf.jp_kcd_wr'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = JavaVersion.VERSION_1_8
 
+
+
+
+
 repositories {
     mavenCentral()
 }
+
+
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
@@ -19,7 +25,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-jdbc'
     // https://mvnrepository.com/artifact/mysql/mysql-connector-java
-    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.47'
+    compile group: 'mysql', name: 'mysql-connector-java'
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -30,4 +36,6 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
     testCompile group: 'org.junit.platform', name: 'junit-platform-runner', version: '1.4.2'
     compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5', version: '3.0.4.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework.hateoas/spring-hateoas
+    compile group: 'org.springframework.hateoas', name: 'spring-hateoas', version: '0.20.0.RELEASE'
 }

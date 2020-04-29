@@ -24,7 +24,7 @@ $(document).ready(function () {
  * @author Jouke Profijt
  */
 let available = [];
-const url = "http://"+document.location.hostname + ":8081/api/tags/all/";
+const url = "http://"+document.location.hostname + ":8080/api/tags/all/";
 $.getJSON(url, function (result) {
     for (let i in result) {
         available.push(result[i])

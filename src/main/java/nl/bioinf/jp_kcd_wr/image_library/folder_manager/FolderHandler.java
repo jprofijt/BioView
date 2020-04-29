@@ -1,15 +1,12 @@
 package nl.bioinf.jp_kcd_wr.image_library.folder_manager;
 
-import nl.bioinf.jp_kcd_wr.image_library.model.Directory;
-import nl.bioinf.jp_kcd_wr.image_library.storage.FileSystemStorageService;
+import nl.bioinf.jp_kcd_wr.image_library.Model.Directory;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;

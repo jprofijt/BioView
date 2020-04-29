@@ -12,11 +12,11 @@ $(document).on('dblclick', '.images li .image-surrounding a', function(){
     loadDynamicModal(count, path);
 });
 
-var roof = null;
-var roofPoints = [];
-var lines = [];
-var lineCounter = 0;
-var drawingObject = {};
+let roof = null;
+let roofPoints = [];
+let lines = [];
+let lineCounter = 0;
+let drawingObject = {};
 
 
 /**

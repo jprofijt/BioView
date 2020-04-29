@@ -65,7 +65,7 @@ create table image_attributes(
   filepath    varchar(700)        not null UNIQUE,
   date        datetime            not null,
   size        long,
-  type        enum('TIFF', 'PNG', 'JPG'),
+    type        enum('TIFF', 'PNG', 'JPG', 'JPEG'),
   primary key (id),
   foreign key (filepath) references images(path)
 );
